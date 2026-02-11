@@ -1,17 +1,10 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, json } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, json, boolean } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
  */
 export const users = mysqlTable("users", {
-  /**
-   * Surrogate primary key. Auto-incremented numeric value managed by the database.
-   * Use this for relations between tables.
-   */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
@@ -26,79 +19,65 @@ export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
 /**
- * Daily metrics tracking for Trinity dimensions (Mind, Body, Soul)
- * Stores intelligence scores and pillar values for each day
+ * HustleSystem Stages - Macro environments (Trap, Suburbs, Penthouse, Mansion, Fort, Keep, Castle, Kingdom)
  */
-export const dailyMetrics = mysqlTable("daily_metrics", {
+export const hsStages = mysqlTable("hs_stages", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  date: varchar("date", { length: 10 }).notNull(), // YYYY-MM-DD format
-  
-  // Daily input values
-  faithScore: decimal("faithScore", { precision: 3, scale: 1 }).default("0"), // 0-10
-  hustlePercentage: decimal("hustlePercentage", { precision: 5, scale: 2 }).default("0"), // 0-100
-  loveScore: decimal("loveScore", { precision: 3, scale: 1 }).default("0"), // 0-10
-  
-  // Pillar values (0-10 scale with 0.5 increments)
-  mindPillar: decimal("mindPillar", { precision: 3, scale: 1 }).default("5"),
-  bodyPillar: decimal("bodyPillar", { precision: 3, scale: 1 }).default("5"),
-  soulPillar: decimal("soulPillar", { precision: 3, scale: 1 }).default("5"),
-  moneyPillar: decimal("moneyPillar", { precision: 3, scale: 1 }).default("5"),
-  powerPillar: decimal("powerPillar", { precision: 3, scale: 1 }).default("5"),
-  respectPillar: decimal("respectPillar", { precision: 3, scale: 1 }).default("5"),
-  consistencyPillar: decimal("consistencyPillar", { precision: 3, scale: 1 }).default("5"),
-  happinessPillar: decimal("happinessPillar", { precision: 3, scale: 1 }).default("5"),
-  recoveryPillar: decimal("recoveryPillar", { precision: 3, scale: 1 }).default("5"),
-  impactPillar: decimal("impactPillar", { precision: 3, scale: 1 }).default("5"),
-  
-  // Calculated intelligence metrics
-  mindIntelligence: decimal("mindIntelligence", { precision: 5, scale: 2 }).default("0"),
-  bodyIntelligence: decimal("bodyIntelligence", { precision: 5, scale: 2 }).default("0"),
-  soulIntelligence: decimal("soulIntelligence", { precision: 5, scale: 2 }).default("0"),
-  
-  // Power calculation
-  powerScore: decimal("powerScore", { precision: 8, scale: 2 }).default("0"),
-  streakMultiplier: decimal("streakMultiplier", { precision: 5, scale: 2 }).default("1"),
-  
-  // Predictive intelligence
-  burnoutRisk: decimal("burnoutRisk", { precision: 5, scale: 2 }).default("0"), // 0-100 percentage
-  faithDecayRisk: decimal("faithDecayRisk", { precision: 5, scale: 2 }).default("0"), // 0-100 percentage
-  momentumStatus: varchar("momentumStatus", { length: 20 }).default("neutral"), // rising, stable, declining, neutral
-  
+  stageName: varchar("stageName", { length: 50 }).notNull().unique(), // Trap, Suburbs, Penthouse, etc.
+  description: text("description"),
+  levelRangeStart: int("levelRangeStart").notNull(), // e.g., 1 for Trap
+  levelRangeEnd: int("levelRangeEnd").notNull(), // e.g., 25 for Trap
+  stageOrder: int("stageOrder").notNull(), // 1-8 for progression order
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
-export type DailyMetrics = typeof dailyMetrics.$inferSelect;
-export type InsertDailyMetrics = typeof dailyMetrics.$inferInsert;
+export type HSStage = typeof hsStages.$inferSelect;
+export type InsertHSStage = typeof hsStages.$inferInsert;
 
 /**
- * User progression and level tracking
- * Tracks overall progress, levels, points, and gate unlocks
+ * User Progression - Current stage, level, degree tracking
  */
 export const userProgression = mysqlTable("user_progression", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull().unique(),
   
-  // Level and points system
+  // Stage → Level → Degree
+  currentStage: varchar("currentStage", { length: 50 }).default("Trap"), // Stage name
   currentLevel: int("currentLevel").default(1).notNull(),
-  totalPoints: int("totalPoints").default(0).notNull(),
-  pointsToNextGate: int("pointsToNextGate").default(40).notNull(), // Points needed to unlock next gate
+  currentDegree: decimal("currentDegree", { precision: 5, scale: 2 }).default("0"), // -90 to +90
   
-  // Streak tracking
-  currentStreak: int("currentStreak").default(0).notNull(),
-  longestStreak: int("longestStreak").default(0).notNull(),
-  lastActiveDate: varchar("lastActiveDate", { length: 10 }), // YYYY-MM-DD
+  // Progression metrics
+  totalXP: int("totalXP").default(0).notNull(),
+  xpToNextLevel: int("xpToNextLevel").default(100).notNull(),
   
-  // Credit economy
-  totalCredits: decimal("totalCredits", { precision: 10, scale: 2 }).default("0"),
-  spentCredits: decimal("spentCredits", { precision: 10, scale: 2 }).default("0"),
+  // Pillar stats (0-100 scale)
+  mindPillar: decimal("mindPillar", { precision: 5, scale: 2 }).default("50"),
+  bodyPillar: decimal("bodyPillar", { precision: 5, scale: 2 }).default("50"),
+  spiritPillar: decimal("spiritPillar", { precision: 5, scale: 2 }).default("50"),
+  moneyPillar: decimal("moneyPillar", { precision: 5, scale: 2 }).default("50"),
+  powerPillar: decimal("powerPillar", { precision: 5, scale: 2 }).default("50"),
+  respectPillar: decimal("respectPillar", { precision: 5, scale: 2 }).default("50"),
   
-  // Gate unlock tracking (which gates have been passed)
-  unlockedGates: json("unlockedGates").$type<number[]>().default([]),
+  // Power calculation
+  powerScore: decimal("powerScore", { precision: 10, scale: 2 }).default("0"),
+  hustleScore: decimal("hustleScore", { precision: 5, scale: 2 }).default("0"),
+  faithScore: decimal("faithScore", { precision: 5, scale: 2 }).default("0"),
+  loveScore: decimal("loveScore", { precision: 5, scale: 2 }).default("0"),
   
-  // Overall intelligence tier
-  intelligenceTier: varchar("intelligenceTier", { length: 20 }).default("novice"), // novice, apprentice, adept, master, oracle
+  // Soul Beast
+  soulBeastName: varchar("soulBeastName", { length: 100 }),
+  soulBeastLevel: int("soulBeastLevel").default(1),
+  soulBeastEvolution: varchar("soulBeastEvolution", { length: 50 }).default("egg"), // egg, hatchling, evolved, ascended
+  
+  // Legacy & Depth
+  legacyFactor: decimal("legacyFactor", { precision: 5, scale: 2 }).default("1"),
+  depthScore: decimal("depthScore", { precision: 5, scale: 2 }).default("0"),
+  
+  // Blessing probability
+  blessingProbability: decimal("blessingProbability", { precision: 5, scale: 2 }).default("50"),
+  
+  // Zone tracking
+  currentZone: varchar("currentZone", { length: 50 }).default("Purgatory"), // Purgatory, Heaven, Hell, Faith Street
   
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -108,59 +87,217 @@ export type UserProgression = typeof userProgression.$inferSelect;
 export type InsertUserProgression = typeof userProgression.$inferInsert;
 
 /**
- * Budget allocation tracking
- * Stores how user allocates their energy/credits across 10 categories
+ * HL Modules (HL0-HL15) - 16 life domains
  */
-export const budgetAllocation = mysqlTable("budget_allocation", {
+export const hlModules = mysqlTable("hl_modules", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
-  date: varchar("date", { length: 10 }).notNull(), // YYYY-MM-DD
   
-  // 10 budget categories with allocation amounts
-  category1: decimal("category1", { precision: 10, scale: 2 }).default("0"), // Mind Development
-  category2: decimal("category2", { precision: 10, scale: 2 }).default("0"), // Body Training
-  category3: decimal("category3", { precision: 10, scale: 2 }).default("0"), // Soul Work
-  category4: decimal("category4", { precision: 10, scale: 2 }).default("0"), // Financial Growth
-  category5: decimal("category5", { precision: 10, scale: 2 }).default("0"), // Power Building
-  category6: decimal("category6", { precision: 10, scale: 2 }).default("0"), // Respect Cultivation
-  category7: decimal("category7", { precision: 10, scale: 2 }).default("0"), // Consistency Practice
-  category8: decimal("category8", { precision: 10, scale: 2 }).default("0"), // Happiness Pursuit
-  category9: decimal("category9", { precision: 10, scale: 2 }).default("0"), // Recovery & Rest
-  category10: decimal("category10", { precision: 10, scale: 2 }).default("0"), // Impact Creation
+  // HL0: Foundation
+  hl0_identity: decimal("hl0_identity", { precision: 5, scale: 2 }).default("0"),
+  hl0_archetype: varchar("hl0_archetype", { length: 100 }),
   
-  // Total budget available and allocated
-  totalBudget: decimal("totalBudget", { precision: 10, scale: 2 }).default("0"),
-  totalAllocated: decimal("totalAllocated", { precision: 10, scale: 2 }).default("0"),
+  // HL1: Mind
+  hl1_clarity: decimal("hl1_clarity", { precision: 5, scale: 2 }).default("0"),
+  hl1_habits: decimal("hl1_habits", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL2: Spirit
+  hl2_faith: decimal("hl2_faith", { precision: 5, scale: 2 }).default("0"),
+  hl2_meditation: decimal("hl2_meditation", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL3: Body
+  hl3_sleep: decimal("hl3_sleep", { precision: 5, scale: 2 }).default("0"),
+  hl3_nutrition: decimal("hl3_nutrition", { precision: 5, scale: 2 }).default("0"),
+  hl3_energy: decimal("hl3_energy", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL4: Money
+  hl4_income: decimal("hl4_income", { precision: 10, scale: 2 }).default("0"),
+  hl4_expenses: decimal("hl4_expenses", { precision: 10, scale: 2 }).default("0"),
+  hl4_savings: decimal("hl4_savings", { precision: 10, scale: 2 }).default("0"),
+  
+  // HL5: Social
+  hl5_relationships: decimal("hl5_relationships", { precision: 5, scale: 2 }).default("0"),
+  hl5_network: decimal("hl5_network", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL6: Mission
+  hl6_goals: decimal("hl6_goals", { precision: 5, scale: 2 }).default("0"),
+  hl6_momentum: decimal("hl6_momentum", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL7: Environment
+  hl7_space: decimal("hl7_space", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL8: Knowledge
+  hl8_skills: decimal("hl8_skills", { precision: 5, scale: 2 }).default("0"),
+  hl8_mastery: decimal("hl8_mastery", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL9: Legacy
+  hl9_impact: decimal("hl9_impact", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL10: Emotion
+  hl10_awareness: decimal("hl10_awareness", { precision: 5, scale: 2 }).default("0"),
+  hl10_regulation: decimal("hl10_regulation", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL11: Intuition
+  hl11_alignment: decimal("hl11_alignment", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL12: Synchronicity
+  hl12_flow: decimal("hl12_flow", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL13: Collective
+  hl13_influence: decimal("hl13_influence", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL14: Energy
+  hl14_vitality: decimal("hl14_vitality", { precision: 5, scale: 2 }).default("0"),
+  
+  // HL15: Drive
+  hl15_persistence: decimal("hl15_persistence", { precision: 5, scale: 2 }).default("0"),
   
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
-export type BudgetAllocation = typeof budgetAllocation.$inferSelect;
-export type InsertBudgetAllocation = typeof budgetAllocation.$inferInsert;
+export type HLModules = typeof hlModules.$inferSelect;
+export type InsertHLModules = typeof hlModules.$inferInsert;
 
 /**
- * Intelligence history tracking
- * Stores historical intelligence scores for trend analysis
+ * Engine Outputs - Results from 9 engines
  */
-export const intelligenceHistory = mysqlTable("intelligence_history", {
+export const engineOutputs = mysqlTable("engine_outputs", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
   date: varchar("date", { length: 10 }).notNull(), // YYYY-MM-DD
   
-  // Historical intelligence values
-  mindIntelligence: decimal("mindIntelligence", { precision: 5, scale: 2 }).default("0"),
-  bodyIntelligence: decimal("bodyIntelligence", { precision: 5, scale: 2 }).default("0"),
-  soulIntelligence: decimal("soulIntelligence", { precision: 5, scale: 2 }).default("0"),
-  overallIntelligence: decimal("overallIntelligence", { precision: 5, scale: 2 }).default("0"),
+  // Hustle Engine
+  hustleEngine_momentum: decimal("hustleEngine_momentum", { precision: 5, scale: 2 }).default("0"),
+  hustleEngine_xpGain: int("hustleEngine_xpGain").default(0),
   
-  // Predictive metrics
-  burnoutRisk: decimal("burnoutRisk", { precision: 5, scale: 2 }).default("0"),
-  faithDecayRisk: decimal("faithDecayRisk", { precision: 5, scale: 2 }).default("0"),
-  momentumStatus: varchar("momentumStatus", { length: 20 }).default("neutral"),
+  // Money Engine
+  moneyEngine_netFlow: decimal("moneyEngine_netFlow", { precision: 10, scale: 2 }).default("0"),
+  moneyEngine_savings: decimal("moneyEngine_savings", { precision: 10, scale: 2 }).default("0"),
+  
+  // Spirit Engine
+  spiritEngine_faith: decimal("spiritEngine_faith", { precision: 5, scale: 2 }).default("0"),
+  spiritEngine_blessingProb: decimal("spiritEngine_blessingProb", { precision: 5, scale: 2 }).default("0"),
+  
+  // Body Engine
+  bodyEngine_energy: decimal("bodyEngine_energy", { precision: 5, scale: 2 }).default("0"),
+  bodyEngine_readiness: decimal("bodyEngine_readiness", { precision: 5, scale: 2 }).default("0"),
+  
+  // Alignment Engine
+  alignmentEngine_degree: decimal("alignmentEngine_degree", { precision: 5, scale: 2 }).default("0"),
+  alignmentEngine_status: varchar("alignmentEngine_status", { length: 50 }).default("neutral"), // aligned, misaligned, extreme
+  
+  // Story Engine
+  storyEngine_narrative: text("storyEngine_narrative"),
+  storyEngine_milestone: varchar("storyEngine_milestone", { length: 100 }),
+  
+  // Recursive Engine
+  recursiveEngine_shadowPattern: text("recursiveEngine_shadowPattern"),
+  recursiveEngine_correction: text("recursiveEngine_correction"),
+  
+  // Blessing Engine
+  blessingEngine_applied: boolean("blessingEngine_applied").default(false),
+  blessingEngine_multiplier: decimal("blessingEngine_multiplier", { precision: 5, scale: 2 }).default("1"),
+  
+  // Soul Engine
+  soulEngine_legacyFactor: decimal("soulEngine_legacyFactor", { precision: 5, scale: 2 }).default("1"),
+  soulEngine_beastEvolution: varchar("soulEngine_beastEvolution", { length: 50 }),
   
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-export type IntelligenceHistory = typeof intelligenceHistory.$inferSelect;
-export type InsertIntelligenceHistory = typeof intelligenceHistory.$inferInsert;
+export type EngineOutputs = typeof engineOutputs.$inferSelect;
+export type InsertEngineOutputs = typeof engineOutputs.$inferInsert;
+
+/**
+ * Zone History - Track zone transitions
+ */
+export const zoneHistory = mysqlTable("zone_history", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  zoneName: varchar("zoneName", { length: 50 }).notNull(), // Purgatory, Heaven, Hell, Faith Street
+  enteredAt: timestamp("enteredAt").defaultNow().notNull(),
+  exitedAt: timestamp("exitedAt"),
+  
+  // Zone-specific data
+  purgatory_alignmentCheck: boolean("purgatory_alignmentCheck"),
+  heaven_powerMultiplier: decimal("heaven_powerMultiplier", { precision: 5, scale: 2 }),
+  hell_penalty: decimal("hell_penalty", { precision: 5, scale: 2 }),
+  faithStreet_blessingCollected: text("faithStreet_blessingCollected"),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ZoneHistory = typeof zoneHistory.$inferSelect;
+export type InsertZoneHistory = typeof zoneHistory.$inferInsert;
+
+/**
+ * Missions & Evidence - Track user actions and proof
+ */
+export const missions = mysqlTable("missions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  missionTitle: varchar("missionTitle", { length: 200 }).notNull(),
+  missionDescription: text("missionDescription"),
+  relatedModule: varchar("relatedModule", { length: 10 }), // HL0-HL15
+  relatedPillar: varchar("relatedPillar", { length: 20 }), // Mind, Body, Spirit, Money, Power, Respect
+  
+  status: mysqlEnum("status", ["pending", "in_progress", "completed", "failed"]).default("pending"),
+  xpReward: int("xpReward").default(0),
+  
+  evidence: text("evidence"), // Proof/documentation
+  completedAt: timestamp("completedAt"),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Missions = typeof missions.$inferSelect;
+export type InsertMissions = typeof missions.$inferInsert;
+
+/**
+ * Life Folders - Identity, finances, health, work
+ */
+export const lifeFolders = mysqlTable("life_folders", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  folderType: mysqlEnum("folderType", ["identity", "finances", "health", "work"]).notNull(),
+  folderName: varchar("folderName", { length: 200 }).notNull(),
+  folderData: json("folderData").$type<Record<string, any>>().default({}),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type LifeFolders = typeof lifeFolders.$inferSelect;
+export type InsertLifeFolders = typeof lifeFolders.$inferInsert;
+
+/**
+ * Daily Snapshots - Capture daily state
+ */
+export const dailySnapshots = mysqlTable("daily_snapshots", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  date: varchar("date", { length: 10 }).notNull().unique(), // YYYY-MM-DD
+  
+  // Daily readings
+  stage: varchar("stage", { length: 50 }),
+  level: int("level"),
+  degree: decimal("degree", { precision: 5, scale: 2 }),
+  powerScore: decimal("powerScore", { precision: 10, scale: 2 }),
+  zone: varchar("zone", { length: 50 }),
+  
+  // Pillar snapshot
+  pillars: json("pillars").$type<Record<string, number>>().default({}),
+  
+  // Module snapshot
+  modules: json("modules").$type<Record<string, number>>().default({}),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type DailySnapshots = typeof dailySnapshots.$inferSelect;
+export type InsertDailySnapshots = typeof dailySnapshots.$inferInsert;

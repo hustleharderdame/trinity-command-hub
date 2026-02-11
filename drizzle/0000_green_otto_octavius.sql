@@ -1,0 +1,160 @@
+CREATE TABLE `daily_snapshots` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`date` varchar(10) NOT NULL,
+	`stage` varchar(50),
+	`level` int,
+	`degree` decimal(5,2),
+	`powerScore` decimal(10,2),
+	`zone` varchar(50),
+	`pillars` json DEFAULT ('{}'),
+	`modules` json DEFAULT ('{}'),
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `daily_snapshots_id` PRIMARY KEY(`id`),
+	CONSTRAINT `daily_snapshots_date_unique` UNIQUE(`date`)
+);
+--> statement-breakpoint
+CREATE TABLE `engine_outputs` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`date` varchar(10) NOT NULL,
+	`hustleEngine_momentum` decimal(5,2) DEFAULT '0',
+	`hustleEngine_xpGain` int DEFAULT 0,
+	`moneyEngine_netFlow` decimal(10,2) DEFAULT '0',
+	`moneyEngine_savings` decimal(10,2) DEFAULT '0',
+	`spiritEngine_faith` decimal(5,2) DEFAULT '0',
+	`spiritEngine_blessingProb` decimal(5,2) DEFAULT '0',
+	`bodyEngine_energy` decimal(5,2) DEFAULT '0',
+	`bodyEngine_readiness` decimal(5,2) DEFAULT '0',
+	`alignmentEngine_degree` decimal(5,2) DEFAULT '0',
+	`alignmentEngine_status` varchar(50) DEFAULT 'neutral',
+	`storyEngine_narrative` text,
+	`storyEngine_milestone` varchar(100),
+	`recursiveEngine_shadowPattern` text,
+	`recursiveEngine_correction` text,
+	`blessingEngine_applied` boolean DEFAULT false,
+	`blessingEngine_multiplier` decimal(5,2) DEFAULT '1',
+	`soulEngine_legacyFactor` decimal(5,2) DEFAULT '1',
+	`soulEngine_beastEvolution` varchar(50),
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `engine_outputs_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `hl_modules` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`hl0_identity` decimal(5,2) DEFAULT '0',
+	`hl0_archetype` varchar(100),
+	`hl1_clarity` decimal(5,2) DEFAULT '0',
+	`hl1_habits` decimal(5,2) DEFAULT '0',
+	`hl2_faith` decimal(5,2) DEFAULT '0',
+	`hl2_meditation` decimal(5,2) DEFAULT '0',
+	`hl3_sleep` decimal(5,2) DEFAULT '0',
+	`hl3_nutrition` decimal(5,2) DEFAULT '0',
+	`hl3_energy` decimal(5,2) DEFAULT '0',
+	`hl4_income` decimal(10,2) DEFAULT '0',
+	`hl4_expenses` decimal(10,2) DEFAULT '0',
+	`hl4_savings` decimal(10,2) DEFAULT '0',
+	`hl5_relationships` decimal(5,2) DEFAULT '0',
+	`hl5_network` decimal(5,2) DEFAULT '0',
+	`hl6_goals` decimal(5,2) DEFAULT '0',
+	`hl6_momentum` decimal(5,2) DEFAULT '0',
+	`hl7_space` decimal(5,2) DEFAULT '0',
+	`hl8_skills` decimal(5,2) DEFAULT '0',
+	`hl8_mastery` decimal(5,2) DEFAULT '0',
+	`hl9_impact` decimal(5,2) DEFAULT '0',
+	`hl10_awareness` decimal(5,2) DEFAULT '0',
+	`hl10_regulation` decimal(5,2) DEFAULT '0',
+	`hl11_alignment` decimal(5,2) DEFAULT '0',
+	`hl12_flow` decimal(5,2) DEFAULT '0',
+	`hl13_influence` decimal(5,2) DEFAULT '0',
+	`hl14_vitality` decimal(5,2) DEFAULT '0',
+	`hl15_persistence` decimal(5,2) DEFAULT '0',
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `hl_modules_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `hs_stages` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`stageName` varchar(50) NOT NULL,
+	`description` text,
+	`levelRangeStart` int NOT NULL,
+	`levelRangeEnd` int NOT NULL,
+	`stageOrder` int NOT NULL,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `hs_stages_id` PRIMARY KEY(`id`),
+	CONSTRAINT `hs_stages_stageName_unique` UNIQUE(`stageName`)
+);
+--> statement-breakpoint
+CREATE TABLE `life_folders` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`folderType` enum('identity','finances','health','work') NOT NULL,
+	`folderName` varchar(200) NOT NULL,
+	`folderData` json DEFAULT ('{}'),
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `life_folders_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `missions` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`missionTitle` varchar(200) NOT NULL,
+	`missionDescription` text,
+	`relatedModule` varchar(10),
+	`relatedPillar` varchar(20),
+	`status` enum('pending','in_progress','completed','failed') DEFAULT 'pending',
+	`xpReward` int DEFAULT 0,
+	`evidence` text,
+	`completedAt` timestamp,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `missions_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `user_progression` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`currentStage` varchar(50) DEFAULT 'Trap',
+	`currentLevel` int NOT NULL DEFAULT 1,
+	`currentDegree` decimal(5,2) DEFAULT '0',
+	`totalXP` int NOT NULL DEFAULT 0,
+	`xpToNextLevel` int NOT NULL DEFAULT 100,
+	`mindPillar` decimal(5,2) DEFAULT '50',
+	`bodyPillar` decimal(5,2) DEFAULT '50',
+	`spiritPillar` decimal(5,2) DEFAULT '50',
+	`moneyPillar` decimal(5,2) DEFAULT '50',
+	`powerPillar` decimal(5,2) DEFAULT '50',
+	`respectPillar` decimal(5,2) DEFAULT '50',
+	`powerScore` decimal(10,2) DEFAULT '0',
+	`hustleScore` decimal(5,2) DEFAULT '0',
+	`faithScore` decimal(5,2) DEFAULT '0',
+	`loveScore` decimal(5,2) DEFAULT '0',
+	`soulBeastName` varchar(100),
+	`soulBeastLevel` int DEFAULT 1,
+	`soulBeastEvolution` varchar(50) DEFAULT 'egg',
+	`legacyFactor` decimal(5,2) DEFAULT '1',
+	`depthScore` decimal(5,2) DEFAULT '0',
+	`blessingProbability` decimal(5,2) DEFAULT '50',
+	`currentZone` varchar(50) DEFAULT 'Purgatory',
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `user_progression_id` PRIMARY KEY(`id`),
+	CONSTRAINT `user_progression_userId_unique` UNIQUE(`userId`)
+);
+--> statement-breakpoint
+CREATE TABLE `zone_history` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`zoneName` varchar(50) NOT NULL,
+	`enteredAt` timestamp NOT NULL DEFAULT (now()),
+	`exitedAt` timestamp,
+	`purgatory_alignmentCheck` boolean,
+	`heaven_powerMultiplier` decimal(5,2),
+	`hell_penalty` decimal(5,2),
+	`faithStreet_blessingCollected` text,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `zone_history_id` PRIMARY KEY(`id`)
+);

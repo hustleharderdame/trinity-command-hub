@@ -1,19 +1,12 @@
 {
-  "version": "7",
+  "version": "5",
   "dialect": "mysql",
   "entries": [
     {
       "idx": 0,
       "version": "5",
-      "when": 1770807187177,
-      "tag": "0000_luxuriant_stingray",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1770807282718,
-      "tag": "0001_plain_blue_marvel",
+      "when": 1770810032346,
+      "tag": "0000_green_otto_octavius",
       "breakpoints": true
     }
   ]

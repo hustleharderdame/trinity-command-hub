@@ -26,12 +26,12 @@ export default function DailyMetricsForm({ onSuccess }: DailyMetricsFormProps) {
     impact: 5,
   })
 
-  const saveMutation = trpc.trinity.saveDailyMetrics.useMutation({
-    onSuccess: (data) => {
+  const saveMutation = trpc.hs.updateModules.useMutation({
+    onSuccess: (data: any) => {
       toast.success("Daily metrics saved! 🚀")
       onSuccess?.()
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(error.message || "Failed to save metrics")
     },
   })
@@ -43,11 +43,17 @@ export default function DailyMetricsForm({ onSuccess }: DailyMetricsFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     await saveMutation.mutateAsync({
-      faithScore,
-      hustlePercentage,
-      loveScore,
-      pillars,
-    })
+      hl2_faith: faithScore,
+      hl1_clarity: hustlePercentage,
+      hl2_meditation: loveScore,
+      hl3_energy: pillars.body,
+      hl1_habits: pillars.consistency,
+      hl6_momentum: pillars.power,
+      hl5_relationships: pillars.respect,
+      hl3_sleep: pillars.recovery,
+      hl9_impact: pillars.impact,
+      hl12_flow: pillars.happiness,
+    } as any)
   }
 
   return (

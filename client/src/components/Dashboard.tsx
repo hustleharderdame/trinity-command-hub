@@ -6,10 +6,14 @@ export default function Dashboard() {
   const [selectedTab, setSelectedTab] = useState<"metrics" | "budget" | "progression">("metrics")
   
   // Fetch user progression
-  const { data: progression } = trpc.trinity.getProgression.useQuery()
+  const { data: progression } = trpc.hs.getProgression.useQuery()
   
-  // Fetch today's metrics
-  const { data: todayMetrics } = trpc.trinity.getTodayMetrics.useQuery()
+  // Fetch modules
+  const { data: modules } = trpc.hs.getModules.useQuery()
+
+  // Type-safe progression data
+  const prog = progression as any || {}
+  const mods = modules as any || {}
 
   return (
     <div className="min-h-screen bg-black text-foreground overflow-hidden">
@@ -33,16 +37,16 @@ export default function Dashboard() {
               {/* Quick stats */}
               <div className="flex gap-6">
                 <div className="glass-panel p-4 text-center">
-                  <div className="text-2xl font-bold text-primary">{progression?.currentLevel || 1}</div>
+                  <div className="text-2xl font-bold text-primary">{prog?.currentLevel || 1}</div>
                   <div className="text-xs text-muted-foreground mt-1">LEVEL</div>
                 </div>
                 <div className="glass-panel p-4 text-center">
-                  <div className="text-2xl font-bold text-secondary">{progression?.totalPoints || 0}</div>
-                  <div className="text-xs text-muted-foreground mt-1">POINTS</div>
+                  <div className="text-2xl font-bold text-secondary">{prog?.totalXP || 0}</div>
+                  <div className="text-xs text-muted-foreground mt-1">XP</div>
                 </div>
                 <div className="glass-panel p-4 text-center">
-                  <div className="text-2xl font-bold text-accent">{progression?.currentStreak || 0}</div>
-                  <div className="text-xs text-muted-foreground mt-1">STREAK</div>
+                  <div className="text-2xl font-bold text-accent">{prog?.powerScore || 0}</div>
+                  <div className="text-xs text-muted-foreground mt-1">POWER</div>
                 </div>
               </div>
             </div>
@@ -84,14 +88,14 @@ export default function Dashboard() {
                     MIND INTELLIGENCE
                   </h3>
                   <div className="text-2xl font-bold text-primary">
-                    {todayMetrics?.mindIntelligence ? parseFloat(todayMetrics.mindIntelligence.toString()).toFixed(1) : "0"}
+                    {mods?.hl1_clarity ? parseFloat(mods.hl1_clarity.toString()).toFixed(1) : "0"}
                   </div>
                 </div>
                 <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
                   <div
                     className="bg-gradient-to-r from-primary to-secondary h-full transition-all duration-500"
                     style={{
-                      width: `${Math.min((parseFloat(todayMetrics?.mindIntelligence?.toString() || "0") / 100) * 100, 100)}%`
+                      width: `${Math.min((parseFloat(mods?.hl1_clarity?.toString() || "0") / 100) * 100, 100)}%`
                     }}
                   />
                 </div>
@@ -108,14 +112,14 @@ export default function Dashboard() {
                     BODY INTELLIGENCE
                   </h3>
                   <div className="text-2xl font-bold text-secondary">
-                    {todayMetrics?.bodyIntelligence ? parseFloat(todayMetrics.bodyIntelligence.toString()).toFixed(1) : "0"}
+                    {mods?.hl3_energy ? parseFloat(mods.hl3_energy.toString()).toFixed(1) : "0"}
                   </div>
                 </div>
                 <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
                   <div
                     className="bg-gradient-to-r from-secondary to-accent h-full transition-all duration-500"
                     style={{
-                      width: `${Math.min((parseFloat(todayMetrics?.bodyIntelligence?.toString() || "0") / 100) * 100, 100)}%`
+                      width: `${Math.min((parseFloat(mods?.hl3_energy?.toString() || "0") / 100) * 100, 100)}%`
                     }}
                   />
                 </div>
@@ -132,14 +136,14 @@ export default function Dashboard() {
                     SOUL INTELLIGENCE
                   </h3>
                   <div className="text-2xl font-bold text-accent">
-                    {todayMetrics?.soulIntelligence ? parseFloat(todayMetrics.soulIntelligence.toString()).toFixed(1) : "0"}
+                    {mods?.hl2_faith ? parseFloat(mods.hl2_faith.toString()).toFixed(1) : "0"}
                   </div>
                 </div>
                 <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
                   <div
                     className="bg-gradient-to-r from-accent to-primary h-full transition-all duration-500"
                     style={{
-                      width: `${Math.min((parseFloat(todayMetrics?.soulIntelligence?.toString() || "0") / 100) * 100, 100)}%`
+                      width: `${Math.min((parseFloat(mods?.hl2_faith?.toString() || "0") / 100) * 100, 100)}%`
                     }}
                   />
                 </div>
@@ -169,14 +173,14 @@ export default function Dashboard() {
               <div className="space-y-6">
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="font-mono text-sm">LEVEL {progression?.currentLevel || 1} PROGRESS</span>
-                    <span className="text-primary font-bold">{progression?.totalPoints || 0}/{progression?.pointsToNextGate || 40}</span>
+                    <span className="font-mono text-sm">LEVEL {prog?.currentLevel || 1} PROGRESS</span>
+                    <span className="text-primary font-bold">{prog?.totalXP || 0}/{prog?.xpToNextLevel || 100}</span>
                   </div>
                   <div className="w-full bg-muted/30 rounded-full h-3 overflow-hidden">
                     <div
                       className="bg-gradient-to-r from-primary to-secondary h-full transition-all duration-500"
                       style={{
-                        width: `${Math.min(((progression?.totalPoints || 0) / (progression?.pointsToNextGate || 40)) * 100, 100)}%`
+                        width: `${Math.min(((prog?.totalXP || 0) / (prog?.xpToNextLevel || 100)) * 100, 100)}%`
                       }}
                     />
                   </div>
@@ -184,28 +188,21 @@ export default function Dashboard() {
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="glass-panel-cyan p-4">
-                    <div className="text-xs text-muted-foreground mb-1">LONGEST STREAK</div>
-                    <div className="text-3xl font-bold text-secondary">{progression?.longestStreak || 0}</div>
-                    <div className="text-xs text-secondary mt-2">days</div>
+                    <div className="text-xs text-muted-foreground mb-1">LEVEL</div>
+                    <div className="text-3xl font-bold text-secondary">{prog?.currentLevel || 1}</div>
+                    <div className="text-xs text-secondary mt-2">current</div>
                   </div>
                   <div className="glass-panel p-4">
-                    <div className="text-xs text-muted-foreground mb-1">TOTAL CREDITS</div>
-                    <div className="text-3xl font-bold text-primary">{progression?.totalCredits || 0}</div>
+                    <div className="text-xs text-muted-foreground mb-1">TOTAL XP</div>
+                    <div className="text-3xl font-bold text-primary">{prog?.totalXP || 0}</div>
                     <div className="text-xs text-primary mt-2">earned</div>
                   </div>
                 </div>
 
                 <div className="mt-6">
-                  <h3 className="text-sm font-mono text-primary mb-3 uppercase tracking-wider">UNLOCKED GATES</h3>
-                  <div className="flex gap-2 flex-wrap">
-                    {(progression?.unlockedGates as any || []).map((gate: number) => (
-                      <div key={gate} className="glass-panel px-4 py-2">
-                        <span className="text-primary font-bold">GATE {gate}</span>
-                      </div>
-                    ))}
-                    {(!progression?.unlockedGates || (progression?.unlockedGates as any).length === 0) && (
-                      <p className="text-muted-foreground text-sm">No gates unlocked yet. Keep grinding!</p>
-                    )}
+                  <h3 className="text-sm font-mono text-primary mb-3 uppercase tracking-wider">CURRENT STAGE</h3>
+                  <div className="glass-panel px-4 py-2">
+                    <span className="text-primary font-bold">{prog?.currentStage || "Trap"}</span>
                   </div>
                 </div>
               </div>
