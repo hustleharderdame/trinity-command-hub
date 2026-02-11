@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -43,39 +44,40 @@
 }
 
 :root {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-600);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.235 0.015 65);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.015 65);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.015 65);
-  --secondary: oklch(0.98 0.001 286.375);
-  --secondary-foreground: oklch(0.4 0.015 65);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.141 0.005 285.823);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.623 0.214 259.815);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.235 0.015 65);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.623 0.214 259.815);
+  /* Cyberpunk Neon Color Palette */
+  --primary: oklch(0.65 0.25 290); /* Neon Pink */
+  --primary-foreground: oklch(0.05 0 0); /* Deep Black */
+  --sidebar-primary: oklch(0.65 0.25 290);
+  --sidebar-primary-foreground: oklch(0.05 0 0);
+  --chart-1: oklch(0.65 0.25 290);
+  --chart-2: oklch(0.55 0.25 180);
+  --chart-3: oklch(0.65 0.25 290);
+  --chart-4: oklch(0.55 0.25 180);
+  --chart-5: oklch(0.45 0.2 290);
+  --radius: 0rem; /* Sharp corners for cyberpunk */
+  --background: oklch(0.05 0 0); /* Deep Black */
+  --foreground: oklch(0.95 0.1 290); /* Neon Pink text */
+  --card: oklch(0.08 0.02 290); /* Dark with slight purple tint */
+  --card-foreground: oklch(0.95 0.1 290);
+  --popover: oklch(0.08 0.02 290);
+  --popover-foreground: oklch(0.95 0.1 290);
+  --secondary: oklch(0.55 0.25 180); /* Electric Cyan */
+  --secondary-foreground: oklch(0.05 0 0);
+  --muted: oklch(0.15 0.02 290);
+  --muted-foreground: oklch(0.6 0.1 290);
+  --accent: oklch(0.65 0.25 290); /* Neon Pink */
+  --accent-foreground: oklch(0.05 0 0);
+  --destructive: oklch(0.6 0.25 25); /* Neon Red */
+  --destructive-foreground: oklch(0.95 0.1 290);
+  --border: oklch(0.4 0.15 290); /* Neon Pink border */
+  --input: oklch(0.12 0.02 290);
+  --ring: oklch(0.65 0.25 290);
+  --sidebar: oklch(0.08 0.02 290);
+  --sidebar-foreground: oklch(0.95 0.1 290);
+  --sidebar-accent: oklch(0.65 0.25 290);
+  --sidebar-accent-foreground: oklch(0.05 0 0);
+  --sidebar-border: oklch(0.4 0.15 290);
+  --sidebar-ring: oklch(0.65 0.25 290);
 }
 
 .dark {
@@ -119,7 +121,117 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Space Mono', monospace;
+    background-image: 
+      radial-gradient(circle at 20% 50%, oklch(0.65 0.25 290 / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, oklch(0.55 0.25 180 / 0.1) 0%, transparent 50%);
+    background-attachment: fixed;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  h1 {
+    @apply text-4xl;
+    text-shadow: 0 0 20px oklch(0.65 0.25 290 / 0.8), 0 0 40px oklch(0.65 0.25 290 / 0.4);
+  }
+
+  h2 {
+    @apply text-3xl;
+    text-shadow: 0 0 15px oklch(0.65 0.25 290 / 0.6);
+  }
+
+  h3 {
+    @apply text-2xl;
+    text-shadow: 0 0 10px oklch(0.55 0.25 180 / 0.6);
+  }
+
+  /* Neon glow effects */
+  .neon-glow {
+    text-shadow: 
+      0 0 7px oklch(0.65 0.25 290 / 0.8),
+      0 0 10px oklch(0.65 0.25 290 / 0.6),
+      0 0 21px oklch(0.65 0.25 290 / 0.4),
+      0 0 42px oklch(0.65 0.25 290 / 0.2);
+  }
+
+  .neon-glow-cyan {
+    text-shadow: 
+      0 0 7px oklch(0.55 0.25 180 / 0.8),
+      0 0 10px oklch(0.55 0.25 180 / 0.6),
+      0 0 21px oklch(0.55 0.25 180 / 0.4),
+      0 0 42px oklch(0.55 0.25 180 / 0.2);
+  }
+
+  /* Glass morphism effect */
+  .glass-panel {
+    @apply backdrop-blur-md border;
+    background: oklch(0.65 0.25 290 / 0.05);
+    border-color: oklch(0.65 0.25 290 / 0.3);
+    box-shadow: 
+      0 8px 32px oklch(0.65 0.25 290 / 0.1),
+      inset 0 1px 1px oklch(1 0 0 / 0.1);
+  }
+
+  .glass-panel-cyan {
+    @apply backdrop-blur-md border;
+    background: oklch(0.55 0.25 180 / 0.05);
+    border-color: oklch(0.55 0.25 180 / 0.3);
+    box-shadow: 
+      0 8px 32px oklch(0.55 0.25 180 / 0.1),
+      inset 0 1px 1px oklch(1 0 0 / 0.1);
+  }
+
+  /* Pulse animation for power orb */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px oklch(0.65 0.25 290 / 0.6), 0 0 40px oklch(0.65 0.25 290 / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px oklch(0.65 0.25 290 / 0.8), 0 0 60px oklch(0.65 0.25 290 / 0.5);
+    }
+  }
+
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Scan line effect */
+  @keyframes scanlines {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(10px);
+    }
+  }
+
+  .scanlines {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scanlines::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      oklch(0 0 0 / 0.15),
+      oklch(0 0 0 / 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    animation: scanlines 8s linear infinite;
+    pointer-events: none;
+  }
+
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),
@@ -134,24 +246,82 @@
 }
 
 @layer components {
+  /* Neon button styles */
+  .btn-neon {
+    @apply px-6 py-2 font-bold border-2 text-foreground;
+    @apply transition-all duration-300 cursor-pointer;
+    border-color: oklch(0.65 0.25 290);
+    box-shadow: 0 0 10px oklch(0.65 0.25 290 / 0.5), inset 0 0 10px oklch(0.65 0.25 290 / 0.1);
+    text-shadow: 0 0 10px oklch(0.65 0.25 290 / 0.8);
+  }
+
+  .btn-neon:hover {
+    @apply bg-primary text-primary-foreground;
+    box-shadow: 0 0 20px oklch(0.65 0.25 290 / 0.8), inset 0 0 20px oklch(0.65 0.25 290 / 0.3);
+  }
+
+  .btn-neon-cyan {
+    @apply px-6 py-2 font-bold border-2 text-secondary;
+    @apply transition-all duration-300 cursor-pointer;
+    border-color: oklch(0.55 0.25 180);
+    box-shadow: 0 0 10px oklch(0.55 0.25 180 / 0.5), inset 0 0 10px oklch(0.55 0.25 180 / 0.1);
+    text-shadow: 0 0 10px oklch(0.55 0.25 180 / 0.8);
+  }
+
+  .btn-neon-cyan:hover {
+    @apply bg-secondary text-secondary-foreground;
+    box-shadow: 0 0 20px oklch(0.55 0.25 180 / 0.8), inset 0 0 20px oklch(0.55 0.25 180 / 0.3);
+  }
+
+  /* Neon input styles */
+  .input-neon {
+    @apply bg-input border-2 text-foreground px-4 py-2;
+    @apply focus:outline-none focus:ring-2;
+    @apply transition-all duration-300;
+    border-color: oklch(0.65 0.25 290);
+    box-shadow: inset 0 0 10px oklch(0.65 0.25 290 / 0.1);
+  }
+
+  .input-neon:focus {
+    border-color: oklch(0.65 0.25 290);
+    --ring: oklch(0.65 0.25 290 / 0.5);
+  }
+
+  .input-neon::placeholder {
+    @apply text-muted-foreground opacity-50;
+  }
+
+  /* Neon slider styles */
+  .slider-neon {
+    @apply w-full h-2 appearance-none cursor-pointer;
+    background: linear-gradient(90deg, oklch(0.65 0.25 290 / 0.3), oklch(0.55 0.25 180 / 0.3));
+    border-radius: 0.5rem;
+  }
+
+  .slider-neon::-webkit-slider-thumb {
+    @apply appearance-none w-5 h-5 cursor-pointer;
+    background: linear-gradient(135deg, oklch(0.65 0.25 290 / 0.8), oklch(0.55 0.25 180 / 0.8));
+    box-shadow: 0 0 15px oklch(0.65 0.25 290 / 0.8), 0 0 25px oklch(0.55 0.25 180 / 0.6);
+    border: 2px solid oklch(0.65 0.25 290 / 0.6);
+    border-radius: 50%;
+  }
+
+  .slider-neon::-moz-range-thumb {
+    @apply w-5 h-5 cursor-pointer;
+    background: linear-gradient(135deg, oklch(0.65 0.25 290 / 0.8), oklch(0.55 0.25 180 / 0.8));
+    box-shadow: 0 0 15px oklch(0.65 0.25 290 / 0.8), 0 0 25px oklch(0.55 0.25 180 / 0.6);
+    border: 2px solid oklch(0.65 0.25 290 / 0.6);
+    border-radius: 50%;
+  }
+
   /**
    * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
    */
   .container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
+    padding-left: 1rem;
     padding-right: 1rem;
   }
 
@@ -162,16 +332,35 @@
 
   @media (min-width: 640px) {
     .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
 
   @media (min-width: 1024px) {
     .container {
-      padding-left: 2rem; /* 32px - desktop padding */
+      padding-left: 2rem;
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 1280px;
     }
   }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: oklch(0.65 0.25 290 / 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, oklch(0.65 0.25 290 / 0.6), oklch(0.55 0.25 180 / 0.6));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, oklch(0.65 0.25 290 / 0.8), oklch(0.55 0.25 180 / 0.8));
 }
