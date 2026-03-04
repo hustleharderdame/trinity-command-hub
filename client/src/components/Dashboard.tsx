@@ -1,9 +1,15 @@
-import { useState, useEffect } from "react"
+import { useState } from 'react'
 import { Brain, Heart, Zap, TrendingUp, Gauge, Target } from "lucide-react"
 import { trpc } from "@/lib/trpc"
+import DailyFlowModal from './DailyFlowModal'
+import PillarsDisplay from './PillarsDisplay'
+import BatteryCreditsDisplay from './BatteryCreditsDisplay'
+import SpiritualAgeDisplay from './SpiritualAgeDisplay'
+import { Button } from '@/components/ui/button'
 
 export default function Dashboard() {
-  const [selectedTab, setSelectedTab] = useState<"metrics" | "budget" | "progression">("metrics")
+  const [selectedTab, setSelectedTab] = useState<"metrics" | "budget" | "progression" | "pillars" | "spiritual">("metrics")
+  const [showDailyFlow, setShowDailyFlow] = useState(false)
   
   // Fetch user progression
   const { data: progression } = trpc.hsProgression.get.useQuery()
@@ -28,56 +34,64 @@ export default function Dashboard() {
         {/* Header */}
         <header className="border-b border-primary/20 backdrop-blur-md bg-black/40">
           <div className="container mx-auto px-4 py-6">
-            <div className="flex items-center justify-between">
+            <div className="flex justify-between items-center mb-6">
               <div>
-                <h1 className="text-4xl font-bold neon-glow">TRINITY COMMAND HUB</h1>
-                <p className="text-secondary text-sm mt-2 font-mono">v13.0 • Consciousness Architecture</p>
+                <h1 className="font-orbitron text-4xl font-black text-primary">TRINITY COMMAND HUB</h1>
+                <p className="text-xs text-muted-foreground mt-1">HS.OS v13.0 • Consciousness Architecture</p>
               </div>
-              
-              {/* Quick stats */}
-              <div className="flex gap-6">
-                <div className="glass-panel p-4 text-center">
-                  <div className="text-2xl font-bold text-primary">{prog?.currentLevel || 1}</div>
-                  <div className="text-xs text-muted-foreground mt-1">LEVEL</div>
+              <div className="flex gap-4">
+                <div className="text-right">
+                  <p className="text-xs text-muted-foreground">LEVEL</p>
+                  <p className="font-orbitron text-3xl font-bold text-primary">{prog?.currentLevel || 1}</p>
                 </div>
-                <div className="glass-panel p-4 text-center">
-                  <div className="text-2xl font-bold text-secondary">{prog?.totalXP || 0}</div>
-                  <div className="text-xs text-muted-foreground mt-1">XP</div>
+                <div className="text-right">
+                  <p className="text-xs text-muted-foreground">XP</p>
+                  <p className="font-orbitron text-3xl font-bold text-secondary">{prog?.totalXP || 0}</p>
                 </div>
-                <div className="glass-panel p-4 text-center">
-                  <div className="text-2xl font-bold text-accent">{prog?.powerScore || 0}</div>
-                  <div className="text-xs text-muted-foreground mt-1">POWER</div>
+                <div className="text-right">
+                  <p className="text-xs text-muted-foreground">POWER</p>
+                  <p className="font-orbitron text-3xl font-bold text-accent">{Math.round(prog?.powerScore || 0)}</p>
                 </div>
               </div>
             </div>
-          </div>
-        </header>
 
-        {/* Navigation tabs */}
-        <div className="border-b border-primary/20 backdrop-blur-md bg-black/40 sticky top-0 z-20">
-          <div className="container mx-auto px-4">
-            <div className="flex gap-8">
-              {(["metrics", "budget", "progression"] as const).map((tab) => (
+            {/* Tab Navigation */}
+            <div className="flex gap-2 overflow-x-auto">
+              {[
+                { id: 'metrics', label: '📊 Intelligence Metrics' },
+                { id: 'budget', label: '💰 Budget Allocation' },
+                { id: 'progression', label: '🎯 Progression' },
+                { id: 'pillars', label: '⚡ Pillars' },
+                { id: 'spiritual', label: '✨ Spiritual Age' },
+              ].map((tab) => (
                 <button
-                  key={tab}
-                  onClick={() => setSelectedTab(tab)}
-                  className={`py-4 px-2 border-b-2 transition-all font-mono text-sm uppercase tracking-wider ${
-                    selectedTab === tab
-                      ? "border-primary text-primary neon-glow"
-                      : "border-transparent text-muted-foreground hover:text-foreground"
+                  key={tab.id}
+                  onClick={() => setSelectedTab(tab.id as any)}
+                  className={`px-4 py-2 text-sm font-mono whitespace-nowrap border-b-2 transition-all ${
+                    selectedTab === tab.id
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  {tab === "metrics" && "Intelligence Metrics"}
-                  {tab === "budget" && "Budget Allocation"}
-                  {tab === "progression" && "Progression Tracker"}
+                  {tab.label}
                 </button>
               ))}
             </div>
           </div>
+        </header>
+
+        {/* Daily Flow Button */}
+        <div className="container mx-auto px-4 py-4">
+          <Button
+            onClick={() => setShowDailyFlow(true)}
+            className="bg-gradient-to-r from-primary to-secondary text-black hover:opacity-90 font-bold"
+          >
+            🚀 Daily Flow
+          </Button>
         </div>
 
-        {/* Content area */}
-        <div className="container mx-auto px-4 py-8">
+        {/* Content */}
+        <div className="container mx-auto px-4 pb-20">
           {selectedTab === "metrics" && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Mind Intelligence */}
@@ -160,7 +174,13 @@ export default function Dashboard() {
                 <Gauge className="w-6 h-6" />
                 BUDGET ALLOCATION SYSTEM
               </h2>
-              <p className="text-muted-foreground">Budget allocation interface coming soon...</p>
+              <BatteryCreditsDisplay
+                totalBattery={prog?.totalBattery || 0}
+                totalCredits={prog?.totalCredits || 0}
+                spentCredits={prog?.spentCredits || 0}
+                availableCredits={prog?.availableCredits || 0}
+                creditsEarned={snap?.creditsEarned || 0}
+              />
             </div>
           )}
 
@@ -187,7 +207,7 @@ export default function Dashboard() {
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="glass-panel-cyan p-4">
+                  <div className="glass-panel p-4">
                     <div className="text-xs text-muted-foreground mb-1">LEVEL</div>
                     <div className="text-3xl font-bold text-secondary">{prog?.currentLevel || 1}</div>
                     <div className="text-xs text-secondary mt-2">current</div>
@@ -208,8 +228,49 @@ export default function Dashboard() {
               </div>
             </div>
           )}
+
+          {selectedTab === "pillars" && (
+            <PillarsDisplay
+              pillars={{
+                mind: snap?.mindPillar || 0,
+                body: snap?.bodyPillar || 0,
+                soul: snap?.soulPillar || 0,
+                money: snap?.moneyPillar || 0,
+                power: snap?.powerPillar || 0,
+                respect: snap?.respectPillar || 0,
+                consistency: snap?.consistencyPillar || 0,
+                happiness: snap?.happinessPillar || 0,
+                recovery: snap?.recoveryPillar || 0,
+                impact: snap?.impactPillar || 0,
+              }}
+              degree={snap?.degree || 0}
+              shadowAvg={snap?.shadowAvg || 0}
+              lightAvg={snap?.lightAvg || 0}
+            />
+          )}
+
+          {selectedTab === "spiritual" && (
+            <SpiritualAgeDisplay
+              spiritualAge={prog?.spiritualAge || 0}
+              biologicalAge={prog?.biologicalAge || 25}
+              lifeCycles={prog?.lifeCycles || 0}
+              frictionScore={prog?.frictionScore || 1.0}
+              deltaFromBaseline={0}
+            />
+          )}
         </div>
       </div>
+
+      {/* Daily Flow Modal */}
+      <DailyFlowModal
+        isOpen={showDailyFlow}
+        onClose={() => setShowDailyFlow(false)}
+        onSuccess={() => {
+          setShowDailyFlow(false)
+          // Refresh data
+          window.location.reload()
+        }}
+      />
     </div>
   )
 }
