@@ -26,7 +26,7 @@ export default function DailyMetricsForm({ onSuccess }: DailyMetricsFormProps) {
     impact: 5,
   })
 
-  const saveMutation = trpc.hs.updateModules.useMutation({
+  const saveMutation = trpc.hsDaily.pmEnd.useMutation({
     onSuccess: (data: any) => {
       toast.success("Daily metrics saved! 🚀")
       onSuccess?.()

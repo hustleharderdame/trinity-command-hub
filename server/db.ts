@@ -1,6 +1,15 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, userProgression, hlModules } from "../drizzle/schema";
+import { 
+  InsertUser, 
+  users, 
+  userProgression, 
+  dailySnapshots,
+  batteryCredits,
+  spiritualAge,
+  streakTracking,
+  intelligenceEngine,
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -68,7 +77,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     }
 
     await db.insert(users).values(values).onDuplicateKeyUpdate({
-      set: updateSet as any,
+      set: updateSet,
     });
   } catch (error) {
     console.error("[Database] Failed to upsert user:", error);
@@ -84,158 +93,214 @@ export async function getUserByOpenId(openId: string) {
   }
 
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
-
   return result.length > 0 ? result[0] : undefined;
 }
 
-/**
- * Get or create user progression
- */
+// HS.OS Database Helpers
+
 export async function getOrCreateUserProgression(userId: number) {
   const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot get user progression: database not available");
-    return null;
-  }
+  if (!db) return null;
 
   try {
-    const existing = await db.select().from(userProgression).where(eq(userProgression.userId, userId)).limit(1);
-
-    if (existing.length > 0) {
-      return existing[0];
+    let prog = await db.select().from(userProgression).where(eq(userProgression.userId, userId)).limit(1);
+    
+    if (prog.length === 0) {
+      await db.insert(userProgression).values({
+        userId,
+        currentStage: "Trap",
+        currentLevel: 1 as any,
+        totalXP: 0 as any,
+        xpToNextLevel: 100 as any,
+        currentStreak: 0 as any,
+        longestStreak: 0 as any,
+        powerScore: "0" as any,
+        tierRank: "RECOVERY",
+        soulBeastEvolution: "egg",
+      } as any);
+      prog = await db.select().from(userProgression).where(eq(userProgression.userId, userId)).limit(1);
     }
-
-    // Create new progression
-    await db.insert(userProgression).values({
-      userId: userId,
-      currentStage: "Trap",
-      currentLevel: 1,
-      currentDegree: "0" as any,
-      totalXP: 0,
-      xpToNextLevel: 100,
-      mindPillar: "50" as any,
-      bodyPillar: "50" as any,
-      spiritPillar: "50" as any,
-      moneyPillar: "50" as any,
-      powerPillar: "50" as any,
-      respectPillar: "50" as any,
-      powerScore: "0" as any,
-      hustleScore: "0" as any,
-      faithScore: "0" as any,
-      loveScore: "0" as any,
-      soulBeastEvolution: "egg",
-      legacyFactor: "1" as any,
-      depthScore: "0" as any,
-      blessingProbability: "50" as any,
-      currentZone: "Purgatory",
-    } as any);
-
-    const created = await db.select().from(userProgression).where(eq(userProgression.userId, userId)).limit(1);
-    return created[0] || null;
+    
+    return prog[0] || null;
   } catch (error) {
     console.error("[Database] Failed to get or create user progression:", error);
     return null;
   }
 }
 
-/**
- * Update user progression
- */
-export async function updateUserProgression(userId: number, updates: Record<string, any>) {
+export async function updateUserProgression(userId: number, data: any) {
   const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot update user progression: database not available");
-    return null;
-  }
+  if (!db) return null;
 
   try {
+    const updateData: any = {};
+    
+    if (data.currentStage !== undefined) updateData.currentStage = data.currentStage;
+    if (data.currentLevel !== undefined) updateData.currentLevel = data.currentLevel;
+    if (data.totalXP !== undefined) updateData.totalXP = data.totalXP;
+    if (data.currentStreak !== undefined) updateData.currentStreak = data.currentStreak;
+    if (data.powerScore !== undefined) updateData.powerScore = data.powerScore;
+    if (data.tierRank !== undefined) updateData.tierRank = data.tierRank;
+    if (data.soulBeastName !== undefined) updateData.soulBeastName = data.soulBeastName;
+    if (data.soulBeastEvolution !== undefined) updateData.soulBeastEvolution = data.soulBeastEvolution;
+    if (data.spiritualAge !== undefined) updateData.spiritualAge = data.spiritualAge;
+    if (data.biologicalAge !== undefined) updateData.biologicalAge = data.biologicalAge;
+    if (data.frictionScore !== undefined) updateData.frictionScore = data.frictionScore;
+    if (data.lifeCycles !== undefined) updateData.lifeCycles = data.lifeCycles;
+    if (data.burnoutRisk !== undefined) updateData.burnoutRisk = data.burnoutRisk;
+    if (data.totalCredits !== undefined) updateData.totalCredits = data.totalCredits;
+    if (data.currentZone !== undefined) updateData.currentZone = data.currentZone;
+
+    updateData.updatedAt = new Date();
+
     await db.update(userProgression)
-      .set(updates)
+      .set(updateData)
       .where(eq(userProgression.userId, userId));
 
-    const updated = await db.select().from(userProgression).where(eq(userProgression.userId, userId)).limit(1);
-    return updated[0] || null;
+    const result = await db.select().from(userProgression).where(eq(userProgression.userId, userId)).limit(1);
+    return result[0] || null;
   } catch (error) {
     console.error("[Database] Failed to update user progression:", error);
     return null;
   }
 }
 
-/**
- * Get HL Modules for user
- */
-export async function getHLModules(userId: number) {
+export async function getOrCreateDailySnapshot(userId: number, dateKey: string) {
   const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot get HL modules: database not available");
-    return null;
-  }
+  if (!db) return null;
 
   try {
-    const existing = await db.select().from(hlModules).where(eq(hlModules.userId, userId)).limit(1);
-
-    if (existing.length > 0) {
-      return existing[0];
+    let snapshot = await db.select().from(dailySnapshots)
+      .where(eq(dailySnapshots.userId, userId) as any)
+      .limit(1) as any;
+    
+    if (snapshot.length === 0) {
+      await db.insert(dailySnapshots).values({
+        userId,
+        dateKey,
+      });
+      snapshot = await db.select().from(dailySnapshots)
+        .where(eq(dailySnapshots.userId, userId) as any)
+        .limit(1) as any;
     }
-
-    // Create new modules
-    await db.insert(hlModules).values({
-      userId: userId,
-      hl0_identity: "0" as any,
-      hl1_clarity: "0" as any,
-      hl1_habits: "0" as any,
-      hl2_faith: "0" as any,
-      hl2_meditation: "0" as any,
-      hl3_sleep: "0" as any,
-      hl3_nutrition: "0" as any,
-      hl3_energy: "0" as any,
-      hl4_income: "0" as any,
-      hl4_expenses: "0" as any,
-      hl4_savings: "0" as any,
-      hl5_relationships: "0" as any,
-      hl5_network: "0" as any,
-      hl6_goals: "0" as any,
-      hl6_momentum: "0" as any,
-      hl7_space: "0" as any,
-      hl8_skills: "0" as any,
-      hl8_mastery: "0" as any,
-      hl9_impact: "0" as any,
-      hl10_awareness: "0" as any,
-      hl10_regulation: "0" as any,
-      hl11_alignment: "0" as any,
-      hl12_flow: "0" as any,
-      hl13_influence: "0" as any,
-      hl14_vitality: "0" as any,
-      hl15_persistence: "0" as any,
-    } as any);
-
-    const created = await db.select().from(hlModules).where(eq(hlModules.userId, userId)).limit(1);
-    return created[0] || null;
+    
+    return snapshot[0] || null;
   } catch (error) {
-    console.error("[Database] Failed to get HL modules:", error);
+    console.error("[Database] Failed to get or create daily snapshot:", error);
     return null;
   }
 }
 
-/**
- * Update HL Modules
- */
-export async function updateHLModules(userId: number, updates: Record<string, any>) {
+export async function updateDailySnapshot(userId: number, dateKey: string, data: any) {
   const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot update HL modules: database not available");
-    return null;
-  }
+  if (!db) return null;
 
   try {
-    await db.update(hlModules)
-      .set(updates)
-      .where(eq(hlModules.userId, userId));
+    const updateData: any = {};
+    
+    // Map all possible fields
+    const fields = [
+      'faithScore', 'writtenIntent', 'beastMessage', 'twinMessage',
+      'hustleExecuted', 'obstacles', 'truthReflection',
+      'enthusiasmScore', 'gratitude', 'worthIt', 'pmReport',
+      'mindPillar', 'bodyPillar', 'soulPillar', 'moneyPillar', 'powerPillar',
+      'respectPillar', 'consistencyPillar', 'happinessPillar', 'recoveryPillar', 'impactPillar',
+      'powerScore', 'tierRank', 'creditsEarned', 'completedPillars', 'extraCredit',
+      'shadowAvg', 'lightAvg', 'degree', 'heavenMultiplier'
+    ];
 
-    const updated = await db.select().from(hlModules).where(eq(hlModules.userId, userId)).limit(1);
-    return updated[0] || null;
+    fields.forEach(field => {
+      if (data[field] !== undefined) {
+        updateData[field] = data[field];
+      }
+    });
+
+    if (Object.keys(updateData).length > 0) {
+      await (db.update(dailySnapshots)
+        .set(updateData)
+        .where(eq(dailySnapshots.userId, userId) as any) as any);
+    }
+
+    const result = await db.select().from(dailySnapshots)
+      .where(eq(dailySnapshots.userId, userId) as any)
+      .limit(1) as any;
+    
+    return result[0] || null;
   } catch (error) {
-    console.error("[Database] Failed to update HL modules:", error);
+    console.error("[Database] Failed to update daily snapshot:", error);
+    return null;
+  }
+}
+
+export async function getOrCreateBatteryCredits(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    let battery = await db.select().from(batteryCredits).where(eq(batteryCredits.userId, userId)).limit(1);
+    
+    if (battery.length === 0) {
+      await db.insert(batteryCredits).values({
+        userId,
+        totalBattery: "0" as any,
+        totalCredits: "0" as any,
+        spentCredits: "0" as any,
+        availableCredits: "0" as any,
+      } as any);
+      battery = await db.select().from(batteryCredits).where(eq(batteryCredits.userId, userId)).limit(1);
+    }
+    
+    return battery[0] || null;
+  } catch (error) {
+    console.error("[Database] Failed to get or create battery credits:", error);
+    return null;
+  }
+}
+
+export async function getOrCreateSpiritualAge(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    let spiritual = await db.select().from(spiritualAge).where(eq(spiritualAge.userId, userId)).limit(1);
+    
+    if (spiritual.length === 0) {
+      await db.insert(spiritualAge).values({
+        userId,
+        spiritualAge: 0 as any,
+        lifeCycles: 0,
+        frictionScore: "1.0" as any,
+      } as any);
+      spiritual = await db.select().from(spiritualAge).where(eq(spiritualAge.userId, userId)).limit(1);
+    }
+    
+    return spiritual[0] || null;
+  } catch (error) {
+    console.error("[Database] Failed to get or create spiritual age:", error);
+    return null;
+  }
+}
+
+export async function getOrCreateStreakTracking(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    let streak = await db.select().from(streakTracking).where(eq(streakTracking.userId, userId)).limit(1);
+    
+    if (streak.length === 0) {
+      await db.insert(streakTracking).values({
+        userId,
+        currentStreak: 0 as any,
+        longestStreak: 0,
+        totalDaysActive: 0,
+      } as any);
+      streak = await db.select().from(streakTracking).where(eq(streakTracking.userId, userId)).limit(1);
+    }
+    
+    return streak[0] || null;
+  } catch (error) {
+    console.error("[Database] Failed to get or create streak tracking:", error);
     return null;
   }
 }

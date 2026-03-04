@@ -1,9 +1,176 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "a1ec4cbc-1fd4-4196-a395-b8cfa16e5b22",
-  "prevId": "97e5f2fc-e6a7-4180-abeb-1e163fde835c",
+  "id": "a3ab426e-8e35-480d-a3c5-e28cb490ad2d",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "battery_credits": {
+      "name": "battery_credits",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "totalBattery": {
+          "name": "totalBattery",
+          "type": "decimal(10,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "totalCredits": {
+          "name": "totalCredits",
+          "type": "decimal(10,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "spentCredits": {
+          "name": "spentCredits",
+          "type": "decimal(10,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "availableCredits": {
+          "name": "availableCredits",
+          "type": "decimal(10,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "mindBudget": {
+          "name": "mindBudget",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "bodyBudget": {
+          "name": "bodyBudget",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "soulBudget": {
+          "name": "soulBudget",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "moneyBudget": {
+          "name": "moneyBudget",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "powerBudget": {
+          "name": "powerBudget",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "respectBudget": {
+          "name": "respectBudget",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "consistencyBudget": {
+          "name": "consistencyBudget",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "happinessBudget": {
+          "name": "happinessBudget",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "recoveryBudget": {
+          "name": "recoveryBudget",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "impactBudget": {
+          "name": "impactBudget",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "onUpdate": true,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "battery_credits_id": {
+          "name": "battery_credits_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "battery_credits_userId_unique": {
+          "name": "battery_credits_userId_unique",
+          "columns": [
+            "userId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
     "daily_snapshots": {
       "name": "daily_snapshots",
       "columns": {
@@ -21,63 +188,241 @@
           "notNull": true,
           "autoincrement": false
         },
-        "date": {
-          "name": "date",
+        "dateKey": {
+          "name": "dateKey",
           "type": "varchar(10)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "stage": {
-          "name": "stage",
-          "type": "varchar(50)",
+        "faithScore": {
+          "name": "faithScore",
+          "type": "decimal(3,1)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "level": {
-          "name": "level",
-          "type": "int",
+        "writtenIntent": {
+          "name": "writtenIntent",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "degree": {
-          "name": "degree",
-          "type": "decimal(5,2)",
+        "beastMessage": {
+          "name": "beastMessage",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "twinMessage": {
+          "name": "twinMessage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "hustleExecuted": {
+          "name": "hustleExecuted",
+          "type": "decimal(5,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "obstacles": {
+          "name": "obstacles",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "truthReflection": {
+          "name": "truthReflection",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "enthusiasmScore": {
+          "name": "enthusiasmScore",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "gratitude": {
+          "name": "gratitude",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "worthIt": {
+          "name": "worthIt",
+          "type": "enum('yes','no','partial')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "pmReport": {
+          "name": "pmReport",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mindPillar": {
+          "name": "mindPillar",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "bodyPillar": {
+          "name": "bodyPillar",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "soulPillar": {
+          "name": "soulPillar",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "moneyPillar": {
+          "name": "moneyPillar",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "powerPillar": {
+          "name": "powerPillar",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "respectPillar": {
+          "name": "respectPillar",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "consistencyPillar": {
+          "name": "consistencyPillar",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "happinessPillar": {
+          "name": "happinessPillar",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "recoveryPillar": {
+          "name": "recoveryPillar",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "impactPillar": {
+          "name": "impactPillar",
+          "type": "decimal(3,1)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
         },
         "powerScore": {
           "name": "powerScore",
           "type": "decimal(10,2)",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'0'"
         },
-        "zone": {
-          "name": "zone",
+        "tierRank": {
+          "name": "tierRank",
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'RECOVERY'"
         },
-        "pillars": {
-          "name": "pillars",
-          "type": "json",
+        "creditsEarned": {
+          "name": "creditsEarned",
+          "type": "decimal(5,2)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "('{}')"
+          "default": "'0'"
         },
-        "modules": {
-          "name": "modules",
-          "type": "json",
+        "completedPillars": {
+          "name": "completedPillars",
+          "type": "int",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "('{}')"
+          "default": 0
+        },
+        "extraCredit": {
+          "name": "extraCredit",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "shadowAvg": {
+          "name": "shadowAvg",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "lightAvg": {
+          "name": "lightAvg",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "degree": {
+          "name": "degree",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "heavenMultiplier": {
+          "name": "heavenMultiplier",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'1'"
         },
         "createdAt": {
           "name": "createdAt",
@@ -98,18 +443,11 @@
           ]
         }
       },
-      "uniqueConstraints": {
-        "daily_snapshots_date_unique": {
-          "name": "daily_snapshots_date_unique",
-          "columns": [
-            "date"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "checkConstraint": {}
     },
-    "engine_outputs": {
-      "name": "engine_outputs",
+    "historical_export": {
+      "name": "historical_export",
       "columns": {
         "id": {
           "name": "id",
@@ -125,549 +463,33 @@
           "notNull": true,
           "autoincrement": false
         },
-        "date": {
-          "name": "date",
-          "type": "varchar(10)",
+        "exportType": {
+          "name": "exportType",
+          "type": "enum('daily','cumulative','full')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "hustleEngine_momentum": {
-          "name": "hustleEngine_momentum",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hustleEngine_xpGain": {
-          "name": "hustleEngine_xpGain",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "moneyEngine_netFlow": {
-          "name": "moneyEngine_netFlow",
-          "type": "decimal(10,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "moneyEngine_savings": {
-          "name": "moneyEngine_savings",
-          "type": "decimal(10,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "spiritEngine_faith": {
-          "name": "spiritEngine_faith",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "spiritEngine_blessingProb": {
-          "name": "spiritEngine_blessingProb",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "bodyEngine_energy": {
-          "name": "bodyEngine_energy",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "bodyEngine_readiness": {
-          "name": "bodyEngine_readiness",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "alignmentEngine_degree": {
-          "name": "alignmentEngine_degree",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "alignmentEngine_status": {
-          "name": "alignmentEngine_status",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'neutral'"
-        },
-        "storyEngine_narrative": {
-          "name": "storyEngine_narrative",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "storyEngine_milestone": {
-          "name": "storyEngine_milestone",
+        "dateRange": {
+          "name": "dateRange",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "recursiveEngine_shadowPattern": {
-          "name": "recursiveEngine_shadowPattern",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "recursiveEngine_correction": {
-          "name": "recursiveEngine_correction",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "blessingEngine_applied": {
-          "name": "blessingEngine_applied",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": false
-        },
-        "blessingEngine_multiplier": {
-          "name": "blessingEngine_multiplier",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'1'"
-        },
-        "soulEngine_legacyFactor": {
-          "name": "soulEngine_legacyFactor",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'1'"
-        },
-        "soulEngine_beastEvolution": {
-          "name": "soulEngine_beastEvolution",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(now())"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "engine_outputs_id": {
-          "name": "engine_outputs_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "hl_modules": {
-      "name": "hl_modules",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "userId": {
-          "name": "userId",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "hl0_identity": {
-          "name": "hl0_identity",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl0_archetype": {
-          "name": "hl0_archetype",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "hl1_clarity": {
-          "name": "hl1_clarity",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl1_habits": {
-          "name": "hl1_habits",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl2_faith": {
-          "name": "hl2_faith",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl2_meditation": {
-          "name": "hl2_meditation",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl3_sleep": {
-          "name": "hl3_sleep",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl3_nutrition": {
-          "name": "hl3_nutrition",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl3_energy": {
-          "name": "hl3_energy",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl4_income": {
-          "name": "hl4_income",
-          "type": "decimal(10,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl4_expenses": {
-          "name": "hl4_expenses",
-          "type": "decimal(10,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl4_savings": {
-          "name": "hl4_savings",
-          "type": "decimal(10,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl5_relationships": {
-          "name": "hl5_relationships",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl5_network": {
-          "name": "hl5_network",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl6_goals": {
-          "name": "hl6_goals",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl6_momentum": {
-          "name": "hl6_momentum",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl7_space": {
-          "name": "hl7_space",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl8_skills": {
-          "name": "hl8_skills",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl8_mastery": {
-          "name": "hl8_mastery",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl9_impact": {
-          "name": "hl9_impact",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl10_awareness": {
-          "name": "hl10_awareness",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl10_regulation": {
-          "name": "hl10_regulation",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl11_alignment": {
-          "name": "hl11_alignment",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl12_flow": {
-          "name": "hl12_flow",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl13_influence": {
-          "name": "hl13_influence",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl14_vitality": {
-          "name": "hl14_vitality",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "hl15_persistence": {
-          "name": "hl15_persistence",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(now())"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "onUpdate": true,
-          "default": "(now())"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "hl_modules_id": {
-          "name": "hl_modules_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "hs_stages": {
-      "name": "hs_stages",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "stageName": {
-          "name": "stageName",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "levelRangeStart": {
-          "name": "levelRangeStart",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "levelRangeEnd": {
-          "name": "levelRangeEnd",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "stageOrder": {
-          "name": "stageOrder",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(now())"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "hs_stages_id": {
-          "name": "hs_stages_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {
-        "hs_stages_stageName_unique": {
-          "name": "hs_stages_stageName_unique",
-          "columns": [
-            "stageName"
-          ]
-        }
-      },
-      "checkConstraint": {}
-    },
-    "life_folders": {
-      "name": "life_folders",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "userId": {
-          "name": "userId",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "folderType": {
-          "name": "folderType",
-          "type": "enum('identity','finances','health','work')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "folderName": {
-          "name": "folderName",
-          "type": "varchar(200)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "folderData": {
-          "name": "folderData",
+        "exportData": {
+          "name": "exportData",
           "type": "json",
           "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fileName": {
+          "name": "fileName",
+          "type": "varchar(255)",
+          "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "('{}')"
+          "autoincrement": false
         },
         "createdAt": {
           "name": "createdAt",
@@ -676,22 +498,13 @@
           "notNull": true,
           "autoincrement": false,
           "default": "(now())"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "onUpdate": true,
-          "default": "(now())"
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "life_folders_id": {
-          "name": "life_folders_id",
+        "historical_export_id": {
+          "name": "historical_export_id",
           "columns": [
             "id"
           ]
@@ -700,8 +513,8 @@
       "uniqueConstraints": {},
       "checkConstraint": {}
     },
-    "missions": {
-      "name": "missions",
+    "intelligence_engine": {
+      "name": "intelligence_engine",
       "columns": {
         "id": {
           "name": "id",
@@ -717,63 +530,170 @@
           "notNull": true,
           "autoincrement": false
         },
-        "missionTitle": {
-          "name": "missionTitle",
-          "type": "varchar(200)",
+        "dateKey": {
+          "name": "dateKey",
+          "type": "varchar(10)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "missionDescription": {
-          "name": "missionDescription",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "relatedModule": {
-          "name": "relatedModule",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "relatedPillar": {
-          "name": "relatedPillar",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "status": {
-          "name": "status",
-          "type": "enum('pending','in_progress','completed','failed')",
+        "burnoutRisk": {
+          "name": "burnoutRisk",
+          "type": "enum('LOW','MODERATE','HIGH')",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'pending'"
+          "default": "'LOW'"
         },
-        "xpReward": {
-          "name": "xpReward",
+        "burnoutScore": {
+          "name": "burnoutScore",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "faithDecayStatus": {
+          "name": "faithDecayStatus",
+          "type": "enum('STABLE','DECLINING','DECAYING')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'STABLE'"
+        },
+        "faithDecayPercent": {
+          "name": "faithDecayPercent",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "momentumStatus": {
+          "name": "momentumStatus",
+          "type": "enum('STRONG','BUILDING','UNSTABLE')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'BUILDING'"
+        },
+        "momentumRatio": {
+          "name": "momentumRatio",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "intelligence_engine_id": {
+          "name": "intelligence_engine_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "spiritual_age": {
+      "name": "spiritual_age",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "biologicalAge": {
+          "name": "biologicalAge",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spiritualAge": {
+          "name": "spiritualAge",
           "type": "int",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
           "default": 0
         },
-        "evidence": {
-          "name": "evidence",
-          "type": "text",
+        "lifeCycles": {
+          "name": "lifeCycles",
+          "type": "int",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": 0
         },
-        "completedAt": {
-          "name": "completedAt",
-          "type": "timestamp",
+        "frictionScore": {
+          "name": "frictionScore",
+          "type": "decimal(3,2)",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'1.0'"
+        },
+        "baseMaturityScore": {
+          "name": "baseMaturityScore",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "wisdomMilestoneScore": {
+          "name": "wisdomMilestoneScore",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "lifeCycleBonus": {
+          "name": "lifeCycleBonus",
+          "type": "decimal(5,2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'0'"
+        },
+        "statusColor": {
+          "name": "statusColor",
+          "type": "enum('green','yellow','red')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'yellow'"
+        },
+        "deltaFromBaseline": {
+          "name": "deltaFromBaseline",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
         },
         "createdAt": {
           "name": "createdAt",
@@ -796,14 +716,114 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "missions_id": {
-          "name": "missions_id",
+        "spiritual_age_id": {
+          "name": "spiritual_age_id",
           "columns": [
             "id"
           ]
         }
       },
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "spiritual_age_userId_unique": {
+          "name": "spiritual_age_userId_unique",
+          "columns": [
+            "userId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "streak_tracking": {
+      "name": "streak_tracking",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "currentStreak": {
+          "name": "currentStreak",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "longestStreak": {
+          "name": "longestStreak",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "lastActiveDate": {
+          "name": "lastActiveDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "streakStartDate": {
+          "name": "streakStartDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "totalDaysActive": {
+          "name": "totalDaysActive",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "onUpdate": true,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "streak_tracking_id": {
+          "name": "streak_tracking_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "streak_tracking_userId_unique": {
+          "name": "streak_tracking_userId_unique",
+          "columns": [
+            "userId"
+          ]
+        }
+      },
       "checkConstraint": {}
     },
     "user_progression": {
@@ -835,7 +855,7 @@
           "name": "currentLevel",
           "type": "int",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": 1
         },
@@ -851,7 +871,7 @@
           "name": "totalXP",
           "type": "int",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": 0
         },
@@ -859,57 +879,49 @@
           "name": "xpToNextLevel",
           "type": "int",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": 100
         },
-        "mindPillar": {
-          "name": "mindPillar",
-          "type": "decimal(5,2)",
+        "currentStreak": {
+          "name": "currentStreak",
+          "type": "int",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'50'"
+          "default": 0
         },
-        "bodyPillar": {
-          "name": "bodyPillar",
-          "type": "decimal(5,2)",
+        "longestStreak": {
+          "name": "longestStreak",
+          "type": "int",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'50'"
+          "default": 0
         },
-        "spiritPillar": {
-          "name": "spiritPillar",
-          "type": "decimal(5,2)",
+        "totalBattery": {
+          "name": "totalBattery",
+          "type": "decimal(10,2)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'50'"
+          "default": "'0'"
         },
-        "moneyPillar": {
-          "name": "moneyPillar",
-          "type": "decimal(5,2)",
+        "totalCredits": {
+          "name": "totalCredits",
+          "type": "decimal(10,2)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'50'"
+          "default": "'0'"
         },
-        "powerPillar": {
-          "name": "powerPillar",
-          "type": "decimal(5,2)",
+        "spentCredits": {
+          "name": "spentCredits",
+          "type": "decimal(10,2)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'50'"
-        },
-        "respectPillar": {
-          "name": "respectPillar",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'50'"
+          "default": "'0'"
         },
         "powerScore": {
           "name": "powerScore",
@@ -919,29 +931,13 @@
           "autoincrement": false,
           "default": "'0'"
         },
-        "hustleScore": {
-          "name": "hustleScore",
-          "type": "decimal(5,2)",
+        "tierRank": {
+          "name": "tierRank",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'0'"
-        },
-        "faithScore": {
-          "name": "faithScore",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "loveScore": {
-          "name": "loveScore",
-          "type": "decimal(5,2)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
+          "default": "'RECOVERY'"
         },
         "soulBeastName": {
           "name": "soulBeastName",
@@ -960,35 +956,66 @@
         },
         "soulBeastEvolution": {
           "name": "soulBeastEvolution",
-          "type": "varchar(50)",
+          "type": "enum('egg','hatchling','evolved','ascended')",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
           "default": "'egg'"
         },
-        "legacyFactor": {
-          "name": "legacyFactor",
-          "type": "decimal(5,2)",
+        "spiritualAge": {
+          "name": "spiritualAge",
+          "type": "int",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'1'"
+          "default": 0
         },
-        "depthScore": {
-          "name": "depthScore",
-          "type": "decimal(5,2)",
+        "biologicalAge": {
+          "name": "biologicalAge",
+          "type": "int",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "'0'"
+          "autoincrement": false
         },
-        "blessingProbability": {
-          "name": "blessingProbability",
-          "type": "decimal(5,2)",
+        "frictionScore": {
+          "name": "frictionScore",
+          "type": "decimal(3,2)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'50'"
+          "default": "'1.0'"
+        },
+        "lifeCycles": {
+          "name": "lifeCycles",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "burnoutRisk": {
+          "name": "burnoutRisk",
+          "type": "enum('LOW','MODERATE','HIGH')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'LOW'"
+        },
+        "faithDecayStatus": {
+          "name": "faithDecayStatus",
+          "type": "enum('STABLE','DECLINING','DECAYING')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'STABLE'"
+        },
+        "momentumStatus": {
+          "name": "momentumStatus",
+          "type": "enum('STRONG','BUILDING','UNSTABLE')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'BUILDING'"
         },
         "currentZone": {
           "name": "currentZone",
@@ -997,6 +1024,13 @@
           "notNull": false,
           "autoincrement": false,
           "default": "'Purgatory'"
+        },
+        "lastActiveDate": {
+          "name": "lastActiveDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "createdAt": {
           "name": "createdAt",

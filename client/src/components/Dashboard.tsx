@@ -6,14 +6,14 @@ export default function Dashboard() {
   const [selectedTab, setSelectedTab] = useState<"metrics" | "budget" | "progression">("metrics")
   
   // Fetch user progression
-  const { data: progression } = trpc.hs.getProgression.useQuery()
+  const { data: progression } = trpc.hsProgression.get.useQuery()
   
-  // Fetch modules
-  const { data: modules } = trpc.hs.getModules.useQuery()
+  // Fetch today's snapshot
+  const { data: snapshot } = trpc.hsDaily.getToday.useQuery()
 
   // Type-safe progression data
   const prog = progression as any || {}
-  const mods = modules as any || {}
+  const snap = snapshot as any || {}
 
   return (
     <div className="min-h-screen bg-black text-foreground overflow-hidden">
@@ -88,14 +88,14 @@ export default function Dashboard() {
                     MIND INTELLIGENCE
                   </h3>
                   <div className="text-2xl font-bold text-primary">
-                    {mods?.hl1_clarity ? parseFloat(mods.hl1_clarity.toString()).toFixed(1) : "0"}
+                    {snap?.mindPillar ? parseFloat(snap.mindPillar.toString()).toFixed(1) : "0"}
                   </div>
                 </div>
                 <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
                   <div
                     className="bg-gradient-to-r from-primary to-secondary h-full transition-all duration-500"
                     style={{
-                      width: `${Math.min((parseFloat(mods?.hl1_clarity?.toString() || "0") / 100) * 100, 100)}%`
+                      width: `${Math.min((parseFloat(snap?.mindPillar?.toString() || "0") / 10) * 100, 100)}%`
                     }}
                   />
                 </div>
@@ -112,14 +112,14 @@ export default function Dashboard() {
                     BODY INTELLIGENCE
                   </h3>
                   <div className="text-2xl font-bold text-secondary">
-                    {mods?.hl3_energy ? parseFloat(mods.hl3_energy.toString()).toFixed(1) : "0"}
+                    {snap?.bodyPillar ? parseFloat(snap.bodyPillar.toString()).toFixed(1) : "0"}
                   </div>
                 </div>
                 <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
                   <div
                     className="bg-gradient-to-r from-secondary to-accent h-full transition-all duration-500"
                     style={{
-                      width: `${Math.min((parseFloat(mods?.hl3_energy?.toString() || "0") / 100) * 100, 100)}%`
+                      width: `${Math.min((parseFloat(snap?.bodyPillar?.toString() || "0") / 10) * 100, 100)}%`
                     }}
                   />
                 </div>
@@ -136,14 +136,14 @@ export default function Dashboard() {
                     SOUL INTELLIGENCE
                   </h3>
                   <div className="text-2xl font-bold text-accent">
-                    {mods?.hl2_faith ? parseFloat(mods.hl2_faith.toString()).toFixed(1) : "0"}
+                    {snap?.soulPillar ? parseFloat(snap.soulPillar.toString()).toFixed(1) : "0"}
                   </div>
                 </div>
                 <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
                   <div
                     className="bg-gradient-to-r from-accent to-primary h-full transition-all duration-500"
                     style={{
-                      width: `${Math.min((parseFloat(mods?.hl2_faith?.toString() || "0") / 100) * 100, 100)}%`
+                      width: `${Math.min((parseFloat(snap?.soulPillar?.toString() || "0") / 10) * 100, 100)}%`
                     }}
                   />
                 </div>

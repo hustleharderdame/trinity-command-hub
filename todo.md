@@ -125,3 +125,75 @@
 - [ ] Track pillar growth
 - [ ] Visualize zone modifiers
 - [ ] Create gamified milestone dashboard
+
+
+## HS.OS Daily Flow System (Chat-Derived v13)
+
+### Daily Flow Lifecycle
+- [ ] AM START: Faith score input, Written Intent, Beast/Twin initialization
+- [ ] MIDDAY CHECK: Hustle execution %, obstacles tracking, truth reflection
+- [ ] PM END: Enthusiasm score, gratitude logging, WorthIt tracking
+- [ ] Daily ritual logs (Beast/Twin messages, PM Report)
+
+### 10 Pillars Tracking
+- [ ] Mind: Knowledge, strategy, planning (0-10 slider)
+- [ ] Body: Physical energy, health (0-10 slider)
+- [ ] Soul: Spiritual alignment, intuition (0-10 slider)
+- [ ] Money: Financial actions, hustles (0-10 slider)
+- [ ] Power: Influence, leadership (0-10 slider)
+- [ ] Respect: Social/relationship capital (0-10 slider)
+- [ ] Consistency: Discipline, routines (0-10 slider)
+- [ ] Happiness: Joy, enthusiasm (0-10 slider)
+- [ ] Recovery: Rest, mental reset (0-10 slider)
+- [ ] Impact: Legacy, external influence (0-10 slider)
+- [ ] Shadow/Light classification (Shadow: Body, Money, Power, Respect | Light: Mind, Soul, Happiness, Recovery)
+
+### Power Engine Calculations
+- [ ] Hustle: Midday % execution tracking
+- [ ] Faith: Start-of-day faith score (1-10)
+- [ ] Love: End-of-day enthusiasm score (1-10)
+- [ ] Power Score formula: ((Hustle² + Faith²)^Love) × TimeFactor × ConsistencyMultiplier × HappinessBoost × RecoveryShield × ImpactRipple
+- [ ] Tier Assignment system (GOD MODE ≥900, ASCENDING ≥600, SOLID ≥300, BUILDING ≥100, RECOVERY <100)
+- [ ] Extra Credit: Completed pillars >6 → +5 credits per pillar
+
+### Intelligence Engine
+- [ ] Burnout Risk detection (7-day tracking: high hustle + low love analysis)
+- [ ] Faith Decay tracking (10-day decline detection, >60% drop = DECAYING)
+- [ ] Momentum analysis (30-day power score ratio, STRONG/BUILDING/UNSTABLE levels)
+- [ ] Degree calculation: clamped(-90, 90, (ShadowAvg - LightAvg)/10 × 90)
+- [ ] Heaven Multiplier: 1 + (1 - |degree|/90) × 0.5
+
+### Battery & Credits System
+- [ ] Battery tracking (totalSE in-game currency)
+- [ ] Credit Balance accumulation (daily earned credits)
+- [ ] Budget Categories (mirrors 10 pillars for allocation)
+- [ ] Dynamic budget allocation UI per pillar
+
+### Streaks & Progression
+- [ ] Current streak tracking
+- [ ] Longest streak tracking
+- [ ] Level progression (0-5 levels)
+- [ ] Gate unlock system (40 points per gate)
+- [ ] Points per day: 6 base + extra pillars
+
+### Spiritual Age & Life Cycles
+- [ ] Friction Score (1.0-2.0 range based on environment)
+- [ ] Life Cycles tracking (developmental progression measurement)
+- [ ] Spiritual Age formula: (Base Maturity Score) + (Wisdom Milestone Score × Friction Multiplier) + (Life Cycle Compression Bonus)
+- [ ] Comparative age display (Biological Age vs Spiritual Age vs World Baseline)
+- [ ] Color-coded status indicators (Green/Yellow/Red)
+- [ ] "Life Cycles ahead of standard humanity" display
+
+### Historical Data & Export
+- [ ] Daily JSON logs storage (pillars, startOfDay, middayCheck, endOfDay, powerScore, creditsEarned, completedPillars)
+- [ ] Export options (daily, cumulative, full historical JSON)
+- [ ] Data integrity rules (22:00 Rule, Filename Rule, Formal Tone)
+- [ ] Closing Log tracking for AI grounding
+
+### Visual Features
+- [ ] Beast vs Twin messaging (Beast: action/warning, Twin: clarity/strategy)
+- [ ] Intensity bars (0-100% imbalance visualization)
+- [ ] Shadow/Light balance visualization
+- [ ] Degree indicator display (-90° to +90°)
+- [ ] Heaven Multiplier display
+- [ ] Tier badge display (GOD MODE, ASCENDING, SOLID, BUILDING, RECOVERY)
