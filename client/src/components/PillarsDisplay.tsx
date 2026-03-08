@@ -35,6 +35,11 @@ const PILLAR_CONFIG = [
 ]
 
 export default function PillarsDisplay({ pillars, degree = 0, shadowAvg = 5, lightAvg = 5 }: PillarsDisplayProps) {
+  // Coerce DECIMAL strings from database to numbers
+  const shadow = Number(shadowAvg ?? 0)
+  const light = Number(lightAvg ?? 0)
+  const deg = Number(degree ?? 0)
+
   const shadowPillars = PILLAR_CONFIG.filter(p => p.type === 'shadow')
   const lightPillars = PILLAR_CONFIG.filter(p => p.type === 'light')
 
@@ -86,7 +91,7 @@ export default function PillarsDisplay({ pillars, degree = 0, shadowAvg = 5, lig
             {/* Indicator */}
             <div
               className="absolute h-6 w-1 bg-primary rounded transition-all duration-300"
-              style={{ left: `${50 + (degree / 180) * 50}%`, transform: 'translateX(-50%)' }}
+              style={{ left: `${50 + (deg / 180) * 50}%`, transform: 'translateX(-50%)' }}
             />
             
             {/* Labels */}
@@ -95,9 +100,9 @@ export default function PillarsDisplay({ pillars, degree = 0, shadowAvg = 5, lig
           </div>
 
           <div className="text-center">
-            <span className="text-lg font-bold text-primary">{Number(degree).toFixed(1)}°</span>
+            <span className="text-lg font-bold text-primary">{deg.toFixed(1)}°</span>
             <p className="text-xs text-muted-foreground mt-1">
-              {Math.abs(degree) < 30 ? 'BALANCED' : degree > 0 ? 'LIGHT ALIGNED' : 'SHADOW ALIGNED'}
+              {Math.abs(deg) < 30 ? 'BALANCED' : deg > 0 ? 'LIGHT ALIGNED' : 'SHADOW ALIGNED'}
             </p>
           </div>
         </div>
@@ -124,11 +129,11 @@ export default function PillarsDisplay({ pillars, degree = 0, shadowAvg = 5, lig
           <div className="grid grid-cols-2 gap-4 text-center">
         <div>
           <p className="text-xs text-muted-foreground">SHADOW AVERAGE</p>
-          <p className="text-2xl font-bold text-red-500">{Number(shadowAvg).toFixed(1)}</p>
+          <p className="text-2xl font-bold text-red-500">{shadow.toFixed(1)}</p>
         </div>
         <div>
           <p className="text-xs text-muted-foreground">LIGHT AVERAGE</p>
-          <p className="text-2xl font-bold text-blue-500">{Number(lightAvg).toFixed(1)}</p>
+          <p className="text-2xl font-bold text-blue-500">{light.toFixed(1)}</p>
         </div>
       </div>
       </Card>

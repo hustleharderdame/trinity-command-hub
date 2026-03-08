@@ -102,20 +102,20 @@ export default function TacticalMode({ progression, snapshot }: TacticalModeProp
         <h3 className="text-sm font-bold text-primary uppercase">10 PILLARS</h3>
         <PillarsDisplay
           pillars={{
-            mind: snap?.mindPillar || 0,
-            body: snap?.bodyPillar || 0,
-            soul: snap?.soulPillar || 0,
-            money: snap?.moneyPillar || 0,
-            power: snap?.powerPillar || 0,
-            respect: snap?.respectPillar || 0,
-            consistency: snap?.consistencyPillar || 0,
-            happiness: snap?.happinessPillar || 0,
-            recovery: snap?.recoveryPillar || 0,
-            impact: snap?.impactPillar || 0,
+            mind: Number(snap?.mindPillar ?? 0),
+            body: Number(snap?.bodyPillar ?? 0),
+            soul: Number(snap?.soulPillar ?? 0),
+            money: Number(snap?.moneyPillar ?? 0),
+            power: Number(snap?.powerPillar ?? 0),
+            respect: Number(snap?.respectPillar ?? 0),
+            consistency: Number(snap?.consistencyPillar ?? 0),
+            happiness: Number(snap?.happinessPillar ?? 0),
+            recovery: Number(snap?.recoveryPillar ?? 0),
+            impact: Number(snap?.impactPillar ?? 0),
           }}
-          degree={snap?.degree || 0}
-          shadowAvg={snap?.shadowAvg || 0}
-          lightAvg={snap?.lightAvg || 0}
+          degree={Number(snap?.degree ?? 0)}
+          shadowAvg={Number(snap?.shadowAvg ?? 0)}
+          lightAvg={Number(snap?.lightAvg ?? 0)}
         />
       </div>
 
