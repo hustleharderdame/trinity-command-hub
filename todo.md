@@ -197,3 +197,62 @@
 - [ ] Degree indicator display (-90° to +90°)
 - [ ] Heaven Multiplier display
 - [ ] Tier badge display (GOD MODE, ASCENDING, SOLID, BUILDING, RECOVERY)
+
+
+## Trinity HLB v13.0 - 4 Modes Integration
+
+### Mode 1: Tactical Dashboard
+- [ ] 8 Stage progression display (Trap, Suburbs, Penthouse, Mansion, Fort, Keep, Castle, Kingdom)
+- [ ] 10 Pillar grid with interactive sliders
+- [ ] Daily Flow modal (AM START, MIDDAY CHECK, PM END)
+- [ ] Power Score calculation and tier display
+- [ ] Real-time intelligence metrics (Mind/Body/Soul)
+- [ ] Current stage and level indicator
+
+### Mode 2: Journal & Logs
+- [ ] Daily log entry creation and editing
+- [ ] Evidence submission system (text, images, links)
+- [ ] PM Report template with structured fields
+- [ ] Closing Log tracking for AI grounding
+- [ ] Historical log browsing and search
+- [ ] Export logs as JSON
+
+### Mode 3: Scrapbook Gallery
+- [ ] Image upload and gallery display
+- [ ] Memory tagging and categorization
+- [ ] Milestone photo evidence linking
+- [ ] Photo timeline view
+- [ ] Scrapbook item hover effects
+- [ ] Download/export scrapbook
+
+### Mode 4: Gaming & 3D
+- [ ] 3D Soul Beast visualization (Three.js)
+- [ ] Soul Beast evolution states (Egg → Hatchling → Beast → Phoenix)
+- [ ] Achievement badge system
+- [ ] Leaderboard display
+- [ ] Gamification elements (streaks, combos)
+- [ ] 3D particle effects and animations
+
+### Google Drive Sync System
+- [ ] Google OAuth authentication
+- [ ] Automatic daily snapshot export
+- [ ] Manual sync button with status indicator
+- [ ] Conflict resolution for offline changes
+- [ ] Sync history and logs
+- [ ] Data backup and restore
+
+### Unified Empire System
+- [ ] 8 Stage progression logic
+- [ ] Level advancement within stages
+- [ ] Degree alignment tracking (-90° to +90°)
+- [ ] Power formula: ((Hustle² + Faith²)^Love) × multipliers
+- [ ] Tier system (GOD MODE, ASCENDING, SOLID, BUILDING, RECOVERY)
+- [ ] Gate unlock mechanics (6 pillars ≥5 + 40 pts)
+
+### UI/UX Enhancements
+- [ ] Mode tab navigation with active states
+- [ ] Glass morphism card styling
+- [ ] Phoenix blue + soul gold color scheme
+- [ ] Smooth transitions between modes
+- [ ] Responsive layout for all screen sizes
+- [ ] Loading animations and progress bars
