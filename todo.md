@@ -490,3 +490,32 @@
 - [ ] Achievement unlock notifications
 - [ ] Leaderboard display
 - [ ] Daily challenge tracker
+
+
+## Startup Video Integration
+
+### Video Setup
+- [x] Upload startup video to S3/CDN
+- [x] Get video CDN URL
+- [ ] Optimize video for web (MP4, H.264)
+- [ ] Add video preload optimization
+
+### StartupVideo Component
+- [x] Full-screen video player
+- [x] Typewriter effect overlay text
+- [x] Fade-in/fade-out transitions
+- [ ] Haptic feedback on key moments
+- [ ] Sound design integration
+
+### Video Flow
+- [x] Video completion detection
+- [x] Auto-transition to Stage 1 after video
+- [x] Skip button (shows after 3 seconds)
+- [x] Replay button after completion
+- [x] Remember user preference (skip video on next login)
+
+### Integration
+- [x] Add StartupVideo to Home.tsx
+- [x] Show video on first login
+- [x] Cache video preference in localStorage
+- [x] Smooth transition to Stage1Hub

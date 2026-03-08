@@ -1,16 +1,33 @@
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/_core/hooks/useAuth'
 import { Loader2 } from 'lucide-react'
 import { getLoginUrl } from '@/const'
 import Stage1Hub from '@/components/Stage1Hub'
+import StartupVideo from '@/components/StartupVideo'
 import { trpc } from '@/lib/trpc'
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth()
+  const [showVideo, setShowVideo] = useState(false)
+  const [watchedVideo, setWatchedVideo] = useState(false)
+
+  // Check if user has watched startup video
+  useEffect(() => {
+    if (isAuthenticated && !watchedVideo) {
+      const hasWatched = localStorage.getItem('startup-video-watched')
+      if (!hasWatched) {
+        setShowVideo(true)
+      } else {
+        setWatchedVideo(true)
+      }
+    }
+  }, [isAuthenticated, watchedVideo])
+
   const { data: progression } = trpc.hsProgression.get.useQuery(undefined, {
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && watchedVideo,
   })
   const { data: snapshot } = trpc.hsDaily.getToday.useQuery(undefined, {
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && watchedVideo,
   })
 
   if (loading) {
@@ -31,6 +48,26 @@ export default function Home() {
         >
           ENTER THE SYSTEM
         </a>
+      </div>
+    )
+  }
+
+  if (showVideo) {
+    return (
+      <StartupVideo
+        onComplete={() => {
+          localStorage.setItem('startup-video-watched', 'true')
+          setShowVideo(false)
+          setWatchedVideo(true)
+        }}
+      />
+    )
+  }
+
+  if (!watchedVideo) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <Loader2 className="animate-spin text-primary" size={48} />
       </div>
     )
   }
