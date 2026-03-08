@@ -7,6 +7,10 @@ import { trpc } from '@/lib/trpc'
 
 type Mode = 'tactical' | 'journal' | 'scrapbook' | 'gaming'
 
+interface HLBProps {
+  userIdentity?: any
+}
+
 const MODES = [
   { id: 'tactical', label: 'Tactical', emoji: '📊' },
   { id: 'journal', label: 'Journal', emoji: '📔' },
@@ -14,7 +18,7 @@ const MODES = [
   { id: 'gaming', label: 'Gaming', emoji: '🎮' },
 ]
 
-export default function HLB() {
+export default function HLB({ userIdentity }: HLBProps) {
   const [activeMode, setActiveMode] = useState<Mode>('tactical')
 
   // Fetch data

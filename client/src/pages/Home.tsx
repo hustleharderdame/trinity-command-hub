@@ -2,14 +2,14 @@ import { useAuth } from "@/_core/hooks/useAuth"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { getLoginUrl } from "@/const"
-import HLB from "@/components/HLB"
+import AppShell from "@/components/AppShell"
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth()
 
-  // Show HLB if authenticated
+  // Show AppShell if authenticated
   if (isAuthenticated && user) {
-    return <HLB />
+    return <AppShell />
   }
 
   return (

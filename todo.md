@@ -256,3 +256,28 @@
 - [ ] Smooth transitions between modes
 - [ ] Responsive layout for all screen sizes
 - [ ] Loading animations and progress bars
+
+
+## Stage 0: Ground Zero Onboarding
+
+### Onboarding Flow
+- [x] Splash screen with loading animation
+- [x] New user detection via localStorage
+- [x] Onboarding path selection (Warrior/Scholar/Creator/Healer)
+- [x] Identity setup form (name, email, avatar)
+- [ ] Consciousness architecture visualization
+- [x] Seamless transition to main dashboard
+- [x] Save user identity to TrinityEngine
+
+### Onboarding Paths
+- [x] Warrior Path - Focus on Power, Consistency, Respect
+- [x] Scholar Path - Focus on Mind, Impact, Recovery
+- [x] Creator Path - Focus on Soul, Happiness, Power
+- [x] Healer Path - Focus on Body, Recovery, Respect
+
+### UI Components
+- [x] SplashScreen component
+- [x] OnboardingScreen component with path cards
+- [x] AppShell component for stage management
+- [ ] ConsciousnessVisualization component
+- [x] Loading progress bar animation
