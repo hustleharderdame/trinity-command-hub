@@ -370,3 +370,41 @@
 - [ ] Streak tracking accuracy
 - [ ] Responsive design across all devices
 - [ ] Performance optimization
+
+
+## Split-Screen UI Redesign
+
+### Tactical Mode (Left Side)
+- [ ] Military green color scheme (#00ff00, #00cc00)
+- [ ] Grid overlay background with crosshair
+- [ ] HUD-style borders and corner brackets
+- [ ] Missions checklist with tactical styling
+- [ ] Objectives display with progress bars
+- [ ] Tactics visualization with graphs
+- [ ] "NEW ENTRY" button at bottom
+- [ ] Rugged metal frame effect around edges
+
+### Legacy Book (Right Side)
+- [ ] Aged parchment texture background
+- [ ] Handwritten font for entries
+- [ ] Ink pen illustration elements
+- [ ] Feather quill graphic
+- [ ] Leather binding effect
+- [ ] Handwritten XP gains display
+- [ ] Stat bonuses (+3 STRENGTH, +1 CLARITY, etc.)
+- [ ] Aged paper color (#f5e6d3)
+
+### Split-Screen Layout
+- [ ] 50/50 horizontal split on desktop
+- [ ] Full-width stacking on mobile
+- [ ] Smooth transitions between modes
+- [ ] Synchronized data updates
+- [ ] Responsive breakpoints
+- [ ] Touch-friendly controls
+
+### Integration
+- [ ] Connect Tactical Mode to daily missions
+- [ ] Connect Legacy Book to nightly reports
+- [ ] Real-time XP sync between sides
+- [ ] Stat calculations and display
+- [ ] Achievement notifications

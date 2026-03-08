@@ -1,144 +1,160 @@
 import { useState } from 'react'
-import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import DailyFlowModal from './DailyFlowModal'
-import PillarsDisplay from './PillarsDisplay'
-import { Zap, Target, TrendingUp } from 'lucide-react'
+import { Checkbox } from '@/components/ui/checkbox'
 
 interface TacticalModeProps {
   progression?: any
   snapshot?: any
 }
 
-const STAGES = [
-  { name: 'Trap', level: '1-25', emoji: '🪤', color: 'from-red-600 to-red-800' },
-  { name: 'Suburbs', level: '26-50', emoji: '🏘️', color: 'from-orange-600 to-orange-800' },
-  { name: 'Penthouse', level: '51-75', emoji: '🏢', color: 'from-yellow-600 to-yellow-800' },
-  { name: 'Mansion', level: '76-100', emoji: '🏰', color: 'from-green-600 to-green-800' },
-  { name: 'Fort', level: '101-115', emoji: '🏯', color: 'from-cyan-600 to-cyan-800' },
-  { name: 'Keep', level: '116-130', emoji: '🗼', color: 'from-blue-600 to-blue-800' },
-  { name: 'Castle', level: '131-150', emoji: '🏛️', color: 'from-purple-600 to-purple-800' },
-  { name: 'Kingdom', level: '151-200', emoji: '👑', color: 'from-pink-600 to-pink-800' },
-]
-
 export default function TacticalMode({ progression, snapshot }: TacticalModeProps) {
-  const [showDailyFlow, setShowDailyFlow] = useState(false)
-  const [selectedStage, setSelectedStage] = useState(0)
+  const [missions, setMissions] = useState([
+    { id: 1, title: 'MISSION ALPHA', completed: false },
+    { id: 2, title: 'MISSION BRAVO', completed: false },
+    { id: 3, title: 'MISSION CHARLIE', completed: false },
+  ])
 
   const prog = progression || {}
   const snap = snapshot || {}
+  const userLevel = prog?.currentLevel || 1
+  const dailyXP = snap?.dailyXP || 0
+  const currentStreak = prog?.currentStreak || 0
 
-  const currentStageIndex = STAGES.findIndex(s => s.name === (prog?.currentStage || 'Trap'))
-  const stage = STAGES[currentStageIndex >= 0 ? currentStageIndex : 0]
+  const toggleMission = (id: number) => {
+    setMissions(missions.map(m => (m.id === id ? { ...m, completed: !m.completed } : m)))
+  }
 
   return (
-    <div className="space-y-8">
-      {/* Header Stats */}
-      <div className="grid grid-cols-4 gap-4">
-        <Card className="glass-panel p-4 border-primary/20">
-          <p className="text-xs text-muted-foreground">LEVEL</p>
-          <p className="text-3xl font-bold text-primary">{prog?.currentLevel || 1}</p>
-        </Card>
-        <Card className="glass-panel p-4 border-secondary/20">
-          <p className="text-xs text-muted-foreground">POWER SCORE</p>
-          <p className="text-3xl font-bold text-secondary">{Math.round(prog?.powerScore || 0)}</p>
-        </Card>
-        <Card className="glass-panel p-4 border-accent/20">
-          <p className="text-xs text-muted-foreground">XP EARNED</p>
-          <p className="text-3xl font-bold text-accent">{prog?.totalXP || 0}</p>
-        </Card>
-        <Card className="glass-panel p-4 border-primary/20">
-          <p className="text-xs text-muted-foreground">TIER</p>
-          <p className="text-2xl font-bold text-primary">
-            {prog?.powerScore >= 900 ? 'GOD' : prog?.powerScore >= 600 ? 'ASC' : prog?.powerScore >= 300 ? 'SLD' : 'BLD'}
-          </p>
-        </Card>
-      </div>
-
-      {/* Current Stage */}
-      <Card className={`glass-panel p-6 border-primary/30 bg-gradient-to-r ${stage.color} bg-opacity-10`}>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs text-muted-foreground uppercase">CURRENT STAGE</p>
-            <h2 className="text-4xl font-orbitron font-bold text-primary mt-2">{stage.emoji} {stage.name}</h2>
-            <p className="text-sm text-muted-foreground mt-1">Levels {stage.level}</p>
-          </div>
-          <div className="text-6xl">{stage.emoji}</div>
-        </div>
-      </Card>
-
-      {/* Stage Progression */}
-      <div className="space-y-3">
-        <h3 className="text-sm font-bold text-primary uppercase">STAGE PROGRESSION</h3>
-        <div className="grid grid-cols-4 gap-2">
-          {STAGES.map((s, idx) => (
-            <div
-              key={s.name}
-              onClick={() => setSelectedStage(idx)}
-              className={`glass-panel p-3 cursor-pointer transition-all text-center ${
-                idx === currentStageIndex
-                  ? 'border-primary/60 bg-primary/10'
-                  : 'border-muted/20 hover:border-primary/30'
-              }`}
-            >
-              <div className="text-2xl mb-1">{s.emoji}</div>
-              <p className="text-xs font-bold">{s.name}</p>
-              <p className="text-xs text-muted-foreground">{s.level}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Daily Flow Button */}
-      <Button
-        onClick={() => setShowDailyFlow(true)}
-        className="w-full bg-gradient-to-r from-primary to-secondary text-black hover:opacity-90 font-bold py-6 text-lg"
-      >
-        🚀 DAILY FLOW
-      </Button>
-
-      {/* 10 Pillars */}
-      <div className="space-y-4">
-        <h3 className="text-sm font-bold text-primary uppercase">10 PILLARS</h3>
-        <PillarsDisplay
-          pillars={{
-            mind: Number(snap?.mindPillar ?? 0),
-            body: Number(snap?.bodyPillar ?? 0),
-            soul: Number(snap?.soulPillar ?? 0),
-            money: Number(snap?.moneyPillar ?? 0),
-            power: Number(snap?.powerPillar ?? 0),
-            respect: Number(snap?.respectPillar ?? 0),
-            consistency: Number(snap?.consistencyPillar ?? 0),
-            happiness: Number(snap?.happinessPillar ?? 0),
-            recovery: Number(snap?.recoveryPillar ?? 0),
-            impact: Number(snap?.impactPillar ?? 0),
+    <div className="min-h-screen bg-black p-6 relative overflow-hidden" style={{ backgroundColor: '#0a0a0a' }}>
+      {/* Grid background overlay */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div
+          className="w-full h-full"
+          style={{
+            backgroundImage: `
+              linear-gradient(0deg, transparent 24%, rgba(0, 255, 0, 0.05) 25%, rgba(0, 255, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.05) 75%, rgba(0, 255, 0, 0.05) 76%, transparent 77%, transparent),
+              linear-gradient(90deg, transparent 24%, rgba(0, 255, 0, 0.05) 25%, rgba(0, 255, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.05) 75%, rgba(0, 255, 0, 0.05) 76%, transparent 77%, transparent)
+            `,
+            backgroundSize: '50px 50px',
           }}
-          degree={Number(snap?.degree ?? 0)}
-          shadowAvg={Number(snap?.shadowAvg ?? 0)}
-          lightAvg={Number(snap?.lightAvg ?? 0)}
         />
       </div>
 
-      {/* Power Formula */}
-      <Card className="glass-panel p-4 border-muted/20">
-        <p className="text-xs font-bold text-muted-foreground uppercase">POWER FORMULA</p>
-        <div className="font-mono text-sm mt-3 text-primary">
-          <p>Power = ((Hustle² + Faith²)^Love) × Multipliers</p>
-          <p className="text-xs text-muted-foreground mt-2">
-            Multipliers: TimeFactor × Consistency × Happiness × Recovery × Impact
-          </p>
-        </div>
-      </Card>
+      {/* Tactical frame border */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-green-500/50" />
+        <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-green-500/50" />
+        <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-green-500/50" />
+        <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-green-500/50" />
+      </div>
 
-      {/* Daily Flow Modal */}
-      <DailyFlowModal
-        isOpen={showDailyFlow}
-        onClose={() => setShowDailyFlow(false)}
-        onSuccess={() => {
-          setShowDailyFlow(false)
-          window.location.reload()
-        }}
-      />
+      {/* Content */}
+      <div className="relative z-10 max-w-md">
+        {/* Header */}
+        <div className="mb-8 border-b-2 border-green-500/30 pb-4">
+          <h1 className="text-3xl font-bold text-green-500 mb-2" style={{ fontFamily: 'Courier New, monospace', letterSpacing: '2px' }}>
+            HUSTLE
+          </h1>
+          <p className="text-xs font-mono text-green-500/70 tracking-widest">LEGACY BOOK</p>
+          <p className="text-xs font-mono text-green-500/50 mt-1">TACTICAL MODE</p>
+        </div>
+
+        {/* Status bars */}
+        <div className="space-y-3 mb-8">
+          <div>
+            <div className="flex justify-between mb-1">
+              <span className="text-xs font-mono text-green-500">LEVEL</span>
+              <span className="text-xs font-mono text-green-500 font-bold">{userLevel}</span>
+            </div>
+            <div className="h-2 bg-black border border-green-500/30 overflow-hidden">
+              <div
+                className="h-full bg-green-500/70 transition-all duration-300"
+                style={{ width: `${Math.min((userLevel / 100) * 100, 100)}%` }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex justify-between mb-1">
+              <span className="text-xs font-mono text-green-500">XP TODAY</span>
+              <span className="text-xs font-mono text-green-500 font-bold">{dailyXP}/100</span>
+            </div>
+            <div className="h-2 bg-black border border-green-500/30 overflow-hidden">
+              <div
+                className="h-full bg-green-500/70 transition-all duration-300"
+                style={{ width: `${dailyXP}%` }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex justify-between mb-1">
+              <span className="text-xs font-mono text-green-500">STREAK</span>
+              <span className="text-xs font-mono text-green-500 font-bold">{currentStreak} DAYS</span>
+            </div>
+            <div className="h-2 bg-black border border-green-500/30 overflow-hidden">
+              <div
+                className="h-full bg-green-500/70 transition-all duration-300"
+                style={{ width: `${Math.min(currentStreak * 10, 100)}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Missions section */}
+        <div className="mb-8 border-2 border-green-500/30 p-4 bg-black/50">
+          <h2 className="text-sm font-mono font-bold text-green-500 mb-4 tracking-widest">✓ MISSIONS</h2>
+
+          <div className="space-y-3">
+            {missions.map(mission => (
+              <div key={mission.id} className="flex items-center gap-3">
+                <Checkbox
+                  checked={mission.completed}
+                  onCheckedChange={() => toggleMission(mission.id)}
+                  className="border-green-500/50"
+                />
+                <span
+                  className={`text-xs font-mono transition-all ${
+                    mission.completed ? 'text-green-500/40 line-through' : 'text-green-500'
+                  }`}
+                >
+                  {mission.title}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Objectives section */}
+        <div className="mb-8 border-2 border-green-500/30 p-4 bg-black/50">
+          <h2 className="text-sm font-mono font-bold text-green-500 mb-4 tracking-widest">▢ OBJECTIVES</h2>
+          <p className="text-xs text-green-500/60 font-mono">Complete all missions for +60 XP</p>
+        </div>
+
+        {/* Tactics section */}
+        <div className="mb-8 border-2 border-green-500/30 p-4 bg-black/50">
+          <h2 className="text-sm font-mono font-bold text-green-500 mb-4 tracking-widest">⚡ TACTICS</h2>
+          <div className="space-y-2">
+            <div className="h-1 bg-green-500/30 overflow-hidden">
+              <div className="h-full bg-green-500 w-3/4" />
+            </div>
+            <div className="h-1 bg-green-500/30 overflow-hidden">
+              <div className="h-full bg-green-500 w-1/2" />
+            </div>
+            <div className="h-1 bg-green-500/30 overflow-hidden">
+              <div className="h-full bg-green-500 w-2/3" />
+            </div>
+          </div>
+        </div>
+
+        {/* Action button */}
+        <Button
+          className="w-full text-green-500 border border-green-500/50 hover:bg-green-500/20 font-mono text-sm py-3 rounded-none bg-black"
+          style={{ color: '#00ff00' }}
+        >
+          ▶ NEW ENTRY
+        </Button>
+      </div>
     </div>
   )
 }

@@ -1,38 +1,39 @@
-import { useAuth } from "@/_core/hooks/useAuth"
-import { Button } from "@/components/ui/button"
-import { Loader2 } from "lucide-react"
-import { getLoginUrl } from "@/const"
-import AppShell from "@/components/AppShell"
+import { useAuth } from '@/_core/hooks/useAuth'
+import { Loader2 } from 'lucide-react'
+import { getLoginUrl } from '@/const'
+import SplitScreenDashboard from '@/components/SplitScreenDashboard'
+import { trpc } from '@/lib/trpc'
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth()
+  const { data: progression } = trpc.hsProgression.get.useQuery(undefined, {
+    enabled: isAuthenticated,
+  })
+  const { data: snapshot } = trpc.hsDaily.getToday.useQuery(undefined, {
+    enabled: isAuthenticated,
+  })
 
-  // Show AppShell if authenticated
-  if (isAuthenticated && user) {
-    return <AppShell />
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <Loader2 className="animate-spin text-primary" size={48} />
+      </div>
+    )
   }
 
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black">
-      <main className="text-center">
-        {loading ? (
-          <div className="flex flex-col items-center gap-4">
-            <Loader2 className="animate-spin w-8 h-8 text-primary" />
-            <p className="text-muted-foreground">Loading Trinity HLB...</p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <h1 className="font-orbitron text-4xl font-black text-primary">TRINITY HLB v13.0</h1>
-            <p className="text-muted-foreground">Unified Empire • 4 Modes</p>
-            <Button
-              onClick={() => window.location.href = getLoginUrl()}
-              className="bg-primary text-black hover:bg-primary/90 font-bold px-8 py-6 text-lg"
-            >
-              🚀 Enter Trinity
-            </Button>
-          </div>
-        )}
-      </main>
-    </div>
-  )
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center">
+        <h1 className="text-4xl font-bold text-primary mb-8">TRINITY HLB v13.0</h1>
+        <a
+          href={getLoginUrl()}
+          className="px-8 py-3 bg-primary text-black font-bold rounded hover:opacity-90 transition-all"
+        >
+          ENTER THE SYSTEM
+        </a>
+      </div>
+    )
+  }
+
+  return <SplitScreenDashboard progression={progression} snapshot={snapshot} />
 }
