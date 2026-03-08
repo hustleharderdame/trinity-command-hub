@@ -95,7 +95,7 @@ export default function PillarsDisplay({ pillars, degree = 0, shadowAvg = 5, lig
           </div>
 
           <div className="text-center">
-            <span className="text-lg font-bold text-primary">{degree.toFixed(1)}°</span>
+            <span className="text-lg font-bold text-primary">{Number(degree).toFixed(1)}°</span>
             <p className="text-xs text-muted-foreground mt-1">
               {Math.abs(degree) < 30 ? 'BALANCED' : degree > 0 ? 'LIGHT ALIGNED' : 'SHADOW ALIGNED'}
             </p>
