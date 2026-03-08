@@ -281,3 +281,49 @@
 - [x] AppShell component for stage management
 - [ ] ConsciousnessVisualization component
 - [x] Loading progress bar animation
+
+
+## Cinematic UX Upgrade - HLB v1.5
+
+### Cold Open Onboarding
+- [x] Pitch black screen with blinking cursor
+- [x] Typewriter effect for narrative prompts
+- [x] Haptic feedback on each keystroke
+- [x] "Reality check initiated" narrative framing
+- [x] Screen crack/flash effect on identity completion
+- [ ] Dashboard boot-up animation
+
+### Dynamic Lighting System
+- [x] Beast Mode (high action) - neon red/orange, harsh shadows
+- [x] Zen Mode (balanced) - cool blues, smooth gradients
+- [x] Danger Zone (low scores) - glitch effects, desaturated colors
+- [x] Real-time UI reactivity to Trinity Score
+- [ ] Color palette transitions based on alignment
+
+### Haptic & Sound Design
+- [x] Morning ritual "thud" on mission confirmation
+- [x] XP gain chime with escalating vibration
+- [x] Mansion upgrade triumphant audio cue
+- [ ] Screen shake on level progression
+- [x] Subtle psychological audio-tactile profile
+
+### Daily Ritual Montage
+- [ ] Mission-based language for daily check-ins
+- [ ] "Nightly Execution Report" debriefing framing
+- [x] Weekly visual "sizzle reel" generation
+- [x] 10-second progress montage animation
+- [x] Mission completion recap with XP visualization
+
+### Progressive Art Direction
+- [ ] Level 1 (Trap House) - gritty, rough textures, heavy shadows
+- [ ] Mid-levels - transitional aesthetic
+- [ ] Late-levels (Penthouse) - polished glass, bright expansive lighting
+- [ ] Visual style evolution tied to stage progression
+- [ ] High-contrast graphic novel aesthetic
+
+### Narrative Framing
+- [ ] Mission-based language throughout UI
+- [ ] "Main character" positioning in copy
+- [ ] High-stakes thriller tone
+- [ ] Debriefing language for check-ins
+- [ ] Victory/defeat narrative feedback
