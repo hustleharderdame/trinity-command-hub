@@ -1,7 +1,7 @@
 import { useAuth } from '@/_core/hooks/useAuth'
 import { Loader2 } from 'lucide-react'
 import { getLoginUrl } from '@/const'
-import SplitScreenDashboard from '@/components/SplitScreenDashboard'
+import Stage1Hub from '@/components/Stage1Hub'
 import { trpc } from '@/lib/trpc'
 
 export default function Home() {
@@ -35,5 +35,5 @@ export default function Home() {
     )
   }
 
-  return <SplitScreenDashboard progression={progression} snapshot={snapshot} />
+  return <Stage1Hub progression={progression} snapshot={snapshot} />
 }
