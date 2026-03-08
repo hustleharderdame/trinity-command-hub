@@ -40,7 +40,7 @@ export default function PillarsDisplay({ pillars, degree = 0, shadowAvg = 5, lig
 
   const renderPillar = (config: typeof PILLAR_CONFIG[0]) => {
     const Icon = config.icon
-    const value = pillars[config.key as keyof PillarData] || 0
+    const value = Number(pillars[config.key as keyof PillarData]) || 0
     const percentage = (value / 10) * 100
 
     return (
@@ -121,16 +121,16 @@ export default function PillarsDisplay({ pillars, degree = 0, shadowAvg = 5, lig
 
       {/* Statistics */}
       <Card className="glass-panel p-4 border-accent/20">
-        <div className="grid grid-cols-2 gap-4 text-center">
-          <div>
-            <p className="text-xs text-muted-foreground">SHADOW AVERAGE</p>
-            <p className="text-2xl font-bold text-red-500">{shadowAvg.toFixed(1)}</p>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground">LIGHT AVERAGE</p>
-            <p className="text-2xl font-bold text-blue-500">{lightAvg.toFixed(1)}</p>
-          </div>
+          <div className="grid grid-cols-2 gap-4 text-center">
+        <div>
+          <p className="text-xs text-muted-foreground">SHADOW AVERAGE</p>
+          <p className="text-2xl font-bold text-red-500">{Number(shadowAvg).toFixed(1)}</p>
         </div>
+        <div>
+          <p className="text-xs text-muted-foreground">LIGHT AVERAGE</p>
+          <p className="text-2xl font-bold text-blue-500">{Number(lightAvg).toFixed(1)}</p>
+        </div>
+      </div>
       </Card>
     </div>
   )
