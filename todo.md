@@ -408,3 +408,34 @@
 - [ ] Real-time XP sync between sides
 - [ ] Stat calculations and display
 - [ ] Achievement notifications
+
+
+## Mobile Optimization
+
+### Responsive Layout
+- [x] Full-screen stacking on mobile (vertical layout)
+- [x] Tab navigation for switching between Tactical/Legacy
+- [x] Smooth animations between tabs
+- [x] Touch-friendly button sizes (min 44px)
+- [x] Optimized padding and spacing for mobile
+- [x] Readable font sizes on small screens
+
+### Tactical Mode Mobile
+- [x] Larger mission checkboxes for touch
+- [x] Full-width progress bars
+- [x] Simplified status display
+- [x] Stacked layout for stats
+- [x] Touch-optimized button sizes
+
+### Legacy Book Mobile
+- [x] Readable parchment texture on small screens
+- [x] Larger text for entries
+- [x] Simplified stat display
+- [x] Touch-friendly write button
+- [x] Optimized illustration sizing
+
+### Navigation
+- [x] Tab indicator showing current view
+- [ ] Swipe gesture support between tabs
+- [ ] Back button for navigation
+- [ ] Quick access to main actions

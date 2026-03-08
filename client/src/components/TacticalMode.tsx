@@ -25,7 +25,10 @@ export default function TacticalMode({ progression, snapshot }: TacticalModeProp
   }
 
   return (
-    <div className="min-h-screen bg-black p-6 relative overflow-hidden" style={{ backgroundColor: '#0a0a0a' }}>
+    <div
+      className="min-h-screen bg-black p-3 sm:p-6 relative overflow-hidden"
+      style={{ backgroundColor: '#0a0a0a' }}
+    >
       {/* Grid background overlay */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div
@@ -40,8 +43,8 @@ export default function TacticalMode({ progression, snapshot }: TacticalModeProp
         />
       </div>
 
-      {/* Tactical frame border */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Tactical frame border - hidden on mobile */}
+      <div className="absolute inset-0 pointer-events-none hidden sm:block">
         <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-green-500/50" />
         <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-green-500/50" />
         <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-green-500/50" />
@@ -49,10 +52,13 @@ export default function TacticalMode({ progression, snapshot }: TacticalModeProp
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-md">
+      <div className="relative z-10 w-full max-w-md mx-auto">
         {/* Header */}
-        <div className="mb-8 border-b-2 border-green-500/30 pb-4">
-          <h1 className="text-3xl font-bold text-green-500 mb-2" style={{ fontFamily: 'Courier New, monospace', letterSpacing: '2px' }}>
+        <div className="mb-6 sm:mb-8 border-b-2 border-green-500/30 pb-3 sm:pb-4">
+          <h1
+            className="text-2xl sm:text-3xl font-bold text-green-500 mb-2"
+            style={{ fontFamily: 'Courier New, monospace', letterSpacing: '2px' }}
+          >
             HUSTLE
           </h1>
           <p className="text-xs font-mono text-green-500/70 tracking-widest">LEGACY BOOK</p>
@@ -60,7 +66,7 @@ export default function TacticalMode({ progression, snapshot }: TacticalModeProp
         </div>
 
         {/* Status bars */}
-        <div className="space-y-3 mb-8">
+        <div className="space-y-3 mb-6 sm:mb-8">
           <div>
             <div className="flex justify-between mb-1">
               <span className="text-xs font-mono text-green-500">LEVEL</span>
@@ -102,19 +108,21 @@ export default function TacticalMode({ progression, snapshot }: TacticalModeProp
         </div>
 
         {/* Missions section */}
-        <div className="mb-8 border-2 border-green-500/30 p-4 bg-black/50">
-          <h2 className="text-sm font-mono font-bold text-green-500 mb-4 tracking-widest">✓ MISSIONS</h2>
+        <div className="mb-6 sm:mb-8 border-2 border-green-500/30 p-3 sm:p-4 bg-black/50">
+          <h2 className="text-xs sm:text-sm font-mono font-bold text-green-500 mb-3 sm:mb-4 tracking-widest">
+            ✓ MISSIONS
+          </h2>
 
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {missions.map(mission => (
-              <div key={mission.id} className="flex items-center gap-3">
+              <div key={mission.id} className="flex items-center gap-2 sm:gap-3">
                 <Checkbox
                   checked={mission.completed}
                   onCheckedChange={() => toggleMission(mission.id)}
-                  className="border-green-500/50"
+                  className="border-green-500/50 w-5 h-5 sm:w-6 sm:h-6"
                 />
                 <span
-                  className={`text-xs font-mono transition-all ${
+                  className={`text-xs sm:text-sm font-mono transition-all ${
                     mission.completed ? 'text-green-500/40 line-through' : 'text-green-500'
                   }`}
                 >
@@ -126,14 +134,18 @@ export default function TacticalMode({ progression, snapshot }: TacticalModeProp
         </div>
 
         {/* Objectives section */}
-        <div className="mb-8 border-2 border-green-500/30 p-4 bg-black/50">
-          <h2 className="text-sm font-mono font-bold text-green-500 mb-4 tracking-widest">▢ OBJECTIVES</h2>
+        <div className="mb-6 sm:mb-8 border-2 border-green-500/30 p-3 sm:p-4 bg-black/50">
+          <h2 className="text-xs sm:text-sm font-mono font-bold text-green-500 mb-2 sm:mb-4 tracking-widest">
+            ▢ OBJECTIVES
+          </h2>
           <p className="text-xs text-green-500/60 font-mono">Complete all missions for +60 XP</p>
         </div>
 
         {/* Tactics section */}
-        <div className="mb-8 border-2 border-green-500/30 p-4 bg-black/50">
-          <h2 className="text-sm font-mono font-bold text-green-500 mb-4 tracking-widest">⚡ TACTICS</h2>
+        <div className="mb-6 sm:mb-8 border-2 border-green-500/30 p-3 sm:p-4 bg-black/50">
+          <h2 className="text-xs sm:text-sm font-mono font-bold text-green-500 mb-2 sm:mb-4 tracking-widest">
+            ⚡ TACTICS
+          </h2>
           <div className="space-y-2">
             <div className="h-1 bg-green-500/30 overflow-hidden">
               <div className="h-full bg-green-500 w-3/4" />
@@ -149,7 +161,7 @@ export default function TacticalMode({ progression, snapshot }: TacticalModeProp
 
         {/* Action button */}
         <Button
-          className="w-full text-green-500 border border-green-500/50 hover:bg-green-500/20 font-mono text-sm py-3 rounded-none bg-black"
+          className="w-full text-green-500 border border-green-500/50 hover:bg-green-500/20 font-mono text-xs sm:text-sm py-2 sm:py-3 rounded-none bg-black"
           style={{ color: '#00ff00' }}
         >
           ▶ NEW ENTRY

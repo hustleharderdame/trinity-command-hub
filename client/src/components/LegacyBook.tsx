@@ -21,7 +21,7 @@ export default function LegacyBook({ progression, snapshot }: LegacyBookProps) {
 
   return (
     <div
-      className="min-h-screen p-8 relative overflow-hidden"
+      className="min-h-screen p-3 sm:p-8 relative overflow-hidden"
       style={{
         backgroundColor: '#f5e6d3',
         backgroundImage: `
@@ -42,21 +42,21 @@ export default function LegacyBook({ progression, snapshot }: LegacyBookProps) {
         `,
       }}
     >
-      {/* Leather binding effect */}
-      <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-amber-900 to-amber-700 opacity-30" />
-      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-amber-900 to-amber-700 opacity-30" />
+      {/* Leather binding effect - hidden on mobile */}
+      <div className="absolute left-0 top-0 bottom-0 w-6 sm:w-12 bg-gradient-to-r from-amber-900 to-amber-700 opacity-30 hidden sm:block" />
+      <div className="absolute right-0 top-0 bottom-0 w-6 sm:w-12 bg-gradient-to-l from-amber-900 to-amber-700 opacity-30 hidden sm:block" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-md ml-auto mr-12">
+      <div className="relative z-10 w-full max-w-md mx-auto sm:ml-auto sm:mr-12">
         {/* Header */}
-        <div className="mb-8 text-center border-b-2 border-amber-900/30 pb-4">
+        <div className="mb-6 sm:mb-8 text-center border-b-2 border-amber-900/30 pb-3 sm:pb-4">
           <h1
-            className="text-4xl font-bold text-amber-900 mb-2"
+            className="text-2xl sm:text-4xl font-bold text-amber-900 mb-2"
             style={{ fontFamily: 'Georgia, serif', letterSpacing: '1px' }}
           >
             HUSTLE
           </h1>
-          <p className="text-sm text-amber-900/70" style={{ fontFamily: 'Georgia, serif' }}>
+          <p className="text-xs sm:text-sm text-amber-900/70" style={{ fontFamily: 'Georgia, serif' }}>
             LEGACY BOOK
           </p>
           <p className="text-xs text-amber-900/50 mt-2" style={{ fontFamily: 'Georgia, serif' }}>
@@ -65,14 +65,14 @@ export default function LegacyBook({ progression, snapshot }: LegacyBookProps) {
         </div>
 
         {/* Feather quill illustration */}
-        <div className="text-6xl mb-8 text-center opacity-30">🪶</div>
+        <div className="text-4xl sm:text-6xl mb-6 sm:mb-8 text-center opacity-30">🪶</div>
 
         {/* Entries */}
-        <div className="space-y-6 mb-8">
+        <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
           {entries.map((entry, idx) => (
-            <div key={idx} className="border-l-2 border-amber-900/30 pl-4">
+            <div key={idx} className="border-l-2 border-amber-900/30 pl-3 sm:pl-4">
               <p
-                className="text-sm text-amber-900 leading-relaxed"
+                className="text-xs sm:text-sm text-amber-900 leading-relaxed"
                 style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
               >
                 {entry}
@@ -82,8 +82,8 @@ export default function LegacyBook({ progression, snapshot }: LegacyBookProps) {
         </div>
 
         {/* Stats section */}
-        <div className="mb-8 border-2 border-amber-900/30 p-4 bg-amber-50/30">
-          <h2 className="text-sm font-bold text-amber-900 mb-4" style={{ fontFamily: 'Georgia, serif' }}>
+        <div className="mb-6 sm:mb-8 border-2 border-amber-900/30 p-3 sm:p-4 bg-amber-50/30">
+          <h2 className="text-xs sm:text-sm font-bold text-amber-900 mb-3 sm:mb-4" style={{ fontFamily: 'Georgia, serif' }}>
             ✦ STAT BONUSES
           </h2>
 
@@ -101,24 +101,24 @@ export default function LegacyBook({ progression, snapshot }: LegacyBookProps) {
         </div>
 
         {/* Sword illustration */}
-        <div className="text-4xl mb-8 text-center opacity-40">⚔️</div>
+        <div className="text-3 sm:text-4xl mb-6 sm:mb-8 text-center opacity-40">⚔️</div>
 
         {/* XP display */}
-        <div className="mb-8 border-2 border-amber-900/30 p-4 bg-amber-50/30 text-center">
+        <div className="mb-6 sm:mb-8 border-2 border-amber-900/30 p-3 sm:p-4 bg-amber-50/30 text-center">
           <p className="text-xs text-amber-900/70 mb-2" style={{ fontFamily: 'Georgia, serif' }}>
             TOTAL XP EARNED
           </p>
-          <p className="text-3xl font-bold text-amber-900" style={{ fontFamily: 'Georgia, serif' }}>
+          <p className="text-2xl sm:text-3xl font-bold text-amber-900" style={{ fontFamily: 'Georgia, serif' }}>
             {totalXP}
           </p>
         </div>
 
         {/* Compass illustration */}
-        <div className="text-4xl mb-8 text-center opacity-40">🧭</div>
+        <div className="text-3xl sm:text-4xl mb-6 sm:mb-8 text-center opacity-40">🧭</div>
 
         {/* Action button */}
         <Button
-          className="w-full text-amber-900 border-2 border-amber-900/50 hover:bg-amber-100 font-serif text-sm py-3 rounded-none bg-amber-50/50"
+          className="w-full text-amber-900 border-2 border-amber-900/50 hover:bg-amber-100 font-serif text-xs sm:text-sm py-2 sm:py-3 rounded-none bg-amber-50/50"
           style={{ fontFamily: 'Georgia, serif' }}
         >
           ✎ WRITE ENTRY
