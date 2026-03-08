@@ -1,254 +1,244 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { Card } from '@/components/ui/card'
-import { Zap, Trophy, Flame } from 'lucide-react'
 
-interface Achievement {
+interface Choice {
+  id: string
+  text: string
+  consequence?: string
+}
+
+interface Cutscene {
   id: string
   title: string
   description: string
-  icon: string
-  unlockedAt?: string
+  imageUrl?: string
+  choices: Choice[]
+  allowFreeAnswer?: boolean
 }
+
+const CUTSCENES: Cutscene[] = [
+  {
+    id: 'intro-1',
+    title: 'The Call',
+    description: 'You wake up in your room. The walls are closing in. Your phone buzzes with a message from an unknown number: "Your time has come. Will you answer the call?"',
+    imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800',
+    choices: [
+      {
+        id: 'choice-1a',
+        text: 'Answer the call immediately',
+        consequence: 'You feel a surge of energy. Your journey begins.',
+      },
+      {
+        id: 'choice-1b',
+        text: 'Ignore it and go back to sleep',
+        consequence: 'The message repeats. Louder. You cannot ignore it.',
+      },
+      {
+        id: 'choice-1c',
+        text: 'Write your own response',
+        consequence: 'Your words echo into the void.',
+      },
+    ],
+    allowFreeAnswer: true,
+  },
+  {
+    id: 'intro-2',
+    title: 'The Choice',
+    description: 'Three paths lay before you. Each one leads to a different destiny. Which will you choose?',
+    imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+    choices: [
+      {
+        id: 'choice-2a',
+        text: 'The Path of Power - Strength and dominance',
+        consequence: 'You feel the weight of ambition on your shoulders.',
+      },
+      {
+        id: 'choice-2b',
+        text: 'The Path of Wisdom - Knowledge and understanding',
+        consequence: 'Your mind expands with infinite possibilities.',
+      },
+      {
+        id: 'choice-2c',
+        text: 'The Path of Soul - Connection and purpose',
+        consequence: 'Your heart resonates with something greater.',
+      },
+    ],
+    allowFreeAnswer: false,
+  },
+]
 
 interface GamingModeProps {
   progression?: any
 }
 
-const ACHIEVEMENTS: Achievement[] = [
-  { id: 'first-day', title: 'First Day', description: 'Complete your first daily flow', icon: '🌅' },
-  { id: 'week-streak', title: 'Week Warrior', description: 'Maintain a 7-day streak', icon: '🔥' },
-  { id: 'power-100', title: 'Rising Power', description: 'Reach 100 power score', icon: '⚡' },
-  { id: 'all-pillars', title: 'Balanced Soul', description: 'Get all 10 pillars above 5', icon: '⚖️' },
-  { id: 'level-10', title: 'Ascendant', description: 'Reach level 10', icon: '👑' },
-  { id: 'mansion', title: 'Estate Owner', description: 'Reach Mansion stage', icon: '🏰' },
-  { id: 'god-mode', title: 'GOD MODE', description: 'Achieve 900+ power score', icon: '🌟' },
-  { id: 'kingdom', title: 'Emperor', description: 'Reach Kingdom stage', icon: '👑' },
-]
-
 export default function GamingMode({ progression }: GamingModeProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [unlockedAchievements, setUnlockedAchievements] = useState<string[]>([])
-  const [soulBeastState, setSoulBeastState] = useState<'egg' | 'hatchling' | 'beast' | 'phoenix'>('egg')
+  const [currentCutsceneIndex, setCurrentCutsceneIndex] = useState(0)
+  const [selectedChoice, setSelectedChoice] = useState<string | null>(null)
+  const [freeAnswer, setFreeAnswer] = useState('')
+  const [showConsequence, setShowConsequence] = useState(false)
+  const [completedCutscenes, setCompletedCutscenes] = useState<string[]>([])
 
-  const prog = progression || {}
+  const currentCutscene = CUTSCENES[currentCutsceneIndex]
 
-  // Determine Soul Beast state based on progression
-  useEffect(() => {
-    const level = prog?.currentLevel || 1
-    if (level >= 150) setSoulBeastState('phoenix')
-    else if (level >= 100) setSoulBeastState('beast')
-    else if (level >= 50) setSoulBeastState('hatchling')
-    else setSoulBeastState('egg')
-  }, [prog?.currentLevel])
+  const handleChoiceSelect = (choiceId: string) => {
+    setSelectedChoice(choiceId)
+    setShowConsequence(true)
+  }
 
-  // Initialize 3D canvas
-  useEffect(() => {
-    if (!canvasRef.current) return
-
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    // Set canvas size
-    canvas.width = canvas.offsetWidth
-    canvas.height = canvas.offsetHeight
-
-    // Draw Soul Beast based on state
-    ctx.fillStyle = '#050505'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-    const centerX = canvas.width / 2
-    const centerY = canvas.height / 2
-
-    ctx.fillStyle = '#00F3FF'
-    ctx.strokeStyle = '#ffd700'
-    ctx.lineWidth = 2
-
-    switch (soulBeastState) {
-      case 'egg':
-        // Draw egg
-        ctx.beginPath()
-        ctx.ellipse(centerX, centerY, 40, 60, 0, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.stroke()
-        ctx.fillStyle = '#ffd700'
-        ctx.font = '30px Arial'
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'middle'
-        ctx.fillText('🥚', centerX, centerY)
-        break
-
-      case 'hatchling':
-        // Draw hatchling
-        ctx.beginPath()
-        ctx.arc(centerX, centerY, 35, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.stroke()
-        // Eyes
-        ctx.fillStyle = '#050505'
-        ctx.beginPath()
-        ctx.arc(centerX - 15, centerY - 10, 5, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.beginPath()
-        ctx.arc(centerX + 15, centerY - 10, 5, 0, Math.PI * 2)
-        ctx.fill()
-        break
-
-      case 'beast':
-        // Draw beast
-        ctx.beginPath()
-        ctx.moveTo(centerX, centerY - 50)
-        ctx.lineTo(centerX + 40, centerY + 20)
-        ctx.lineTo(centerX, centerY + 40)
-        ctx.lineTo(centerX - 40, centerY + 20)
-        ctx.closePath()
-        ctx.fill()
-        ctx.stroke()
-        // Horns
-        ctx.strokeStyle = '#ffd700'
-        ctx.lineWidth = 3
-        ctx.beginPath()
-        ctx.moveTo(centerX - 20, centerY - 50)
-        ctx.lineTo(centerX - 30, centerY - 70)
-        ctx.stroke()
-        ctx.beginPath()
-        ctx.moveTo(centerX + 20, centerY - 50)
-        ctx.lineTo(centerX + 30, centerY - 70)
-        ctx.stroke()
-        break
-
-      case 'phoenix':
-        // Draw phoenix
-        ctx.fillStyle = '#ff6600'
-        ctx.beginPath()
-        ctx.arc(centerX, centerY, 45, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.strokeStyle = '#ffd700'
-        ctx.lineWidth = 3
-        ctx.stroke()
-        // Wings
-        ctx.fillStyle = '#ff9900'
-        ctx.beginPath()
-        ctx.ellipse(centerX - 50, centerY, 30, 50, -0.3, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.beginPath()
-        ctx.ellipse(centerX + 50, centerY, 30, 50, 0.3, 0, Math.PI * 2)
-        ctx.fill()
-        break
+  const handleFreeAnswer = () => {
+    if (freeAnswer.trim()) {
+      setShowConsequence(true)
     }
-  }, [soulBeastState])
+  }
+
+  const handleContinue = () => {
+    setCompletedCutscenes([...completedCutscenes, currentCutscene.id])
+    if (currentCutsceneIndex < CUTSCENES.length - 1) {
+      setCurrentCutsceneIndex(currentCutsceneIndex + 1)
+      setSelectedChoice(null)
+      setFreeAnswer('')
+      setShowConsequence(false)
+    } else {
+      // All cutscenes completed
+      setCurrentCutsceneIndex(0)
+    }
+  }
+
+  const choice = currentCutscene.choices.find((c) => c.id === selectedChoice)
+  const consequence = choice?.consequence || ''
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Zap className="w-6 h-6 text-primary" />
-          <h2 className="text-2xl font-bold text-primary">GAMING & EVOLUTION</h2>
-        </div>
-      </div>
+      {/* Cutscene Container */}
+      <Card className="glass-panel p-6 sm:p-8 border-cyan-500/30 overflow-hidden">
+        {/* Background image */}
+        {currentCutscene.imageUrl && (
+          <div
+            className="absolute inset-0 z-0 opacity-20"
+            style={{
+              backgroundImage: `url(${currentCutscene.imageUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          />
+        )}
 
-      {/* Soul Beast Visualization */}
-      <Card className="glass-panel p-6 border-secondary/30">
-        <h3 className="text-lg font-bold text-secondary mb-4">SOUL BEAST EVOLUTION</h3>
-        <canvas
-          ref={canvasRef}
-          className="w-full bg-gradient-to-b from-black/50 to-black/20 rounded-lg mb-4"
-          style={{ height: '300px' }}
-        />
-        <div className="text-center">
-          <p className="text-sm text-muted-foreground">Current State</p>
-          <p className="text-2xl font-bold text-secondary capitalize">{soulBeastState}</p>
-          <p className="text-xs text-muted-foreground mt-1">
-            Level {prog?.currentLevel || 1} • {prog?.currentStage || 'Trap'}
-          </p>
-        </div>
-      </Card>
-
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        <Card className="glass-panel p-4 border-primary/20">
-          <p className="text-xs text-muted-foreground">POWER SCORE</p>
-          <p className="text-3xl font-bold text-primary">{Math.round(prog?.powerScore || 0)}</p>
-        </Card>
-        <Card className="glass-panel p-4 border-secondary/20">
-          <p className="text-xs text-muted-foreground">CURRENT STREAK</p>
-          <p className="text-3xl font-bold text-secondary">{prog?.currentStreak || 0}</p>
-        </Card>
-        <Card className="glass-panel p-4 border-accent/20">
-          <p className="text-xs text-muted-foreground">LONGEST STREAK</p>
-          <p className="text-3xl font-bold text-accent">{prog?.longestStreak || 0}</p>
-        </Card>
-      </div>
-
-      {/* Achievements */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Trophy className="w-5 h-5 text-primary" />
-          <h3 className="text-sm font-bold text-primary uppercase">ACHIEVEMENTS</h3>
-          <span className="text-xs text-muted-foreground">({unlockedAchievements.length}/{ACHIEVEMENTS.length})</span>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {ACHIEVEMENTS.map((achievement) => {
-            const isUnlocked = unlockedAchievements.includes(achievement.id)
-            return (
-              <Card
-                key={achievement.id}
-                className={`glass-panel p-4 text-center transition-all ${
-                  isUnlocked
-                    ? 'border-primary/60 bg-primary/10'
-                    : 'border-muted/20 opacity-50 grayscale'
-                }`}
-              >
-                <div className="text-3xl mb-2">{achievement.icon}</div>
-                <p className="text-xs font-bold">{achievement.title}</p>
-                <p className="text-xs text-muted-foreground mt-1">{achievement.description}</p>
-                {isUnlocked && (
-                  <p className="text-xs text-primary mt-2 font-bold">✓ UNLOCKED</p>
-                )}
-              </Card>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Leaderboard */}
-      <Card className="glass-panel p-6 border-accent/20">
-        <div className="flex items-center gap-2 mb-4">
-          <Flame className="w-5 h-5 text-accent" />
-          <h3 className="text-lg font-bold text-accent">LEADERBOARD</h3>
-        </div>
-
-        <div className="space-y-2">
-          {[
-            { rank: 1, name: 'You', power: Math.round(prog?.powerScore || 0), stage: prog?.currentStage || 'Trap' },
-            { rank: 2, name: 'Phoenix', power: 850, stage: 'Kingdom' },
-            { rank: 3, name: 'Beast', power: 750, stage: 'Castle' },
-            { rank: 4, name: 'Warrior', power: 650, stage: 'Keep' },
-            { rank: 5, name: 'Seeker', power: 550, stage: 'Fort' },
-          ].map((entry) => (
-            <div
-              key={entry.rank}
-              className={`flex items-center justify-between p-3 rounded-lg ${
-                entry.rank === 1
-                  ? 'bg-primary/20 border border-primary/30'
-                  : 'bg-muted/20 border border-muted/30'
-              }`}
+        {/* Content overlay */}
+        <div className="relative z-10">
+          {/* Header */}
+          <div className="mb-8 text-center">
+            <h1
+              className="text-3xl sm:text-4xl font-bold mb-2"
+              style={{
+                color: '#00ffff',
+                textShadow: '0 0 20px rgba(0, 255, 255, 0.8)',
+                fontFamily: 'Courier New, monospace',
+              }}
             >
-              <div className="flex items-center gap-3">
-                <span className="text-lg font-bold text-primary">#{entry.rank}</span>
-                <div>
-                  <p className="text-sm font-bold">{entry.name}</p>
-                  <p className="text-xs text-muted-foreground">{entry.stage}</p>
+              {currentCutscene.title}
+            </h1>
+            <div className="h-1 w-16 bg-gradient-to-r from-cyan-500 to-pink-500 mx-auto" />
+          </div>
+
+          {/* Cutscene description */}
+          <div className="bg-black/80 border border-cyan-500/30 rounded-lg p-4 sm:p-6 mb-6 backdrop-blur-sm">
+            <p className="text-base sm:text-lg leading-relaxed text-gray-100">
+              {currentCutscene.description}
+            </p>
+          </div>
+
+          {/* Choices section */}
+          <div className="space-y-3">
+            {!showConsequence ? (
+              <>
+                {/* Multiple choice options */}
+                <div className="space-y-2">
+                  {currentCutscene.choices.map((choice) => (
+                    <Button
+                      key={choice.id}
+                      onClick={() => handleChoiceSelect(choice.id)}
+                      className="w-full text-left h-auto p-3 sm:p-4 bg-black border border-cyan-500/30 hover:border-cyan-500 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all rounded-lg justify-start text-sm sm:text-base"
+                    >
+                      <span className="text-pink-500 mr-3">▶</span>
+                      {choice.text}
+                    </Button>
+                  ))}
                 </div>
+
+                {/* Free answer option */}
+                {currentCutscene.allowFreeAnswer && (
+                  <div className="mt-4 pt-4 border-t border-cyan-500/30">
+                    <p className="text-cyan-400 mb-2 text-xs sm:text-sm font-mono">
+                      Or write your own response:
+                    </p>
+                    <Textarea
+                      value={freeAnswer}
+                      onChange={(e) => setFreeAnswer(e.target.value)}
+                      placeholder="Enter your response..."
+                      className="bg-black/80 border border-cyan-500/30 text-cyan-400 placeholder-cyan-600/50 rounded-lg mb-2 text-sm"
+                      rows={3}
+                    />
+                    <Button
+                      onClick={handleFreeAnswer}
+                      disabled={!freeAnswer.trim()}
+                      className="w-full bg-pink-600/20 border border-pink-500/50 text-pink-400 hover:bg-pink-600/40 hover:border-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm"
+                    >
+                      SUBMIT RESPONSE
+                    </Button>
+                  </div>
+                )}
+              </>
+            ) : (
+              /* Consequence display */
+              <div className="bg-pink-900/20 border border-pink-500/50 rounded-lg p-4 sm:p-6 backdrop-blur-sm">
+                <p className="text-pink-300 text-base sm:text-lg mb-4 font-mono">
+                  {consequence}
+                </p>
+
+                {freeAnswer && (
+                  <div className="mb-4 p-3 bg-black/50 border border-cyan-500/30 rounded">
+                    <p className="text-cyan-400 text-xs font-mono mb-2">Your words:</p>
+                    <p className="text-gray-300 italic text-sm">"{freeAnswer}"</p>
+                  </div>
+                )}
+
+                <Button
+                  onClick={handleContinue}
+                  className="w-full bg-cyan-600/20 border border-cyan-500/50 text-cyan-400 hover:bg-cyan-600/40 hover:border-cyan-500 transition-all py-2 font-bold text-sm"
+                >
+                  CONTINUE ▶
+                </Button>
               </div>
-              <div className="text-right">
-                <p className="text-lg font-bold text-secondary">{entry.power}</p>
-                <p className="text-xs text-muted-foreground">power</p>
-              </div>
+            )}
+          </div>
+
+          {/* Progress indicator */}
+          <div className="flex justify-center items-center gap-2 mt-6">
+            {CUTSCENES.map((cutscene, index) => (
+              <div
+                key={cutscene.id}
+                className={`h-2 w-2 rounded-full transition-all ${
+                  index === currentCutsceneIndex
+                    ? 'bg-cyan-500 w-4'
+                    : completedCutscenes.includes(cutscene.id)
+                      ? 'bg-pink-500'
+                      : 'bg-gray-600'
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* XP reward display */}
+          {showConsequence && (
+            <div
+              className="text-center mt-4 text-pink-500 font-bold text-lg animate-pulse text-sm sm:text-base"
+              style={{ textShadow: '0 0 10px rgba(255, 0, 255, 0.6)' }}
+            >
+              +20 XP
             </div>
-          ))}
+          )}
         </div>
       </Card>
     </div>

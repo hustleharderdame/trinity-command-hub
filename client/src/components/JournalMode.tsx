@@ -1,222 +1,181 @@
-import { useState } from 'react'
-import { Card } from '@/components/ui/card'
+import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { BookOpen, Plus, Download } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Card } from '@/components/ui/card'
+import { Send, MessageCircle } from 'lucide-react'
 
-interface JournalEntry {
-  date: string
-  title: string
-  content: string
-  evidence: string[]
-  pmReport: string
-  closingLog: string
+interface Message {
+  id: string
+  sender: 'user' | 'soul-beast' | 'ai-twin'
+  text: string
+  timestamp: Date
 }
 
 export default function JournalMode() {
-  const [entries, setEntries] = useState<JournalEntry[]>([])
-  const [showNewEntry, setShowNewEntry] = useState(false)
-  const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null)
-  const [newEntry, setNewEntry] = useState({
-    title: '',
-    content: '',
-    pmReport: '',
-    closingLog: '',
-  })
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: '1',
+      sender: 'soul-beast',
+      text: 'I sense your presence. What troubles your mind today?',
+      timestamp: new Date(),
+    },
+  ])
+  const [inputValue, setInputValue] = useState('')
+  const [activeChat, setActiveChat] = useState<'soul-beast' | 'ai-twin'>('soul-beast')
+  const [isLoading, setIsLoading] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const handleCreateEntry = () => {
-    const entry: JournalEntry = {
-      date: new Date().toISOString().split('T')[0],
-      title: newEntry.title || `Entry - ${new Date().toLocaleDateString()}`,
-      content: newEntry.content,
-      evidence: [],
-      pmReport: newEntry.pmReport,
-      closingLog: newEntry.closingLog,
-    }
-    setEntries([entry, ...entries])
-    setNewEntry({ title: '', content: '', pmReport: '', closingLog: '' })
-    setShowNewEntry(false)
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const handleExportJSON = () => {
-    const dataStr = JSON.stringify(entries, null, 2)
-    const dataBlob = new Blob([dataStr], { type: 'application/json' })
-    const url = URL.createObjectURL(dataBlob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `journal-${new Date().toISOString().split('T')[0]}.json`
-    link.click()
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
+  const handleSendMessage = async () => {
+    if (!inputValue.trim()) return
+
+    // Add user message
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      sender: 'user',
+      text: inputValue,
+      timestamp: new Date(),
+    }
+
+    setMessages((prev) => [...prev, userMessage])
+    setInputValue('')
+    setIsLoading(true)
+
+    // Simulate AI response delay
+    setTimeout(() => {
+      const responses = {
+        'soul-beast': [
+          'Your words resonate with my essence. Continue on this path.',
+          'I feel your determination. The beast within grows stronger.',
+          'Your struggles shape your evolution. Embrace them.',
+          'The night is long, but your spirit burns brighter.',
+          'I sense your power growing. Keep pushing forward.',
+        ],
+        'ai-twin': [
+          'I analyze your words and see great potential ahead.',
+          'Your strategy is sound. Execute with precision.',
+          'The data suggests you are on the right trajectory.',
+          'Interesting perspective. Let me process that further.',
+          'Your logic is flawless. Proceed with confidence.',
+        ],
+      }
+
+      const responseList = responses[activeChat]
+      const randomResponse = responseList[Math.floor(Math.random() * responseList.length)]
+
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        sender: activeChat,
+        text: randomResponse,
+        timestamp: new Date(),
+      }
+
+      setMessages((prev) => [...prev, aiMessage])
+      setIsLoading(false)
+    }, 800)
+  }
+
+  const handleSwitchChat = (chat: 'soul-beast' | 'ai-twin') => {
+    setActiveChat(chat)
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <BookOpen className="w-6 h-6 text-primary" />
-          <h2 className="text-2xl font-bold text-primary">JOURNAL & LOGS</h2>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            onClick={handleExportJSON}
-            variant="outline"
-            className="gap-2"
-          >
-            <Download className="w-4 h-4" />
-            Export JSON
-          </Button>
-          <Button
-            onClick={() => setShowNewEntry(!showNewEntry)}
-            className="bg-primary text-black hover:bg-primary/90 gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            New Entry
-          </Button>
-        </div>
+    <div className="space-y-4 h-[600px] flex flex-col">
+      {/* Chat selector */}
+      <div className="flex gap-2">
+        <Button
+          onClick={() => handleSwitchChat('soul-beast')}
+          className={`flex-1 text-sm sm:text-base ${
+            activeChat === 'soul-beast'
+              ? 'bg-pink-600/30 border-pink-500 text-pink-400'
+              : 'bg-black/50 border-gray-600 text-gray-400'
+          } border rounded-lg py-2 transition-all`}
+        >
+          🐉 SOUL BEAST
+        </Button>
+        <Button
+          onClick={() => handleSwitchChat('ai-twin')}
+          className={`flex-1 text-sm sm:text-base ${
+            activeChat === 'ai-twin'
+              ? 'bg-cyan-600/30 border-cyan-500 text-cyan-400'
+              : 'bg-black/50 border-gray-600 text-gray-400'
+          } border rounded-lg py-2 transition-all`}
+        >
+          🤖 AI TWIN
+        </Button>
       </div>
 
-      {/* New Entry Form */}
-      {showNewEntry && (
-        <Card className="glass-panel p-6 border-primary/30">
-          <h3 className="text-lg font-bold text-primary mb-4">CREATE NEW ENTRY</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm text-muted-foreground">Title</label>
-              <input
-                type="text"
-                value={newEntry.title}
-                onChange={(e) => setNewEntry({ ...newEntry, title: e.target.value })}
-                className="w-full bg-muted/30 border border-primary/20 rounded p-2 text-sm mt-1"
-                placeholder="Entry title..."
-              />
-            </div>
+      {/* Chat header */}
+      <Card className="glass-panel p-3 sm:p-4 border-cyan-500/30">
+        <div className="flex items-center gap-2">
+          <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+          <h3 className="text-base sm:text-lg font-bold text-primary">
+            {activeChat === 'soul-beast' ? 'Soul Beast' : 'AI Twin'} Chat
+          </h3>
+        </div>
+      </Card>
 
-            <div>
-              <label className="text-sm text-muted-foreground">Daily Log</label>
-              <Textarea
-                value={newEntry.content}
-                onChange={(e) => setNewEntry({ ...newEntry, content: e.target.value })}
-                className="w-full bg-muted/30 border border-primary/20 rounded p-2 text-sm mt-1"
-                placeholder="What happened today? What did you learn?"
-                rows={4}
-              />
-            </div>
-
-            <div>
-              <label className="text-sm text-muted-foreground">PM Report</label>
-              <Textarea
-                value={newEntry.pmReport}
-                onChange={(e) => setNewEntry({ ...newEntry, pmReport: e.target.value })}
-                className="w-full bg-muted/30 border border-primary/20 rounded p-2 text-sm mt-1"
-                placeholder="End of day summary and reflections..."
-                rows={3}
-              />
-            </div>
-
-            <div>
-              <label className="text-sm text-muted-foreground">Closing Log</label>
-              <Textarea
-                value={newEntry.closingLog}
-                onChange={(e) => setNewEntry({ ...newEntry, closingLog: e.target.value })}
-                className="w-full bg-muted/30 border border-primary/20 rounded p-2 text-sm mt-1"
-                placeholder="Final thoughts for AI grounding..."
-                rows={2}
-              />
-            </div>
-
-            <div className="flex gap-2">
-              <Button
-                onClick={() => setShowNewEntry(false)}
-                variant="outline"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleCreateEntry}
-                className="bg-primary text-black hover:bg-primary/90"
-              >
-                Save Entry
-              </Button>
-            </div>
-          </div>
-        </Card>
-      )}
-
-      {/* Selected Entry Detail */}
-      {selectedEntry && (
-        <Card className="glass-panel p-6 border-secondary/30">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <p className="text-xs text-muted-foreground">{selectedEntry.date}</p>
-              <h3 className="text-2xl font-bold text-secondary">{selectedEntry.title}</h3>
-            </div>
-            <Button
-              onClick={() => setSelectedEntry(null)}
-              variant="outline"
-              className="text-xs"
+      {/* Messages area */}
+      <Card className="glass-panel p-3 sm:p-4 border-cyan-500/30 flex-1 overflow-y-auto space-y-3 sm:space-y-4">
+        {messages
+          .filter((msg) => msg.sender === 'user' || msg.sender === activeChat)
+          .map((message) => (
+            <div
+              key={message.id}
+              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              Close
-            </Button>
-          </div>
-
-          <div className="space-y-4">
-            {selectedEntry.content && (
-              <div>
-                <h4 className="text-sm font-bold text-primary mb-2">DAILY LOG</h4>
-                <p className="text-sm text-foreground whitespace-pre-wrap">{selectedEntry.content}</p>
-              </div>
-            )}
-
-            {selectedEntry.pmReport && (
-              <div>
-                <h4 className="text-sm font-bold text-secondary mb-2">PM REPORT</h4>
-                <p className="text-sm text-foreground whitespace-pre-wrap">{selectedEntry.pmReport}</p>
-              </div>
-            )}
-
-            {selectedEntry.closingLog && (
-              <div>
-                <h4 className="text-sm font-bold text-accent mb-2">CLOSING LOG</h4>
-                <p className="text-sm text-foreground whitespace-pre-wrap">{selectedEntry.closingLog}</p>
-              </div>
-            )}
-          </div>
-        </Card>
-      )}
-
-      {/* Entries List */}
-      <div className="space-y-3">
-        <h3 className="text-sm font-bold text-primary uppercase">RECENT ENTRIES ({entries.length})</h3>
-        {entries.length === 0 ? (
-          <Card className="glass-panel p-6 text-center border-muted/20">
-            <p className="text-muted-foreground">No entries yet. Create your first entry!</p>
-          </Card>
-        ) : (
-          <div className="grid gap-3">
-            {entries.map((entry, idx) => (
-              <Card
-                key={idx}
-                onClick={() => setSelectedEntry(entry)}
-                className="glass-panel p-4 border-muted/20 cursor-pointer hover:border-primary/30 transition-all"
+              <div
+                className={`max-w-xs px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base ${
+                  message.sender === 'user'
+                    ? 'bg-cyan-600/20 border border-cyan-500/50 text-cyan-300'
+                    : activeChat === 'soul-beast'
+                      ? 'bg-pink-600/20 border border-pink-500/50 text-pink-300'
+                      : 'bg-blue-600/20 border border-blue-500/50 text-blue-300'
+                }`}
               >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="text-xs text-muted-foreground">{entry.date}</p>
-                    <p className="font-bold text-foreground">{entry.title}</p>
-                    <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{entry.content}</p>
-                  </div>
-                  <div className="text-right">
-                    {entry.evidence.length > 0 && (
-                      <span className="text-xs bg-accent/20 text-accent px-2 py-1 rounded">
-                        {entry.evidence.length} evidence
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </Card>
-            ))}
+                <p>{message.text}</p>
+                <p className="text-xs opacity-50 mt-1">
+                  {message.timestamp.toLocaleTimeString()}
+                </p>
+              </div>
+            </div>
+          ))}
+
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="bg-gray-600/20 border border-gray-500/50 text-gray-300 px-3 sm:px-4 py-2 rounded-lg text-sm">
+              <p className="animate-pulse">Thinking...</p>
+            </div>
           </div>
         )}
+
+        <div ref={messagesEndRef} />
+      </Card>
+
+      {/* Input area */}
+      <div className="flex gap-2">
+        <Input
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+          placeholder={`Chat with your ${activeChat === 'soul-beast' ? 'Soul Beast' : 'AI Twin'}...`}
+          className="bg-black/50 border-cyan-500/30 text-cyan-400 placeholder-cyan-600/50 flex-1 text-sm"
+          disabled={isLoading}
+        />
+        <Button
+          onClick={handleSendMessage}
+          disabled={!inputValue.trim() || isLoading}
+          className="bg-cyan-600/20 border border-cyan-500/50 text-cyan-400 hover:bg-cyan-600/40 disabled:opacity-50 px-3 sm:px-4"
+        >
+          <Send className="w-4 h-4" />
+        </Button>
       </div>
     </div>
   )

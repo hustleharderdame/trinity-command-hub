@@ -519,3 +519,42 @@
 - [x] Show video on first login
 - [x] Cache video preference in localStorage
 - [x] Smooth transition to Stage1Hub
+
+
+## Mode Rebuild - Correct Purposes
+
+### Gaming Mode (Cutscenes + Choice Events)
+- [ ] Cutscene system with video playback
+- [ ] Narrative branching based on choices
+- [ ] 3-choice multiple choice events with free answer option
+- [ ] Dynamic story progression tied to user decisions
+- [ ] Setting events that trigger based on game state
+- [ ] XP rewards for choice completion
+- [ ] Story state persistence
+
+### Tactical Mode (Life Structure)
+- [ ] Daily flow structure (AM START, MIDDAY, PM END)
+- [ ] 10 Pillars tracking with sliders
+- [ ] Power Score calculations
+- [ ] Mission/Objective tracking
+- [ ] Life metrics display
+- [ ] Streak and consistency tracking
+- [ ] Progress visualization
+
+### Scrapbook Mode (Uploads + Memories)
+- [ ] File upload interface (images, documents, videos)
+- [ ] Memory organization by category (Memories, Important, Finances)
+- [ ] Gallery view with thumbnails
+- [ ] File metadata and timestamps
+- [ ] Search and filter functionality
+- [ ] Archive/restore functionality
+- [ ] Sharing options
+
+### Journal Mode (Soul Beast + AI Twin Chat)
+- [ ] Chat interface with Soul Beast
+- [ ] Chat interface with AI Twin
+- [ ] Message history and persistence
+- [ ] AI responses with personality
+- [ ] Soul Beast evolution visualization
+- [ ] Conversation context memory
+- [ ] Daily reflection prompts
