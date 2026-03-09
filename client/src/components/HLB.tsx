@@ -2,7 +2,7 @@ import { useState } from 'react'
 import TacticalMode from './TacticalMode'
 import JournalMode from './JournalMode'
 import ScrapbookMode from './ScrapbookMode'
-import GamingMode from './GamingMode'
+import Stage1GamingMode from './Stage1GamingMode'
 import { trpc } from '@/lib/trpc'
 
 type Mode = 'tactical' | 'journal' | 'scrapbook' | 'gaming'
@@ -12,10 +12,10 @@ interface HLBProps {
 }
 
 const MODES = [
-  { id: 'tactical', label: 'Tactical', emoji: '📊' },
-  { id: 'journal', label: 'Journal', emoji: '📔' },
-  { id: 'scrapbook', label: 'Scrapbook', emoji: '📸' },
-  { id: 'gaming', label: 'Gaming', emoji: '🎮' },
+  { id: 'tactical', label: 'TACTICAL', emoji: '⚙️', color: '#00ff96', glow: 'rgba(0,255,150,0.4)' },
+  { id: 'journal', label: 'GARDEN', emoji: '🌿', color: '#cc00ff', glow: 'rgba(204,0,255,0.4)' },
+  { id: 'scrapbook', label: 'SCRAPBOOK', emoji: '📸', color: '#ff6b9d', glow: 'rgba(255,107,157,0.4)' },
+  { id: 'gaming', label: 'GAMING', emoji: '🎮', color: '#00c8ff', glow: 'rgba(0,200,255,0.4)' },
 ]
 
 export default function HLB({ userIdentity }: HLBProps) {
@@ -28,70 +28,102 @@ export default function HLB({ userIdentity }: HLBProps) {
   const prog = progression as any || {}
   const snap = snapshot as any || {}
 
+  const activeConfig = MODES.find((m) => m.id === activeMode)!
+
   return (
-    <div className="min-h-screen bg-black text-foreground overflow-hidden">
-      {/* Background effects */}
+    <div className="min-h-screen bg-black overflow-hidden">
+      {/* Ambient background */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-20" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl opacity-20" />
+        <div
+          className="absolute inset-0 transition-all duration-700"
+          style={{
+            background: `radial-gradient(ellipse at 50% 0%, ${activeConfig.glow.replace('0.4', '0.06')} 0%, transparent 60%)`,
+          }}
+        />
       </div>
 
-      {/* Main content */}
-      <div className="relative z-10">
-        {/* Header */}
-        <header className="border-b border-primary/20 backdrop-blur-md bg-black/40 sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h1 className="font-orbitron text-3xl font-black text-primary">TRINITY HLB</h1>
-                <p className="text-xs text-muted-foreground">v13.0 • Unified Empire</p>
+      {/* Header */}
+      <header
+        className="sticky top-0 z-50 border-b"
+        style={{
+          borderColor: `${activeConfig.color}30`,
+          background: 'rgba(0,0,0,0.85)',
+          backdropFilter: 'blur(12px)',
+        }}
+      >
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <div className="text-xs font-mono tracking-[0.4em] mb-0.5" style={{ color: `${activeConfig.color}70` }}>
+                HUSTLE LEGACY BOOK
               </div>
-              <div className="flex gap-6 text-right">
-                <div>
-                  <p className="text-xs text-muted-foreground">LEVEL</p>
-                  <p className="font-orbitron text-2xl font-bold text-primary">{prog?.currentLevel || 1}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">POWER</p>
-                  <p className="font-orbitron text-2xl font-bold text-secondary">{Math.round(prog?.powerScore || 0)}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">STAGE</p>
-                  <p className="font-orbitron text-2xl font-bold text-accent">{prog?.currentStage || 'Trap'}</p>
-                </div>
-              </div>
+              <h1
+                className="text-xl font-black"
+                style={{
+                  fontFamily: 'Impact, Arial Black, sans-serif',
+                  color: activeConfig.color,
+                  textShadow: `0 0 15px ${activeConfig.glow}`,
+                  letterSpacing: '3px',
+                }}
+              >
+                TRINITY v13.0
+              </h1>
             </div>
-
-            {/* Mode Tabs */}
-            <div className="flex gap-1 border-b border-muted/20">
-              {MODES.map((mode) => (
-                <button
-                  key={mode.id}
-                  onClick={() => setActiveMode(mode.id as Mode)}
-                  className={`px-6 py-3 font-mono text-sm transition-all border-b-2 ${
-                    activeMode === mode.id
-                      ? 'border-primary text-primary bg-primary/10'
-                      : 'border-transparent text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  <span className="mr-2">{mode.emoji}</span>
-                  {mode.label}
-                </button>
-              ))}
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <div className="text-xs font-mono text-gray-600">LEVEL</div>
+                <div className="text-lg font-black font-mono" style={{ color: activeConfig.color }}>
+                  {prog?.currentLevel || 1}
+                </div>
+              </div>
+              <div className="text-right hidden sm:block">
+                <div className="text-xs font-mono text-gray-600">POWER</div>
+                <div className="text-lg font-black font-mono text-yellow-400">
+                  {Math.round(prog?.powerScore || 0)}
+                </div>
+              </div>
+              <div className="text-right hidden md:block">
+                <div className="text-xs font-mono text-gray-600">STREAK</div>
+                <div className="text-lg font-black font-mono text-orange-400">
+                  🔥 {prog?.currentStreak || 0}d
+                </div>
+              </div>
             </div>
           </div>
-        </header>
 
-        {/* Content */}
-        <main className="container mx-auto px-4 py-8">
-          {activeMode === 'tactical' && (
-            <TacticalMode progression={progression} snapshot={snapshot} />
-          )}
-          {activeMode === 'journal' && <JournalMode />}
-          {activeMode === 'scrapbook' && <ScrapbookMode />}
-          {activeMode === 'gaming' && <GamingMode progression={progression} />}
-        </main>
-      </div>
+          {/* Mode tabs */}
+          <div className="flex gap-1 overflow-x-auto">
+            {MODES.map((mode) => (
+              <button
+                key={mode.id}
+                onClick={() => setActiveMode(mode.id as Mode)}
+                className="flex-shrink-0 flex items-center gap-1.5 py-1.5 px-3 font-mono text-xs transition-all border-b-2"
+                style={{
+                  borderBottomColor: activeMode === mode.id ? mode.color : 'transparent',
+                  color: activeMode === mode.id ? mode.color : '#555',
+                  background: activeMode === mode.id ? `${mode.color}10` : 'transparent',
+                  textShadow: activeMode === mode.id ? `0 0 8px ${mode.glow}` : 'none',
+                }}
+              >
+                <span>{mode.emoji}</span>
+                <span>{mode.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </header>
+
+      {/* Content */}
+      <main className="relative z-10">
+        {activeMode === 'tactical' && (
+          <TacticalMode progression={progression} snapshot={snapshot} />
+        )}
+        {activeMode === 'journal' && <JournalMode />}
+        {activeMode === 'scrapbook' && <ScrapbookMode />}
+        {activeMode === 'gaming' && (
+          <Stage1GamingMode progression={progression} snapshot={snapshot} />
+        )}
+      </main>
     </div>
   )
 }
