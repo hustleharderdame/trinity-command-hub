@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `journal_messages` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`userId` int NOT NULL,\n\t`sessionId` varchar(64) NOT NULL,\n\t`sender` enum('user','soul-beast','ai-twin') NOT NULL,\n\t`text` text NOT NULL,\n\t`chatType` enum('soul-beast','ai-twin') NOT NULL,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `journal_messages_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4DZk2SyHjbKXyq1.root --database Zyb3U9XY3iwn56Cnt4twok --execute CREATE TABLE `journal_messages` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`userId` int NOT NULL,\n\t`sessionId` varchar(64) NOT NULL,\n\t`sender` enum('user','soul-beast','ai-twin') NOT NULL,\n\t`text` text NOT NULL,\n\t`chatType` enum('soul-beast','ai-twin') NOT NULL,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `journal_messages_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1481
+}

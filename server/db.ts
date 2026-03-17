@@ -304,3 +304,41 @@ export async function getOrCreateStreakTracking(userId: number) {
     return null;
   }
 }
+
+//// ─── Journal Chat Helpers ───────────────────────────────────────────────────
+export async function saveJournalMessage(data: {
+  userId: number;
+  sessionId: string;
+  sender: "user" | "soul-beast" | "ai-twin";
+  text: string;
+  chatType: "soul-beast" | "ai-twin";
+}) {
+  const db = await getDb();
+  if (!db) return;
+  const { journalMessages } = await import("../drizzle/schema");
+  await db.insert(journalMessages).values(data);
+}
+export async function getJournalHistory(
+  userId: number,
+  sessionId: string,
+  chatType: "soul-beast" | "ai-twin",
+  limit = 20
+) {
+  const db = await getDb();
+  if (!db) return [];
+  const { journalMessages } = await import("../drizzle/schema");
+  const { eq, and, desc } = await import("drizzle-orm");
+  const rows = await db
+    .select()
+    .from(journalMessages)
+    .where(
+      and(
+        eq(journalMessages.userId, userId),
+        eq(journalMessages.sessionId, sessionId),
+        eq(journalMessages.chatType, chatType)
+      )
+    )
+    .orderBy(desc(journalMessages.createdAt))
+    .limit(limit);
+  return rows.reverse();
+}

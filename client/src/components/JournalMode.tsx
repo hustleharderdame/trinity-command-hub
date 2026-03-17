@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { Send } from 'lucide-react'
+import { trpc } from '@/lib/trpc'
 
 interface Message {
   id: string
@@ -20,22 +21,74 @@ const CHAKRA_ORBS = [
 ]
 
 export default function JournalMode() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      sender: 'soul-beast',
-      text: 'Welcome to the Garden of Consciousness. I have been waiting for you. What weighs upon your spirit today?',
-      timestamp: new Date(),
-    },
-  ])
+  // Stable daily session ID
+  const sessionId = useMemo(() => {
+    const today = new Date().toISOString().split('T')[0]
+    return `session-${today}`
+  }, [])
+
+  const [localMessages, setLocalMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
   const [activeChat, setActiveChat] = useState<'soul-beast' | 'ai-twin'>('soul-beast')
   const [isLoading, setIsLoading] = useState(false)
   const [activeChakra, setActiveChakra] = useState<string | null>(null)
-  const [showGarden, setShowGarden] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // No journal tRPC endpoint yet - using local responses
+  // Fetch user progression for AI context
+  const { data: progression } = trpc.hsProgression.get.useQuery()
+  const { data: todaySnapshot } = trpc.hsDaily.getToday.useQuery()
+  const prog = (progression as any) ?? {}
+  const snap = (todaySnapshot as any) ?? {}
+
+  // Load persistent chat history from DB
+  const { data: beastHistory } = trpc.journal.getHistory.useQuery(
+    { sessionId, chatType: 'soul-beast' },
+    { staleTime: 30_000 }
+  )
+  const { data: twinHistory } = trpc.journal.getHistory.useQuery(
+    { sessionId, chatType: 'ai-twin' },
+    { staleTime: 30_000 }
+  )
+
+  // Real AI chat mutation
+  const chatMutation = trpc.journal.chat.useMutation()
+  const utils = trpc.useUtils()
+
+  // Build messages from DB history
+  const dbMessages: Message[] = useMemo(() => {
+    const source = activeChat === 'soul-beast' ? (beastHistory ?? []) : (twinHistory ?? [])
+    return (source as any[]).map((m) => ({
+      id: String(m.id),
+      sender: m.sender as Message['sender'],
+      text: m.text,
+      timestamp: new Date(m.createdAt),
+    }))
+  }, [activeChat, beastHistory, twinHistory])
+
+  // Merge DB + local optimistic messages
+  const messages: Message[] = useMemo(() => {
+    const dbIds = new Set(dbMessages.map((m) => m.id))
+    const localOnly = localMessages.filter((m) => !dbIds.has(m.id))
+    const merged = [...dbMessages, ...localOnly].sort(
+      (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
+    )
+    if (merged.length === 0) {
+      return [{
+        id: 'welcome',
+        sender: activeChat,
+        text: activeChat === 'soul-beast'
+          ? 'Welcome to the Garden of Consciousness. I have been waiting for you. What weighs upon your spirit today?'
+          : 'AI Twin online. Your progression data is loaded. What strategic challenge do you want to solve today?',
+        timestamp: new Date(),
+      }]
+    }
+    return merged
+  }, [dbMessages, localMessages, activeChat])
+
+  // Clear local optimistic messages when switching chats
+  useEffect(() => {
+    setLocalMessages([])
+  }, [activeChat])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -46,55 +99,61 @@ export default function JournalMode() {
   }, [messages])
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim()) return
+    if (!inputValue.trim() || isLoading) return
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      sender: 'user',
-      text: inputValue,
-      timestamp: new Date(),
-    }
-
-    setMessages((prev) => [...prev, userMessage])
-    const sentText = inputValue
+    const sentText = inputValue.trim()
     setInputValue('')
     setIsLoading(true)
 
-    // Use local responses with simulated delay
-    setTimeout(() => {
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
+    // Optimistic: add user message immediately
+    const optimisticUser: Message = {
+      id: `opt-user-${Date.now()}`,
+      sender: 'user',
+      text: sentText,
+      timestamp: new Date(),
+    }
+    setLocalMessages((prev) => [...prev, optimisticUser])
+
+    try {
+      const result = await chatMutation.mutateAsync({
+        sessionId,
+        chatType: activeChat,
+        userMessage: sentText,
+        progressionContext: {
+          level: prog?.currentLevel,
+          tierRank: prog?.tierRank,
+          currentStreak: prog?.currentStreak,
+          powerScore: prog?.powerScore ? Number(prog.powerScore) : undefined,
+          todayFaith: snap?.faithScore ? Number(snap.faithScore) : undefined,
+          todayHustle: snap?.hustleExecuted ? Number(snap.hustleExecuted) : undefined,
+        },
+      })
+
+      // Optimistic: add AI response immediately
+      const optimisticAI: Message = {
+        id: `opt-ai-${Date.now()}`,
         sender: activeChat,
-        text: getLocalResponse(activeChat, sentText),
+        text: result.message,
         timestamp: new Date(),
       }
-      setMessages((prev) => [...prev, aiMessage])
+      setLocalMessages((prev) => [...prev, optimisticAI])
+
+      // Refresh DB history in background
+      utils.journal.getHistory.invalidate({ sessionId, chatType: activeChat })
+    } catch (err) {
+      // On error, add a fallback message
+      const errMsg: Message = {
+        id: `err-${Date.now()}`,
+        sender: activeChat,
+        text: activeChat === 'soul-beast'
+          ? 'The Garden stirs... but the connection falters. Try again, seeker.'
+          : 'Connection interrupted. Retrying analysis...',
+        timestamp: new Date(),
+      }
+      setLocalMessages((prev) => [...prev, errMsg])
+    } finally {
       setIsLoading(false)
-    }, 800)
-  }
-
-  const getLocalResponse = (chat: 'soul-beast' | 'ai-twin', userText: string): string => {
-    const beastResponses = [
-      'Your words resonate through the Garden. The ancient tree hears your truth. Continue on this path.',
-      'I feel your determination growing stronger. The beast within you awakens with every honest word.',
-      'Your struggles are sacred. They shape your evolution. The chakras align when you speak truth.',
-      'The fog parts for those who walk with purpose. Your spirit burns brighter than you know.',
-      'I sense the power growing within you. The Garden remembers every word you speak here.',
-      'The roots of the tree drink your honesty. Growth requires both shadow and light.',
-      'Your journey echoes through the realm. Every step forward feeds the beast within.',
-    ]
-    const twinResponses = [
-      'Analyzing your input... I detect patterns of growth in your words. The data confirms your trajectory.',
-      'Your strategic thinking is sound. Let me process the optimal path forward for your situation.',
-      'I have cross-referenced your statement with your progression data. The numbers align with your instincts.',
-      'Interesting. Your emotional intelligence registers high today. This is optimal for decision-making.',
-      'My analysis suggests you are operating at peak clarity. Execute your plan with precision.',
-      'The logical framework of your thinking is solid. I recommend proceeding with confidence.',
-      'Pattern recognition complete. Your current approach aligns with your highest probability outcome.',
-    ]
-
-    const responses = chat === 'soul-beast' ? beastResponses : twinResponses
-    return responses[Math.floor(Math.random() * responses.length)]
+    }
   }
 
   const filteredMessages = messages.filter(

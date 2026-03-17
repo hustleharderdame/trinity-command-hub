@@ -249,3 +249,18 @@ export const historicalExport = mysqlTable("historical_export", {
 
 export type HistoricalExport = typeof historicalExport.$inferSelect;
 export type InsertHistoricalExport = typeof historicalExport.$inferInsert;
+
+/**
+ * Journal Chat Messages — persists Soul Beast and AI Twin conversations
+ */
+export const journalMessages = mysqlTable("journal_messages", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  sessionId: varchar("sessionId", { length: 64 }).notNull(),
+  sender: mysqlEnum("sender", ["user", "soul-beast", "ai-twin"]).notNull(),
+  text: text("text").notNull(),
+  chatType: mysqlEnum("chatType", ["soul-beast", "ai-twin"]).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type JournalMessage = typeof journalMessages.$inferSelect;
+export type InsertJournalMessage = typeof journalMessages.$inferInsert;

@@ -571,3 +571,15 @@
 - [x] Integrate all modes into Stage1Hub navigation
 - [x] HLB header updated with dark cinematic mode-reactive styling
 - [x] TacticalMode rebuilt with daily flow modal, 10 pillars tracker, scan line effect
+
+## Garden of Consciousness - Real AI Chat
+
+- [x] Add journal_messages table to schema
+- [x] Run drizzle migration for journal_messages
+- [x] Add saveJournalMessage and getJournalHistory DB helpers
+- [x] Add journal.chat tRPC procedure with Soul Beast LLM personality
+- [x] Add journal.getHistory tRPC procedure with session-based history
+- [x] Update JournalMode frontend to call real tRPC endpoints
+- [x] Add optimistic updates and error handling in JournalMode
+- [x] Pass progression context (level, streak, power score, faith, hustle) to LLM
+- [x] Write vitest tests for journal.chat and journal.getHistory (6/6 passing)
