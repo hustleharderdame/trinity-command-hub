@@ -4,13 +4,14 @@ import TacticalMode from './TacticalMode'
 import LegacyBook from './LegacyBook'
 import JournalMode from './JournalMode'
 import ScrapbookMode from './ScrapbookMode'
+import WealthProgression from './WealthProgression'
 
 interface Stage1HubProps {
   progression?: any
   snapshot?: any
 }
 
-type Mode = 'traphouse' | 'gaming' | 'tactical' | 'journal' | 'scrapbook'
+type Mode = 'traphouse' | 'gaming' | 'tactical' | 'journal' | 'scrapbook' | 'wealth'
 
 export default function Stage1Hub({ progression, snapshot }: Stage1HubProps) {
   const [activeMode, setActiveMode] = useState<Mode>('traphouse')
@@ -36,6 +37,7 @@ export default function Stage1Hub({ progression, snapshot }: Stage1HubProps) {
     { id: 'tactical' as Mode, label: 'TACTICAL', emoji: '⚙️', color: 'green' },
     { id: 'journal' as Mode, label: 'GARDEN', emoji: '🌿', color: 'purple' },
     { id: 'scrapbook' as Mode, label: 'SCRAPBOOK', emoji: '📸', color: 'pink' },
+    { id: 'wealth' as Mode, label: 'WEALTH', emoji: '💎', color: 'gold' },
   ]
 
   const colorMap: Record<string, string> = {
@@ -44,6 +46,7 @@ export default function Stage1Hub({ progression, snapshot }: Stage1HubProps) {
     green: 'bg-green-500/20 text-green-400 border-green-500/50',
     purple: 'bg-purple-500/20 text-purple-400 border-purple-500/50',
     pink: 'bg-pink-500/20 text-pink-400 border-pink-500/50',
+    gold: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/50',
   }
 
   return (
@@ -97,6 +100,9 @@ export default function Stage1Hub({ progression, snapshot }: Stage1HubProps) {
         )}
         {activeMode === 'scrapbook' && (
           <ScrapbookModeWrapper />
+        )}
+        {activeMode === 'wealth' && (
+          <WealthProgression />
         )}
       </div>
     </div>

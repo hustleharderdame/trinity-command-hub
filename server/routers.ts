@@ -4,6 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { getOrCreateUserProgression, updateUserProgression, getOrCreateDailySnapshot, updateDailySnapshot, saveJournalMessage, getJournalHistory } from "./db";
+import { calculateWealthLevel, getBeastEvolution } from "../shared/wealthConstants";
 import { invokeLLM } from "./_core/llm";
 
 export const appRouter = router({
@@ -333,6 +334,50 @@ Respond as the AI Twin. Do not break character. Do not use bullet points or head
         return {
           message: aiText,
           sender: input.chatType,
+        };
+      }),
+  }),
+
+  // ─── Wealth Progression Router ────────────────────────────────────────────────────
+  wealth: router({
+    // Get current wealth progress
+    getProgress: protectedProcedure.query(async ({ ctx }) => {
+      const prog = await getOrCreateUserProgression(ctx.user.id);
+      const netWorth = Number(prog?.wealthNetWorth ?? 0);
+      const wealthData = calculateWealthLevel(netWorth);
+      const beastEvolution = getBeastEvolution(netWorth);
+      return {
+        netWorth,
+        level: wealthData.level,
+        stage: wealthData.stage,
+        stageProgress: wealthData.stageProgress,
+        nextMilestone: wealthData.nextMilestone,
+        currentMilestone: wealthData.currentMilestone,
+        beastEvolution,
+      };
+    }),
+
+    // Update net worth
+    updateNetWorth: protectedProcedure
+      .input(z.object({
+        netWorth: z.number().min(0).max(100_000_000),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const wealthData = calculateWealthLevel(input.netWorth);
+        await updateUserProgression(ctx.user.id, {
+          wealthNetWorth: input.netWorth.toFixed(2),
+          wealthLevel: wealthData.level,
+          wealthStageId: wealthData.stage.id,
+        });
+        const beastEvolution = getBeastEvolution(input.netWorth);
+        return {
+          netWorth: input.netWorth,
+          level: wealthData.level,
+          stage: wealthData.stage,
+          stageProgress: wealthData.stageProgress,
+          nextMilestone: wealthData.nextMilestone,
+          currentMilestone: wealthData.currentMilestone,
+          beastEvolution,
         };
       }),
   }),

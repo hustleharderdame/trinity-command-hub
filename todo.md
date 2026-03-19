@@ -583,3 +583,17 @@
 - [x] Add optimistic updates and error handling in JournalMode
 - [x] Pass progression context (level, streak, power score, faith, hustle) to LLM
 - [x] Write vitest tests for journal.chat and journal.getHistory (6/6 passing)
+
+## 200-Level Wealth Progression System
+
+- [x] Add wealthNetWorth and wealthLevel fields to userProgression schema
+- [x] Run drizzle migration for new wealth fields
+- [x] Add wealth constants file (WEALTH_STAGES, WEALTH_MILESTONES, BEAST_EVOLUTIONS)
+- [x] Add wealth.updateNetWorth and wealth.getProgress tRPC procedures
+- [x] Build WealthProgression page with 10-stage visual map
+- [x] Add net worth input form with level calculation
+- [x] Add milestone tracker with completion states
+- [x] Add Soul Beast evolution display (11 evolution states tied to wealth)
+- [x] Add Level 100 First Heaven and Level 200 Final Heaven cinematic moments
+- [x] Wire WealthProgression into Stage1Hub as WEALTH mode (💎)
+- [x] Write vitest tests for wealth procedures (21/21 passing)

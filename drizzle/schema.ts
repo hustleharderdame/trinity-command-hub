@@ -48,6 +48,10 @@ export const userProgression = mysqlTable("user_progression", {
   momentumStatus: mysqlEnum("momentumStatus", ["STRONG", "BUILDING", "UNSTABLE"]).default("BUILDING"),
   currentZone: varchar("currentZone", { length: 50 }).default("Purgatory"),
   lastActiveDate: date("lastActiveDate"),
+  // 200-Level Wealth Progression
+  wealthNetWorth: decimal("wealthNetWorth", { precision: 15, scale: 2 }).default("0"),
+  wealthLevel: int("wealthLevel").default(0),
+  wealthStageId: int("wealthStageId").default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
