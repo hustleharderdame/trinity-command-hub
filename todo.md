@@ -597,3 +597,29 @@
 - [x] Add Level 100 First Heaven and Level 200 Final Heaven cinematic moments
 - [x] Wire WealthProgression into Stage1Hub as WEALTH mode (💎)
 - [x] Write vitest tests for wealth procedures (21/21 passing)
+
+## v15 Divine Power Edition Upgrade
+
+- [ ] Apply v15 fonts: Cinzel Decorative, Rajdhani, Share Tech Mono via Google Fonts CDN
+- [ ] Apply v15 CSS variables: --void, --phi, --soul, --flame, --gold, --silver, --glass
+- [ ] Rebuild splash/onboarding screen with animated ring, gradient title, and Enter button
+- [ ] Rebuild app header with hdr-stat chips (Level, XP, Streak, Tier)
+- [ ] Build Beast Chamber with Three.js animated canvas, power card, XP bar, transformation tracker
+- [ ] Build Mission Grid with category filter tabs, mission cards, difficulty dots, reward badges
+- [ ] Add evidence upload modal with drag-and-drop, image preview, and note field
+- [ ] Upgrade JournalMode chat UI with v15 twin/beast/user message bubbles and typing indicator
+- [ ] Add twin-tabs (Chat / Journal Log) to JournalMode header
+
+
+## v15 Divine Power Edition Upgrade
+
+- [x] Add v15 fonts to index.html (Cinzel Decorative, Rajdhani, Share Tech Mono)
+- [x] Add v15 CSS variables to index.css (void, phi, soul, flame, gold, silver colors)
+- [x] Rebuild Home.tsx splash screen with animated ring, starfield, gradient title
+- [x] Build BeastChamber with Three.js canvas, power card, XP bar, transformation tracker
+- [x] Build MissionGrid with 12 missions, category filters, evidence upload modal
+- [x] Upgrade JournalMode chat UI with v15 message bubbles, typing indicator, glowing borders
+- [x] Wire BeastChamber and MissionGrid into Stage1Hub as new modes
+- [x] Apply v15 color palette to all message bubbles and UI elements
+- [x] Add Three.js dependency and integration
+- [x] All components tested and zero TypeScript errors

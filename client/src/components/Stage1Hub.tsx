@@ -5,13 +5,15 @@ import LegacyBook from './LegacyBook'
 import JournalMode from './JournalMode'
 import ScrapbookMode from './ScrapbookMode'
 import WealthProgression from './WealthProgression'
+import BeastChamber from './BeastChamber'
+import MissionGrid from './MissionGrid'
 
 interface Stage1HubProps {
   progression?: any
   snapshot?: any
 }
 
-type Mode = 'traphouse' | 'gaming' | 'tactical' | 'journal' | 'scrapbook' | 'wealth'
+type Mode = 'traphouse' | 'gaming' | 'tactical' | 'journal' | 'scrapbook' | 'wealth' | 'beast' | 'missions'
 
 export default function Stage1Hub({ progression, snapshot }: Stage1HubProps) {
   const [activeMode, setActiveMode] = useState<Mode>('traphouse')
@@ -38,6 +40,8 @@ export default function Stage1Hub({ progression, snapshot }: Stage1HubProps) {
     { id: 'journal' as Mode, label: 'GARDEN', emoji: '🌿', color: 'purple' },
     { id: 'scrapbook' as Mode, label: 'SCRAPBOOK', emoji: '📸', color: 'pink' },
     { id: 'wealth' as Mode, label: 'WEALTH', emoji: '💎', color: 'gold' },
+    { id: 'beast' as Mode, label: 'BEAST', emoji: '🐲', color: 'orange' },
+    { id: 'missions' as Mode, label: 'MISSIONS', emoji: '⚡', color: 'phi' },
   ]
 
   const colorMap: Record<string, string> = {
@@ -47,6 +51,8 @@ export default function Stage1Hub({ progression, snapshot }: Stage1HubProps) {
     purple: 'bg-purple-500/20 text-purple-400 border-purple-500/50',
     pink: 'bg-pink-500/20 text-pink-400 border-pink-500/50',
     gold: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/50',
+    orange: 'bg-orange-500/20 text-orange-300 border-orange-500/50',
+    phi: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50',
   }
 
   return (
@@ -103,6 +109,24 @@ export default function Stage1Hub({ progression, snapshot }: Stage1HubProps) {
         )}
         {activeMode === 'wealth' && (
           <WealthProgression />
+        )}
+        {activeMode === 'beast' && (
+          <div className="p-4 max-w-6xl mx-auto w-full">
+            <div className="mb-6">
+              <h2 style={{ fontFamily: "'Cinzel Decorative', cursive", color: '#00e5a0', fontSize: '1.2em', letterSpacing: 4 }}>BEAST CHAMBER</h2>
+              <p style={{ fontFamily: "'Share Tech Mono', monospace", color: 'rgba(255,255,255,0.4)', fontSize: '0.8em', marginTop: 4 }}>Your soul beast evolves as you level up</p>
+            </div>
+            <BeastChamber progression={progression} />
+          </div>
+        )}
+        {activeMode === 'missions' && (
+          <div className="p-4 max-w-6xl mx-auto w-full">
+            <div className="mb-6">
+              <h2 style={{ fontFamily: "'Cinzel Decorative', cursive", color: '#00e5a0', fontSize: '1.2em', letterSpacing: 4 }}>MISSION BOARD</h2>
+              <p style={{ fontFamily: "'Share Tech Mono', monospace", color: 'rgba(255,255,255,0.4)', fontSize: '0.8em', marginTop: 4 }}>Complete missions to earn XP and Power Points</p>
+            </div>
+            <MissionGrid />
+          </div>
         )}
       </div>
     </div>

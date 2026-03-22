@@ -464,40 +464,43 @@ export default function JournalMode() {
             </button>
           </div>
 
-          {/* Chat header */}
+          {/* Chat header with tabs */}
           <div
-            className="rounded-xl border p-3 mb-4 flex items-center gap-3"
+            className="rounded-xl border p-3 mb-4 flex items-center justify-between gap-3"
             style={{
-              borderColor: activeChat === 'soul-beast' ? 'rgba(255,50,150,0.4)' : 'rgba(0,200,255,0.4)',
-              background: 'rgba(0,0,0,0.6)',
+              borderColor: activeChat === 'soul-beast' ? 'rgba(221,0,255,0.4)' : 'rgba(0,200,255,0.4)',
+              background: 'linear-gradient(135deg, rgba(10,0,30,0.8), rgba(0,5,20,0.8))',
               backdropFilter: 'blur(10px)',
             }}
           >
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center text-xl flex-shrink-0"
-              style={{
-                background: activeChat === 'soul-beast'
-                  ? 'radial-gradient(circle, rgba(255,50,150,0.3) 0%, transparent 70%)'
-                  : 'radial-gradient(circle, rgba(0,200,255,0.3) 0%, transparent 70%)',
-              }}
-            >
-              {activeChat === 'soul-beast' ? '🐉' : '🤖'}
-            </div>
-            <div>
+            <div className="flex items-center gap-3">
               <div
-                className="font-bold text-sm"
-                style={{ color: activeChat === 'soul-beast' ? '#ff3296' : '#00c8ff' }}
+                className="w-10 h-10 rounded-full flex items-center justify-center text-xl flex-shrink-0"
+                style={{
+                  background: activeChat === 'soul-beast'
+                    ? 'radial-gradient(circle, rgba(221,0,255,0.3) 0%, transparent 70%)'
+                    : 'radial-gradient(circle, rgba(0,200,255,0.3) 0%, transparent 70%)',
+                  boxShadow: activeChat === 'soul-beast' ? '0 0 15px rgba(221,0,255,0.3)' : '0 0 15px rgba(0,200,255,0.3)',
+                }}
               >
-                {activeChat === 'soul-beast' ? 'Soul Beast' : 'AI Twin'}
+                {activeChat === 'soul-beast' ? '🐉' : '🤖'}
               </div>
-              <div className="text-xs text-gray-500">
-                {activeChat === 'soul-beast' ? 'Ancient spiritual guide' : 'Strategic intelligence advisor'}
+              <div>
+                <div
+                  className="font-bold text-sm"
+                  style={{ color: activeChat === 'soul-beast' ? '#dd00ff' : '#00c8ff', fontFamily: "'Cinzel Decorative', cursive" }}
+                >
+                  {activeChat === 'soul-beast' ? 'SOUL BEAST' : 'AI TWIN'}
+                </div>
+                <div className="text-xs text-gray-500" style={{ fontFamily: "'Share Tech Mono', monospace" }}>
+                  {activeChat === 'soul-beast' ? 'Spiritual guide' : 'Strategic advisor'}
+                </div>
               </div>
             </div>
-            <div className="ml-auto flex items-center gap-1">
+            <div className="flex items-center gap-1">
               <div
                 className="w-2 h-2 rounded-full animate-pulse"
-                style={{ background: activeChat === 'soul-beast' ? '#ff3296' : '#00c8ff' }}
+                style={{ background: activeChat === 'soul-beast' ? '#dd00ff' : '#00c8ff' }}
               />
               <span className="text-xs text-gray-500">Online</span>
             </div>
@@ -517,14 +520,15 @@ export default function JournalMode() {
             {filteredMessages.map((message) => (
               <div
                 key={message.id}
-                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-2 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.sender !== 'user' && (
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm mr-2 flex-shrink-0 mt-1"
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0 mt-1"
                     style={{
                       background: activeChat === 'soul-beast'
-                        ? 'radial-gradient(circle, rgba(255,50,150,0.3) 0%, transparent 70%)'
+                        ? 'radial-gradient(circle, rgba(221,0,255,0.3) 0%, transparent 70%)'
                         : 'radial-gradient(circle, rgba(0,200,255,0.3) 0%, transparent 70%)',
+                      boxShadow: activeChat === 'soul-beast' ? '0 0 10px rgba(221,0,255,0.2)' : '0 0 10px rgba(0,200,255,0.2)',
                     }}
                   >
                     {activeChat === 'soul-beast' ? '🐉' : '🤖'}
@@ -535,28 +539,33 @@ export default function JournalMode() {
                   style={
                     message.sender === 'user'
                       ? {
-                          background: 'rgba(100, 100, 200, 0.2)',
-                          border: '1px solid rgba(100,100,200,0.4)',
-                          color: '#c0c0ff',
+                          background: 'rgba(0,229,160,0.08)',
+                          border: '1px solid rgba(0,229,160,0.3)',
+                          color: '#00e5a0',
                           borderRadius: '18px 18px 4px 18px',
+                          fontFamily: "'Rajdhani', sans-serif",
                         }
                       : activeChat === 'soul-beast'
                       ? {
-                          background: 'rgba(255, 50, 150, 0.1)',
-                          border: '1px solid rgba(255,50,150,0.3)',
-                          color: '#ffb0d0',
+                          background: 'rgba(221,0,255,0.08)',
+                          border: '1px solid rgba(221,0,255,0.3)',
+                          color: '#dd00ff',
                           borderRadius: '4px 18px 18px 18px',
+                          fontFamily: "'Rajdhani', sans-serif",
+                          boxShadow: '0 0 15px rgba(221,0,255,0.1)',
                         }
                       : {
-                          background: 'rgba(0, 200, 255, 0.1)',
+                          background: 'rgba(0,200,255,0.08)',
                           border: '1px solid rgba(0,200,255,0.3)',
-                          color: '#a0e8ff',
+                          color: '#00b4ff',
                           borderRadius: '4px 18px 18px 18px',
+                          fontFamily: "'Rajdhani', sans-serif",
+                          boxShadow: '0 0 15px rgba(0,200,255,0.1)',
                         }
                   }
                 >
                   <p>{message.text}</p>
-                  <p className="text-xs opacity-40 mt-1 text-right">
+                  <p className="text-xs opacity-40 mt-1 text-right" style={{ fontFamily: "'Share Tech Mono', monospace" }}>
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
@@ -564,22 +573,29 @@ export default function JournalMode() {
             ))}
 
             {isLoading && (
-              <div className="flex justify-start">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm mr-2 flex-shrink-0">
+              <div className="flex gap-2 justify-start">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0 mt-1"
+                  style={{
+                    background: activeChat === 'soul-beast'
+                      ? 'radial-gradient(circle, rgba(221,0,255,0.3) 0%, transparent 70%)'
+                      : 'radial-gradient(circle, rgba(0,200,255,0.3) 0%, transparent 70%)',
+                  }}
+                >
                   {activeChat === 'soul-beast' ? '🐉' : '🤖'}
                 </div>
                 <div
                   className="px-4 py-3 rounded-2xl text-sm"
                   style={{
-                    background: activeChat === 'soul-beast' ? 'rgba(255,50,150,0.1)' : 'rgba(0,200,255,0.1)',
-                    border: `1px solid ${activeChat === 'soul-beast' ? 'rgba(255,50,150,0.3)' : 'rgba(0,200,255,0.3)'}`,
+                    background: activeChat === 'soul-beast' ? 'rgba(221,0,255,0.08)' : 'rgba(0,200,255,0.08)',
+                    border: `1px solid ${activeChat === 'soul-beast' ? 'rgba(221,0,255,0.3)' : 'rgba(0,200,255,0.3)'}`,
                     borderRadius: '4px 18px 18px 18px',
+                    boxShadow: activeChat === 'soul-beast' ? '0 0 15px rgba(221,0,255,0.1)' : '0 0 15px rgba(0,200,255,0.1)',
                   }}
                 >
                   <div className="flex gap-1 items-center">
-                    <div className="w-2 h-2 rounded-full animate-bounce" style={{ background: activeChat === 'soul-beast' ? '#ff3296' : '#00c8ff', animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 rounded-full animate-bounce" style={{ background: activeChat === 'soul-beast' ? '#ff3296' : '#00c8ff', animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 rounded-full animate-bounce" style={{ background: activeChat === 'soul-beast' ? '#ff3296' : '#00c8ff', animationDelay: '300ms' }} />
+                    <div className="w-2 h-2 rounded-full animate-bounce" style={{ background: activeChat === 'soul-beast' ? '#dd00ff' : '#00b4ff', animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 rounded-full animate-bounce" style={{ background: activeChat === 'soul-beast' ? '#dd00ff' : '#00b4ff', animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 rounded-full animate-bounce" style={{ background: activeChat === 'soul-beast' ? '#dd00ff' : '#00b4ff', animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -598,9 +614,10 @@ export default function JournalMode() {
               className="flex-1 px-4 py-3 rounded-xl text-sm outline-none transition-all"
               style={{
                 background: 'rgba(0,0,0,0.6)',
-                border: `1px solid ${activeChat === 'soul-beast' ? 'rgba(255,50,150,0.3)' : 'rgba(0,200,255,0.3)'}`,
-                color: activeChat === 'soul-beast' ? '#ffb0d0' : '#a0e8ff',
+                border: `1px solid ${activeChat === 'soul-beast' ? 'rgba(221,0,255,0.3)' : 'rgba(0,200,255,0.3)'}`,
+                color: activeChat === 'soul-beast' ? '#dd00ff' : '#00b4ff',
                 backdropFilter: 'blur(10px)',
+                fontFamily: "'Rajdhani', sans-serif",
               }}
               disabled={isLoading}
             />
@@ -609,9 +626,10 @@ export default function JournalMode() {
               disabled={!inputValue.trim() || isLoading}
               className="px-4 py-3 rounded-xl transition-all disabled:opacity-40"
               style={{
-                background: activeChat === 'soul-beast' ? 'rgba(255,50,150,0.2)' : 'rgba(0,200,255,0.2)',
-                border: `1px solid ${activeChat === 'soul-beast' ? 'rgba(255,50,150,0.5)' : 'rgba(0,200,255,0.5)'}`,
-                color: activeChat === 'soul-beast' ? '#ff3296' : '#00c8ff',
+                background: activeChat === 'soul-beast' ? 'rgba(221,0,255,0.15)' : 'rgba(0,200,255,0.15)',
+                border: `1px solid ${activeChat === 'soul-beast' ? 'rgba(221,0,255,0.5)' : 'rgba(0,200,255,0.5)'}`,
+                color: activeChat === 'soul-beast' ? '#dd00ff' : '#00b4ff',
+                boxShadow: activeChat === 'soul-beast' ? '0 0 15px rgba(221,0,255,0.2)' : '0 0 15px rgba(0,200,255,0.2)',
               }}
             >
               <Send className="w-4 h-4" />

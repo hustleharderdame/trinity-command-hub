@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap');
+/* v15 Divine Power Edition fonts loaded via index.html: Cinzel Decorative, Rajdhani, Share Tech Mono */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -44,6 +45,23 @@
 }
 
 :root {
+  /* v15 Divine Power Edition — semantic tokens */
+  --void: #000005;
+  --deep: #05000f;
+  --v15-flame: #ff3d00;
+  --v15-gold: #ffd600;
+  --v15-phi: #00e5a0;
+  --v15-soul: #dd00ff;
+  --v15-blue: #00b4ff;
+  --v15-silver: #e8f0ff;
+  --v15-glass: rgba(5,0,20,0.75);
+  --v15-glass-b: rgba(255,255,255,0.08);
+  --v15-text: rgba(255,255,255,0.92);
+  --v15-muted: rgba(255,255,255,0.5);
+  --font-head: 'Cinzel Decorative', cursive;
+  --font-body: 'Rajdhani', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+
   /* Cyberpunk Neon Color Palette */
   --primary: oklch(0.65 0.25 290); /* Neon Pink */
   --primary-foreground: oklch(0.05 0 0); /* Deep Black */
