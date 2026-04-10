@@ -623,3 +623,204 @@
 - [x] Apply v15 color palette to all message bubbles and UI elements
 - [x] Add Three.js dependency and integration
 - [x] All components tested and zero TypeScript errors
+
+
+## HustleSystem Master Index Implementation
+
+### Phase 1: Core Schema & Mathematical Kernels
+- [ ] Add MindDNA thought cells table (emotion, idea, action, timestamp)
+- [ ] Add MBS/MPR credit tracking (Mind, Body, Soul, Money, Power, Respect max values)
+- [ ] Add Blessing Probability calculation field
+- [ ] Add Financial Milestones tracking (Gross, Net, Saved, Passive, Net Worth)
+- [ ] Add Hustle Age progression (Infant Hustler → Millionaire → Soul Architect)
+- [ ] Add ULC (Unlearned Lesson Code) and Shadow Loop tracking
+
+### Phase 2: MindDNA & Thought Cell UI
+- [ ] Build Thought Cell logger (emotion frequency, idea meaning, action output)
+- [ ] Build Expression Level calculator (avg resonance across all cells)
+- [ ] Build MindDNA strand visualization (Hustle, Faith, Love strands)
+- [ ] Add daily Thought Cell review interface
+
+### Phase 3: The 9 Interfaces
+- [ ] Interface 1: Closed Tome (identity setup, archetype selection, cinematic entry)
+- [ ] Interface 2: Open Codex (daily journal, Soul Temperature slider, consciousness notes)
+- [ ] Interface 3: Tactical Mode (task logging, Context Switchers, domain tags)
+- [ ] Interface 4: Gaming Journal (XP bars, pillar circles, achievement unlocks)
+- [ ] Interface 5: SIGMA Dashboard (3D 4D coordinates visualization)
+- [ ] Interface 6: Stage Journey (25-stage progression tree)
+- [ ] Interface 7: Cockpit Flame (driving-optimized, shift timers, income logging)
+- [ ] Interface 8: Framework Map (interactive module diagram)
+- [ ] Interface 9: Tech Inspiration (development roadmap, AI Council notes)
+
+### Phase 4: Behavioral Governance & Energetic Justice
+- [ ] Implement Idealization mode (High Love + High Faith)
+- [ ] Implement Discipline mode (Low Love + Reckless Ego)
+- [ ] Implement Reflection mode (Inconsistent Energy)
+- [ ] Implement Reconciliation mode (Acknowledgement of Error)
+- [ ] Build Disrespect Response Framework (Light Check, Heavy Check, Divine Discipline)
+- [ ] Implement ULC Shadow Loops (repeating scenarios until lesson learned)
+
+### Phase 5: Financial Evolution & Wealth Ladder
+- [ ] Build 5-tier wealth progression tracker
+- [ ] Implement Financial Firewall Protocol (Tier 1 vs Tier 2)
+- [ ] Add wealth milestone celebrations (Gross, Net, Saved, Passive, $1M)
+- [ ] Build wealth efficiency visualization
+
+### Phase 6: RPG World Layers & Fog Mechanics
+- [ ] Implement TrapHouse layer (0 mi, chaos state)
+- [ ] Implement The Street layer (1-250 mi, effort + momentum)
+- [ ] Implement Apartments layer (250-500 mi, stability)
+- [ ] Implement Penthouse layer (500-800 mi, high responsibility)
+- [ ] Implement Mansion layer (1000 mi, mastery)
+- [ ] Build Fog Radius mechanics (expands with missions, shrinks with neglect)
+
+### Phase 7: 6-Day Weekly Ritual
+- [ ] Build Divine Planning (Sunday)
+- [ ] Build Foundation & Documents (Monday)
+- [ ] Build Building & Creating (Tuesday)
+- [ ] Build Family & Relationships (Wednesday)
+- [ ] Build Resources & Systems (Thursday)
+- [ ] Build Completion & Momentum (Friday)
+- [ ] Build Sabbath Rest (Saturday)
+- [ ] Implement Divine To-Do List (Survival → Support → Growth)
+
+
+---
+
+## Hustle System v16.1 Implementation (Current Phase)
+
+### Core: Consciousness Kernel
+- [ ] Create ConsciousnessKernel.ts with all kernel evaluation logic
+- [ ] Implement balancing scale calculation (Mind/Body/Soul)
+- [ ] Implement self-love mark system (Red/Green marks)
+- [ ] Implement mutation system (Celestial Glow / Dark Aura / Neutral)
+- [ ] Implement harmony calculation formula
+- [ ] Implement manifestation decision logic
+- [ ] Implement Spiritual Age calculation
+- [ ] Write vitest tests for Kernel formulas (15+ test cases)
+
+### Hustle Street Interface
+- [ ] Create HustleStreet.tsx component
+- [ ] Build mission execution UI (take action, log intention)
+- [ ] Build money log interface (track income, expenses, savings)
+- [ ] Build tactical execution tracker (daily moves, checklist)
+- [ ] Add tRPC procedures for hustle actions
+- [ ] Integrate Kernel evaluation on action completion
+- [ ] Add loading states and error handling
+
+### Faith Street Interface
+- [ ] Create FaithStreet.tsx component
+- [ ] Build manifestation pickup UI (notification + card)
+- [ ] Build gratitude log interface
+- [ ] Build faith statement input
+- [ ] Add reward display (XP, harmony, marks, insights)
+- [ ] Add tRPC procedures for faith actions
+- [ ] Implement notification system for manifestation arrivals
+
+### 200-Level Mission Architecture
+- [ ] Create MissionArchitecture.tsx component
+- [ ] Build stage map visualization (4 Ascent stages + Legendary)
+- [ ] Build stage progression tracker
+- [ ] Implement stage unlock logic (XP, milestones, harmony)
+- [ ] Add milestone list for each stage
+- [ ] Add stage transition ceremonies/cutscenes
+- [ ] Wire stage progression to Kernel evaluation
+
+### Kernel Integration into Existing Modes
+- [ ] Update Journal mode to trigger Kernel evaluation on entry
+- [ ] Update Scrapbook mode to track self-love alignment
+- [ ] Update Tactical mode to show harmony/balance state
+- [ ] Update Gaming Mode to award XP through Kernel
+- [ ] Update Wealth Progression to integrate with Kernel
+
+### Daily Flow & Notifications
+- [ ] Create DailyFlow.tsx (Hustle Street → Kernel → Faith Street)
+- [ ] Implement Kernel evaluation scheduler (runs after actions)
+- [ ] Build manifestation notification system
+- [ ] Add daily reset logic (missions, streak tracking)
+- [ ] Implement Recovery Mode trigger (extreme imbalance)
+- [ ] Add onboarding flow for Purgatory (Levels 1–5)
+
+### Dashboard & Analytics
+- [ ] Update Dashboard to show Kernel state (balance scale, marks)
+- [ ] Add Spiritual Age display
+- [ ] Add harmony trend chart
+- [ ] Add stage progress visualization
+- [ ] Add manifestation history log
+- [ ] Add recovery mode status indicator
+
+### Testing & Polish
+- [ ] Write comprehensive vitest tests for Kernel
+- [ ] Write tests for stage progression logic
+- [ ] Write tests for manifestation decision logic
+- [ ] Test daily flow end-to-end
+- [ ] Test notification system
+- [ ] Performance optimization
+- [ ] Mobile responsiveness check
+
+### Documentation & Delivery
+- [ ] Document Kernel rules and formulas
+- [ ] Document daily flow process
+- [ ] Document stage progression requirements
+- [ ] Create user guide for Hustle Street / Faith Street
+- [ ] Create admin guide for monitoring Kernel state
+- [ ] Save final checkpoint v16.1
+
+
+## Gaming Mode: Business Mastery Tracker (NEW DIRECTION)
+
+### Core Architecture
+- [x] Create businessTasks.ts with 20+ real-world business tasks
+- [ ] Each task has: name, description, category, mandatory MBS/MPR fields, 4 optional mastery challenges
+- [ ] Add database schema for task_completions and mastery_progress tables
+- [ ] Implement mastery level calculation (0 = incomplete, 1-4 = mastery stars)
+
+### Business Task Categories
+- [ ] Sales & Closing (Close Deal, Pitch Product, Negotiate Contract)
+- [ ] Product & Launch (Build Feature, Launch Product, Gather Feedback)
+- [ ] Team & Leadership (Hire Team Member, Conduct 1-on-1, Resolve Conflict)
+- [ ] Finance & Operations (Audit Finances, Optimize Costs, Scale Revenue)
+- [ ] Marketing & Brand (Create Campaign, Build Community, Establish Authority)
+- [ ] Personal Mastery (Daily Ritual, Meditation, Physical Training)
+
+### Mandatory MBS/MPR Tracking
+- [ ] Mind: Strategic clarity, decision quality (0-10)
+- [ ] Body: Physical energy, execution speed (0-10)
+- [ ] Soul: Alignment with values, integrity (0-10)
+- [ ] Money: Financial impact, ROI (0-10)
+- [ ] Power: Influence gained, leverage (0-10)
+- [ ] Respect: Reputation impact, trust (0-10)
+
+### 4 Optional Mastery Challenges per Task
+- [ ] Mastery 1: Complete task with 70%+ MBS/MPR average
+- [ ] Mastery 2: Complete task with 80%+ MBS/MPR average + document process
+- [ ] Mastery 3: Complete task + teach someone else the skill
+- [ ] Mastery 4: Complete task + optimize it for 2x speed/efficiency
+
+### Gaming Mode UI Rebuild
+- [ ] Create BusinessMasteryTracker.tsx component
+- [ ] Build task grid with category filters
+- [ ] Build task card with mandatory MBS/MPR input sliders
+- [ ] Build 4 mastery challenge checkboxes
+- [ ] Add task completion modal with evidence upload
+- [ ] Add mastery progress visualization (stars/badges)
+- [ ] Add category leaderboard (which skills are most mastered)
+
+### tRPC Procedures
+- [ ] tasks.getAll (fetch all available tasks)
+- [ ] tasks.complete (log task completion + MBS/MPR values)
+- [ ] tasks.getMasteryProgress (fetch user's mastery level per task)
+- [ ] tasks.unlockMastery (unlock mastery level when challenges met)
+- [ ] tasks.getStats (total tasks completed, average MBS/MPR, mastery count)
+
+### Kernel Integration
+- [ ] Evaluate task completion through Consciousness Kernel
+- [ ] Award XP based on MBS/MPR alignment + mastery level
+- [ ] Trigger manifestation if task aligns with user's highest self
+- [ ] Award harmony points for high-integrity task completion
+
+### Testing
+- [ ] Write vitest tests for mastery calculation logic
+- [ ] Test MBS/MPR validation and averaging
+- [ ] Test task completion workflow
+- [ ] Test Kernel integration with task rewards

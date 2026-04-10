@@ -22,6 +22,20 @@
       "when": 1773957769279,
       "tag": "0002_brown_reptil",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1774650360474,
+      "tag": "0003_flimsy_magdalene",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1775830846134,
+      "tag": "0004_serious_human_robot",
+      "breakpoints": true
     }
   ]
 }

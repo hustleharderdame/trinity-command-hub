@@ -9,6 +9,14 @@ import {
   spiritualAge,
   streakTracking,
   intelligenceEngine,
+  mindDNAThoughtCells,
+  mbsMprCredits,
+  blessingProbability,
+  financialMilestones,
+  behavioralGovernance,
+  rpgWorldLayers,
+  autonomyStage,
+  journalMessages,
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -342,3 +350,5 @@ export async function getJournalHistory(
     .limit(limit);
   return rows.reverse();
 }
+
+
