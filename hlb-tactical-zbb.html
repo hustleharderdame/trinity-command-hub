@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TACTICAL MODE | HLB LHOS</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cinzel:wght@400;700&family=Space+Mono:wght@400;700&family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#020205',
+                        'void-faith': '#04030a',
+                        red: '#ff1a1a',
+                        red2: '#cc0000',
+                        ember: '#ff4500',
+                        ember2: '#ff6b35',
+                        soul: '#c400ff',
+                        soul2: '#8800cc',
+                        gold: '#ffd700',
+                        gold2: '#ffaa00',
+                        gem: '#00f5c4',
+                        flame: '#ff6b35',
+                        cyan: '#00f5c4',
+                    },
+                    fontFamily: {
+                        pixel: ['Press Start 2P', 'monospace'],
+                        divine: ['Cinzel', 'serif'],
+                        body: ['Space Mono', 'monospace'],
+                        scripture: ['Cormorant Garamond', 'serif'],
+                    },
+                    animation: {
+                        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        flicker: 'flicker 0.15s infinite',
+                        glow: 'glow 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        flicker: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.7' },
+                        },
+                        glow: {
+                            '0%, 100%': { boxShadow: '0 0 5px rgba(255, 26, 26, 0.5)' },
+                            '50%': { boxShadow: '0 0 20px rgba(255, 26, 26, 0.8)' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #020205 0%, #04030a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        /* Scanlines effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        /* Fog overlay */
+        .fog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.5s ease;
+            background: radial-gradient(ellipse at center, rgba(180, 60, 20, 0.18) 0%, rgba(10, 5, 5, 0.92) 100%);
+        }
+        
+        .fog-overlay.red-zone {
+            background: radial-gradient(ellipse at center, rgba(255, 26, 26, 0.35) 0%, rgba(180, 60, 20, 0.25) 50%, rgba(10, 5, 5, 0.92) 100%);
+            opacity: 0.9;
+            animation: fogPulseRed 3s ease-in-out infinite;
+        }
+        
+        .fog-overlay.yellow-zone {
+            background: radial-gradient(ellipse at center, rgba(255, 170, 0, 0.25) 0%, rgba(180, 60, 20, 0.15) 50%, rgba(10, 5, 5, 0.92) 100%);
+            opacity: 0.6;
+            animation: fogPulseYellow 3s ease-in-out infinite;
+        }
+        
+        .fog-overlay.green-zone {
+            background: radial-gradient(ellipse at center, rgba(0, 245, 196, 0.12) 0%, rgba(180, 60, 20, 0.08) 50%, rgba(10, 5, 5, 0.92) 100%);
+            opacity: 0.3;
+            animation: fogPulseGreen 3s ease-in-out infinite;
+        }
+        
+        @keyframes fogPulseRed {
+            0%, 100% { opacity: 0.85; }
+            50% { opacity: 0.95; }
+        }
+        
+        @keyframes fogPulseYellow {
+            0%, 100% { opacity: 0.55; }
+            50% { opacity: 0.65; }
+        }
+        
+        @keyframes fogPulseGreen {
+            0%, 100% { opacity: 0.25; }
+            50% { opacity: 0.35; }
+        }
+        
+        /* Grid background */
+        .grid-bg {
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(255, 26, 26, 0.05) 25%, rgba(255, 26, 26, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 26, 26, 0.05) 75%, rgba(255, 26, 26, 0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(255, 26, 26, 0.05) 25%, rgba(255, 26, 26, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 26, 26, 0.05) 75%, rgba(255, 26, 26, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+        }
+        
+        /* Gauge styling */
+        .gauge-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+        
+        .gauge-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 180deg,
+                #ff1a1a 0deg,
+                #ffaa00 90deg,
+                #00f5c4 180deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(255, 26, 26, 0.3);
+        }
+        
+        .gauge-inner {
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+            background: #020205;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .gauge-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00f5c4;
+            font-family: 'Space Mono', monospace;
+        }
+        
+        .gauge-label {
+            font-size: 0.75rem;
+            color: #888;
+            font-family: 'Space Mono', monospace;
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            height: 24px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #ff1a1a;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff1a1a, #ffaa00, #00f5c4);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #020205;
+        }
+        
+        /* Card styling */
+        .card {
+            background: rgba(4, 3, 10, 0.85);
+            border: 1px solid rgba(255, 26, 26, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 20px rgba(255, 26, 26, 0.05);
+        }
+        
+        .card:hover {
+            border-color: rgba(255, 26, 26, 0.6);
+            box-shadow: 0 0 25px rgba(255, 26, 26, 0.3), inset 0 0 20px rgba(255, 26, 26, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        /* Button styling */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #ff1a1a;
+            background: transparent;
+            color: #ff1a1a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: bold;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #ff1a1a;
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            left: 0;
+        }
+        
+        .btn:hover {
+            color: #020205;
+            box-shadow: 0 0 15px rgba(255, 26, 26, 0.5);
+        }
+        
+        .btn-primary {
+            background: #ff1a1a;
+            color: #020205;
+        }
+        
+        .btn-primary:hover {
+            background: #cc0000;
+            box-shadow: 0 0 20px rgba(255, 26, 26, 0.8);
+        }
+        
+        /* Input styling */
+        input, select, textarea {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 26, 26, 0.3);
+            color: #ffffff;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff1a1a;
+            box-shadow: 0 0 10px rgba(255, 26, 26, 0.3);
+        }
+        
+        /* Tab styling */
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 26, 26, 0.3);
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            border-radius: 0;
+        }
+        
+        .tab-button.active {
+            background: #ff1a1a;
+            color: #020205;
+            border-color: #ff1a1a;
+        }
+        
+        /* Checkbox styling */
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #ff1a1a;
+        }
+        
+        /* Zone badge */
+        .zone-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            font-family: 'Press Start 2P', monospace;
+            letter-spacing: 1px;
+        }
+        
+        .zone-badge.red {
+            background: rgba(255, 26, 26, 0.3);
+            color: #ff1a1a;
+            border: 1px solid #ff1a1a;
+        }
+        
+        .zone-badge.yellow {
+            background: rgba(255, 170, 0, 0.3);
+            color: #ffaa00;
+            border: 1px solid #ffaa00;
+        }
+        
+        .zone-badge.green {
+            background: rgba(0, 245, 196, 0.3);
+            color: #00f5c4;
+            border: 1px solid #00f5c4;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #04030a;
+            border: 1px solid #ff1a1a;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #ff1a1a;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffaa00;
+        }
+    </style>
+</head>
+<body class="grid-bg">
+    <div class="fog-overlay green-zone" id="fogOverlay"></div>
+    
+    <!-- Main Container -->
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="border-b border-red border-opacity-30 bg-void-faith bg-opacity-80 backdrop-blur-sm sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <h1 class="font-pixel text-red text-sm md:text-base">TACTICAL</h1>
+                    <span class="text-gray-500">|</span>
+                    <h2 class="font-divine text-gold text-lg md:text-xl">HLB LHOS</h2>
+                </div>
+                <div class="flex items-center gap-2 md:gap-4">
+                    <span id="userInitials" class="font-body text-cyan text-sm">--</span>
+                    <span class="text-gray-500">|</span>
+                    <span id="currentZone" class="font-body text-gold text-xs md:text-sm">Zone: --</span>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-8">
+            <!-- Tabs -->
+            <div class="flex gap-2 mb-8 overflow-x-auto pb-2">
+                <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+                <button class="tab-button" data-tab="zbb">ZBB Budget</button>
+                <button class="tab-button" data-tab="decalogue">Decalogue</button>
+                <button class="tab-button" data-tab="metrics">Metrics</button>
+                <button class="tab-button" data-tab="settings">Settings</button>
+            </div>
+            
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Quick Stats Sidebar -->
+                    <div class="md:col-span-1">
+                        <div class="card space-y-4">
+                            <h3 class="font-pixel text-red text-xs">QUICK STATS</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400 text-sm">Total XP</span>
+                                    <span id="totalXP" class="font-body text-cyan font-bold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400 text-sm">Level</span>
+                                    <span id="currentLevel" class="font-body text-gold font-bold">1</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400 text-sm">Day Streak</span>
+                                    <span id="dayStreak" class="font-body text-ember font-bold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400 text-sm">RI Score</span>
+                                    <span id="riScore" class="font-body text-gem font-bold">0.0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-400 text-sm">Budget Health</span>
+                                    <span id="budgetHealth" class="font-body text-gold font-bold">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RI Gauge -->
+                    <div class="md:col-span-1">
+                        <div class="card flex flex-col items-center">
+                            <h3 class="font-pixel text-red text-xs mb-4">REACTOR INTEGRITY</h3>
+                            <div class="gauge-container">
+                                <div class="gauge-circle">
+                                    <div class="gauge-inner">
+                                        <div class="gauge-value" id="riValue">0.0</div>
+                                        <div class="gauge-label" id="riZone">GREEN ZONE</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Trinity Formula -->
+                    <div class="md:col-span-1">
+                        <div class="card space-y-4">
+                            <h3 class="font-pixel text-soul text-xs">TRINITY FORMULA</h3>
+                            <div class="text-center space-y-2">
+                                <p class="font-scripture text-gold text-sm">(Hustle + Faith)^Love</p>
+                                <p class="text-gray-400 text-xs">=</p>
+                                <p class="font-divine text-gem text-lg">Manifestation</p>
+                            </div>
+                            <div class="border-t border-red border-opacity-30 pt-4 mt-4">
+                                <p class="text-gray-400 text-xs leading-relaxed">From Survival to Sovereignty. 248-week journey through consciousness transformation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Daily Decalogue Preview -->
+                <div class="card mb-8">
+                    <h3 class="font-pixel text-red text-xs mb-4">TODAY'S DECALOGUE (10/10)</h3>
+                    <div id="decaloguePreview" class="space-y-2">
+                    </div>
+                </div>
+                
+                <!-- Budget Overview -->
+                <div class="card">
+                    <h3 class="font-pixel text-red text-xs mb-4">BUDGET ALLOCATION (70/20/10)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="space-y-2">
+                            <p class="text-sm text-gray-400">Needs/Operations (70%)</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="needsBar" style="width: 0%">0%</div>
+                            </div>
+                            <p class="text-xs text-gray-500">$<span id="needsAmount">0</span> / $<span id="needsTarget">0</span></p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-sm text-gray-400">Growth/Investment (20%)</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="growthBar" style="width: 0%">0%</div>
+                            </div>
+                            <p class="text-xs text-gray-500">$<span id="growthAmount">0</span> / $<span id="growthTarget">0</span></p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-sm text-gray-400">Freedom/Play (10%)</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="freedomBar" style="width: 0%">0%</div>
+                            </div>
+                            <p class="text-xs text-gray-500">$<span id="freedomAmount">0</span> / $<span id="freedomTarget">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ZBB Budget Tab -->
+            <div id="zbb" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Income Section -->
+                    <div class="card">
+                        <h3 class="font-pixel text-gold text-xs mb-4">INCOME STREAMS</h3>
+                        <div id="incomeList" class="space-y-3 mb-4">
+                        </div>
+                        <button class="btn btn-primary w-full" onclick="openAddIncomeModal()">+ Add Income</button>
+                    </div>
+                    
+                    <!-- Expense Section -->
+                    <div class="card">
+                        <h3 class="font-pixel text-red text-xs mb-4">RECENT TRANSACTIONS</h3>
+                        <div id="transactionList" class="space-y-2 mb-4 max-h-96 overflow-y-auto">
+                        </div>
+                        <button class="btn btn-primary w-full" onclick="openAddExpenseModal()">+ Add Expense</button>
+                    </div>
+                </div>
+                
+                <!-- Month Control -->
+                <div class="card mt-6">
+                    <h3 class="font-pixel text-cyan text-xs mb-4">MONTH CONTROL</h3>
+                    <div class="flex gap-4">
+                        <input type="month" id="currentMonth" class="flex-1">
+                        <button class="btn btn-primary" onclick="startNewMonth()">Start New Month</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Decalogue Tab -->
+            <div id="decalogue" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2">
+                        <div class="card">
+                            <h3 class="font-pixel text-red text-xs mb-4">DAILY DECALOGUE (10/10)</h3>
+                            <div id="decalogueList" class="space-y-3">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card space-y-4">
+                            <h3 class="font-pixel text-cyan text-xs">DECALOGUE STATS</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <p class="text-gray-400 text-xs mb-1">Completed Today</p>
+                                    <p id="completedToday" class="font-body text-gold text-2xl font-bold">0/10</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-xs mb-1">Current Streak</p>
+                                    <p id="streakDisplay" class="font-body text-red text-2xl font-bold">0 days</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-xs mb-1">XP Earned Today</p>
+                                    <p id="xpToday" class="font-body text-gem text-2xl font-bold">0</p>
+                                </div>
+                                <button class="btn btn-primary w-full" onclick="resetDailyTasks()">Reset for New Day</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Metrics Tab -->
+            <div id="metrics" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h3 class="font-pixel text-gold text-xs mb-4">NET WORTH</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Assets</span>
+                                <input type="number" id="assetsInput" placeholder="0" class="w-32">
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Liabilities</span>
+                                <input type="number" id="liabilitiesInput" placeholder="0" class="w-32">
+                            </div>
+                            <div class="border-t border-red border-opacity-30 pt-3">
+                                <div class="flex justify-between">
+                                    <span class="text-cyan font-bold">Net Worth</span>
+                                    <span id="netWorthDisplay" class="font-body text-gem font-bold">$0</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary w-full" onclick="updateNetWorth()">Update</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="font-pixel text-red text-xs mb-4">SAVINGS RATE</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-gray-400 text-sm mb-2">Current Month</p>
+                                <p id="savingsRateDisplay" class="font-body text-gold text-3xl font-bold">0%</p>
+                            </div>
+                            <div class="border-t border-red border-opacity-30 pt-3">
+                                <p class="text-gray-400 text-xs">Savings = (Income - Expenses) / Income</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card md:col-span-2">
+                        <h3 class="font-pixel text-cyan text-xs mb-4">248-WEEK JOURNEY</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-gray-400 text-sm">Progress</span>
+                                    <span id="weekProgress" class="text-gold text-sm font-bold">Week 1 / 248</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="journeyBar" style="width: 0.4%">0%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div id="settings" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h3 class="font-pixel text-red text-xs mb-4">USER SETTINGS</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-gray-400 text-sm mb-2 block">Initials</label>
+                                <input type="text" id="initialsInput" maxlength="3" placeholder="ABC" class="w-full">
+                            </div>
+                            <div>
+                                <label class="text-gray-400 text-sm mb-2 block">Current Zone</label>
+                                <select id="zoneSelect" class="w-full">
+                                    <option>Purgatory</option>
+                                    <option>The Trap</option>
+                                    <option>Earth Walk</option>
+                                    <option>Faith Street</option>
+                                    <option>The Ascension</option>
+                                    <option>Heaven Gate</option>
+                                    <option>Legacy</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="soundToggle" checked>
+                                <label class="text-gray-400 text-sm">Sound Effects</label>
+                            </div>
+                            <button class="btn btn-primary w-full" onclick="saveSettings()">Save Settings</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="font-pixel text-cyan text-xs mb-4">DATA MANAGEMENT</h3>
+                        <div class="space-y-3">
+                            <button class="btn btn-primary w-full" onclick="exportData()">📥 Export Data</button>
+                            <button class="btn w-full" onclick="openImportModal()">📤 Import Data</button>
+                            <button class="btn w-full" onclick="resetAllData()">🔄 Reset All Data</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="border-t border-red border-opacity-30 bg-void-faith bg-opacity-80 backdrop-blur-sm mt-12">
+            <div class="max-w-7xl mx-auto px-4 py-6 text-center">
+                <p class="font-body text-gray-400 text-xs">Hustle Legacy Book — From Survival to Sovereignty</p>
+                <p class="font-scripture text-gold text-xs mt-2">Built for consciousness-based transformation</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Modals -->
+    
+    <!-- Add Income Modal -->
+    <div id="addIncomeModal" class="modal">
+        <div class="modal-content">
+            <h3 class="font-pixel text-gold text-sm mb-4">ADD INCOME STREAM</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-gray-400 text-sm mb-2 block">Income Name</label>
+                    <input type="text" id="incomeNameInput" placeholder="e.g., Salary" class="w-full">
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm mb-2 block">Amount</label>
+                    <input type="number" id="incomeAmountInput" placeholder="0" class="w-full">
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm mb-2 block">Type</label>
+                    <select id="incomeTypeSelect" class="w-full">
+                        <option>recurring</option>
+                        <option>one-time</option>
+                    </select>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn btn-primary flex-1" onclick="addIncome()">Add</button>
+                    <button class="btn flex-1" onclick="closeModal('addIncomeModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Expense Modal -->
+    <div id="addExpenseModal" class="modal">
+        <div class="modal-content">
+            <h3 class="font-pixel text-red text-sm mb-4">ADD EXPENSE</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-gray-400 text-sm mb-2 block">Description</label>
+                    <input type="text" id="expenseDescInput" placeholder="e.g., Groceries" class="w-full">
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm mb-2 block">Amount</label>
+                    <input type="number" id="expenseAmountInput" placeholder="0" class="w-full">
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm mb-2 block">Bucket</label>
+                    <select id="expenseBucketSelect" class="w-full">
+                        <option value="needsOperations">Needs/Operations (70%)</option>
+                        <option value="growthInvestment">Growth/Investment (20%)</option>
+                        <option value="freedomPlay">Freedom/Play (10%)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm mb-2 block">Category</label>
+                    <input type="text" id="expenseCategoryInput" placeholder="e.g., Food" class="w-full">
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn btn-primary flex-1" onclick="addExpense()">Add</button>
+                    <button class="btn flex-1" onclick="closeModal('addExpenseModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Import Data Modal -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <h3 class="font-pixel text-cyan text-sm mb-4">IMPORT DATA</h3>
+            <div class="space-y-4">
+                <input type="file" id="importFileInput" accept=".json" class="w-full">
+                <div class="flex gap-2">
+                    <button class="btn btn-primary flex-1" onclick="importData()">Import</button>
+                    <button class="btn flex-1" onclick="closeModal('importModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ============================================================================
+        // CORE DATA MODEL & INITIALIZATION
+        // ============================================================================
+        
+        let appState = {
+            user: {
+                initials: 'USR',
+                xp: 0,
+                level: 1,
+                currentZone: 'Purgatory',
+                soundEffectsEnabled: true,
+            },
+            budget: {
+                currentMonth: new Date().toISOString().slice(0, 7),
+                incomeStreams: [],
+                allocations: {
+                    needsOperations: { target: 0, spent: 0, categories: [] },
+                    growthInvestment: { target: 0, spent: 0, categories: [] },
+                    freedomPlay: { target: 0, spent: 0, categories: [] },
+                },
+                transactions: [],
+            },
+            decalogue: {
+                lastCompletionDate: null,
+                currentStreak: 0,
+                dailyTasks: [
+                    { id: generateId(), description: 'Meditate 10 mins', completed: false },
+                    { id: generateId(), description: 'Exercise 30 mins', completed: false },
+                    { id: generateId(), description: 'Read/Learn 30 mins', completed: false },
+                    { id: generateId(), description: 'Journal 15 mins', completed: false },
+                    { id: generateId(), description: 'Hydrate (8+ glasses)', completed: false },
+                    { id: generateId(), description: 'Healthy meals', completed: false },
+                    { id: generateId(), description: 'No distractions (2 hrs)', completed: false },
+                    { id: generateId(), description: 'Gratitude practice', completed: false },
+                    { id: generateId(), description: 'Financial review', completed: false },
+                    { id: generateId(), description: 'Manifestation work', completed: false },
+                ],
+                history: [],
+            },
+            reactorIntegrity: {
+                score: 1.0,
+                zone: 'GREEN ZONE',
+            },
+            metrics: {
+                netWorth: [],
+                incomeVsExpenses: [],
+                savingsRate: [],
+                journeyProgress: {
+                    currentWeek: 1,
+                    totalWeeks: 248,
+                },
+            },
+        };
+        
+        // ============================================================================
+        // UTILITY FUNCTIONS
+        // ============================================================================
+        
+        function generateId() {
+            return 'id_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        function getCurrentDate() {
+            return new Date().toISOString().slice(0, 10);
+        }
+        
+        function getCurrentMonth() {
+            return new Date().toISOString().slice(0, 7);
+        }
+        
+        function saveAppState() {
+            localStorage.setItem('hlbAppState', JSON.stringify(appState));
+        }
+        
+        function loadAppState() {
+            const saved = localStorage.getItem('hlbAppState');
+            if (saved) {
+                try {
+                    appState = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Failed to load app state:', e);
+                }
+            }
+        }
+        
+        function playSound() {
+            if (!appState.user.soundEffectsEnabled) return;
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+        
+        // ============================================================================
+        // ZERO-BASED BUDGETING ENGINE
+        // ============================================================================
+        
+        function calculateTotalIncome() {
+            return appState.budget.incomeStreams.reduce((sum, stream) => sum + (stream.amount || 0), 0);
+        }
+        
+        function allocateBudget() {
+            const totalIncome = calculateTotalIncome();
+            appState.budget.allocations.needsOperations.target = totalIncome * 0.70;
+            appState.budget.allocations.growthInvestment.target = totalIncome * 0.20;
+            appState.budget.allocations.freedomPlay.target = totalIncome * 0.10;
+        }
+        
+        function addIncome() {
+            const name = document.getElementById('incomeNameInput').value.trim();
+            const amount = parseFloat(document.getElementById('incomeAmountInput').value) || 0;
+            const type = document.getElementById('incomeTypeSelect').value;
+            
+            if (!name || amount <= 0) {
+                alert('Please enter a valid income name and amount.');
+                return;
+            }
+            
+            appState.budget.incomeStreams.push({
+                id: generateId(),
+                name,
+                amount,
+                type,
+            });
+            
+            allocateBudget();
+            saveAppState();
+            playSound();
+            closeModal('addIncomeModal');
+            document.getElementById('incomeNameInput').value = '';
+            document.getElementById('incomeAmountInput').value = '';
+            renderUI();
+        }
+        
+        function addExpense() {
+            const description = document.getElementById('expenseDescInput').value.trim();
+            const amount = parseFloat(document.getElementById('expenseAmountInput').value) || 0;
+            const bucket = document.getElementById('expenseBucketSelect').value;
+            const category = document.getElementById('expenseCategoryInput').value.trim();
+            
+            if (!description || amount <= 0) {
+                alert('Please enter a valid description and amount.');
+                return;
+            }
+            
+            appState.budget.transactions.push({
+                id: generateId(),
+                date: getCurrentDate(),
+                description,
+                amount,
+                type: 'expense',
+                bucket,
+                category: category || 'Uncategorized',
+            });
+            
+            appState.budget.allocations[bucket].spent += amount;
+            
+            saveAppState();
+            playSound();
+            closeModal('addExpenseModal');
+            document.getElementById('expenseDescInput').value = '';
+            document.getElementById('expenseAmountInput').value = '';
+            renderUI();
+        }
+        
+        function startNewMonth() {
+            const newMonth = document.getElementById('currentMonth').value;
+            if (!newMonth) {
+                alert('Please select a month.');
+                return;
+            }
+            
+            appState.budget.currentMonth = newMonth;
+            appState.budget.allocations.needsOperations.spent = 0;
+            appState.budget.allocations.growthInvestment.spent = 0;
+            appState.budget.allocations.freedomPlay.spent = 0;
+            appState.budget.transactions = [];
+            
+            allocateBudget();
+            saveAppState();
+            playSound();
+            renderUI();
+        }
+        
+        // ============================================================================
+        // DAILY DECALOGUE & XP SYSTEM
+        // ============================================================================
+        
+        function completeDecalogueTask(taskId) {
+            const task = appState.decalogue.dailyTasks.find(t => t.id === taskId);
+            if (task) {
+                const wasCompleted = task.completed;
+                task.completed = !task.completed;
+                
+                if (task.completed && !wasCompleted) {
+                    awardXP(50);
+                }
+                
+                const allCompleted = appState.decalogue.dailyTasks.every(t => t.completed);
+                if (allCompleted && !wasCompleted) {
+                    awardXP(200);
+                    appState.decalogue.lastCompletionDate = getCurrentDate();
+                    appState.decalogue.currentStreak++;
+                }
+                
+                calculateRI();
+                saveAppState();
+                playSound();
+                renderUI();
+            }
+        }
+        
+        function resetDailyTasks() {
+            const today = getCurrentDate();
+            const lastCompletion = appState.decalogue.lastCompletionDate;
+            
+            if (lastCompletion) {
+                const lastDate = new Date(lastCompletion);
+                const todayDate = new Date(today);
+                const daysDiff = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+                
+                if (daysDiff === 1 && appState.decalogue.dailyTasks.every(t => t.completed)) {
+                    appState.decalogue.currentStreak++;
+                } else if (daysDiff > 1) {
+                    appState.decalogue.currentStreak = 0;
+                }
+            }
+            
+            appState.decalogue.dailyTasks.forEach(task => task.completed = false);
+            saveAppState();
+            playSound();
+            renderUI();
+        }
+        
+        function getCompletedTasksCount() {
+            return appState.decalogue.dailyTasks.filter(t => t.completed).length;
+        }
+        
+        function getDecalogueXP() {
+            const completed = getCompletedTasksCount();
+            const baseXP = completed * 50;
+            const bonus = completed === 10 ? 200 : 0;
+            return baseXP + bonus;
+        }
+        
+        function awardXP(amount) {
+            appState.user.xp += amount;
+            appState.user.level = Math.floor(appState.user.xp / 1000) + 1;
+        }
+        
+        // ============================================================================
+        // REACTOR INTEGRITY CALCULATION
+        // ============================================================================
+        
+        function calculateRI() {
+            const completed = getCompletedTasksCount();
+            const dailyCompletionRatio = completed / 10;
+            const streakBonus = Math.min(appState.decalogue.currentStreak / 7, 1);
+            const decalogueScore = (dailyCompletionRatio * 0.7) + (streakBonus * 0.3);
+            
+            const totalIncome = calculateTotalIncome();
+            let budgetAdherenceScore = 1.0;
+            if (totalIncome > 0) {
+                const needsOverspent = Math.max(0, appState.budget.allocations.needsOperations.spent - appState.budget.allocations.needsOperations.target);
+                const growthOverspent = Math.max(0, appState.budget.allocations.growthInvestment.spent - appState.budget.allocations.growthInvestment.target);
+                const freedomOverspent = Math.max(0, appState.budget.allocations.freedomPlay.spent - appState.budget.allocations.freedomPlay.target);
+                const totalOverspent = needsOverspent + growthOverspent + freedomOverspent;
+                
+                if (totalOverspent > 0) {
+                    budgetAdherenceScore = Math.max(0, 1.0 - (totalOverspent / totalIncome));
+                }
+            }
+            
+            const journalEntriesLast7Days = appState.decalogue.history.filter(h => {
+                const entryDate = new Date(h.date);
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                return entryDate >= sevenDaysAgo;
+            }).length;
+            const journalScore = Math.min(journalEntriesLast7Days / 3, 1);
+            
+            let netWorthTrendScore = 1.0;
+            if (appState.metrics.netWorth.length >= 2) {
+                const latest = appState.metrics.netWorth[appState.metrics.netWorth.length - 1].net;
+                const previous = appState.metrics.netWorth[appState.metrics.netWorth.length - 2].net;
+                if (latest > previous) {
+                    netWorthTrendScore = 1.0;
+                } else if (latest === previous) {
+                    netWorthTrendScore = 0.5;
+                } else {
+                    netWorthTrendScore = 0.0;
+                }
+            }
+            
+            const rawRIScore = (decalogueScore * 0.4) + (budgetAdherenceScore * 0.3) + (journalScore * 0.2) + (netWorthTrendScore * 0.1);
+            appState.reactorIntegrity.score = Math.max(0, Math.min(rawRIScore, 1.0));
+            
+            if (appState.reactorIntegrity.score < 0.4) {
+                appState.reactorIntegrity.zone = 'RED ZONE';
+            } else if (appState.reactorIntegrity.score < 0.7) {
+                appState.reactorIntegrity.zone = 'YELLOW ZONE';
+            } else {
+                appState.reactorIntegrity.zone = 'GREEN ZONE';
+            }
+            
+            const fogOverlay = document.getElementById('fogOverlay');
+            fogOverlay.className = 'fog-overlay';
+            if (appState.reactorIntegrity.zone === 'RED ZONE') {
+                fogOverlay.classList.add('red-zone');
+            } else if (appState.reactorIntegrity.zone === 'YELLOW ZONE') {
+                fogOverlay.classList.add('yellow-zone');
+            } else {
+                fogOverlay.classList.add('green-zone');
+            }
+        }
+        
+        // ============================================================================
+        // METRICS & NET WORTH
+        // ============================================================================
+        
+        function updateNetWorth() {
+            const assets = parseFloat(document.getElementById('assetsInput').value) || 0;
+            const liabilities = parseFloat(document.getElementById('liabilitiesInput').value) || 0;
+            const net = assets - liabilities;
+            
+            appState.metrics.netWorth.push({
+                date: getCurrentDate(),
+                assets,
+                liabilities,
+                net,
+            });
+            
+            calculateRI();
+            saveAppState();
+            playSound();
+            renderUI();
+        }
+        
+        function calculateSavingsRate() {
+            const totalIncome = calculateTotalIncome();
+            const totalExpenses = appState.budget.transactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            if (totalIncome === 0) return 0;
+            return ((totalIncome - totalExpenses) / totalIncome) * 100;
+        }
+        
+        // ============================================================================
+        // MODAL MANAGEMENT
+        // ============================================================================
+        
+        function openAddIncomeModal() {
+            document.getElementById('addIncomeModal').classList.add('active');
+        }
+        
+        function openAddExpenseModal() {
+            document.getElementById('addExpenseModal').classList.add('active');
+        }
+        
+        function openImportModal() {
+            document.getElementById('importModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+        
+        // ============================================================================
+        // SETTINGS & DATA MANAGEMENT
+        // ============================================================================
+        
+        function saveSettings() {
+            appState.user.initials = document.getElementById('initialsInput').value.toUpperCase() || 'USR';
+            appState.user.currentZone = document.getElementById('zoneSelect').value;
+            appState.user.soundEffectsEnabled = document.getElementById('soundToggle').checked;
+            
+            saveAppState();
+            playSound();
+            renderUI();
+        }
+        
+        function exportData() {
+            const filename = `${appState.user.initials}.${new Date().toISOString().slice(0, 10).replace(/-/g, '')}.lhos-export.json`;
+            const dataStr = JSON.stringify(appState, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function importData() {
+            const fileInput = document.getElementById('importFileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    appState = imported;
+                    saveAppState();
+                    playSound();
+                    closeModal('importModal');
+                    fileInput.value = '';
+                    renderUI();
+                } catch (error) {
+                    alert('Failed to import data: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        function resetAllData() {
+            if (confirm('Are you sure? This will delete all data.')) {
+                localStorage.removeItem('hlbAppState');
+                location.reload();
+            }
+        }
+        
+        // ============================================================================
+        // TAB SWITCHING
+        // ============================================================================
+        
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.dataset.tab;
+                
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.add('hidden');
+                });
+                
+                document.getElementById(tabName).classList.remove('hidden');
+                
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+            });
+        });
+        
+        // ============================================================================
+        // UI RENDERING
+        // ============================================================================
+        
+        function renderUI() {
+            document.getElementById('userInitials').textContent = appState.user.initials;
+            document.getElementById('currentZone').textContent = `Zone: ${appState.user.currentZone}`;
+            
+            document.getElementById('totalXP').textContent = appState.user.xp;
+            document.getElementById('currentLevel').textContent = appState.user.level;
+            document.getElementById('dayStreak').textContent = appState.decalogue.currentStreak;
+            document.getElementById('riScore').textContent = appState.reactorIntegrity.score.toFixed(2);
+            
+            const totalIncome = calculateTotalIncome();
+            const totalAllocated = appState.budget.allocations.needsOperations.target + 
+                                   appState.budget.allocations.growthInvestment.target + 
+                                   appState.budget.allocations.freedomPlay.target;
+            const budgetHealth = totalIncome > 0 ? Math.min((totalAllocated / totalIncome) * 100, 100) : 0;
+            document.getElementById('budgetHealth').textContent = Math.round(budgetHealth) + '%';
+            
+            document.getElementById('riValue').textContent = appState.reactorIntegrity.score.toFixed(2);
+            document.getElementById('riZone').textContent = appState.reactorIntegrity.zone;
+            
+            const needsPercent = appState.budget.allocations.needsOperations.target > 0 
+                ? (appState.budget.allocations.needsOperations.spent / appState.budget.allocations.needsOperations.target) * 100 
+                : 0;
+            const growthPercent = appState.budget.allocations.growthInvestment.target > 0 
+                ? (appState.budget.allocations.growthInvestment.spent / appState.budget.allocations.growthInvestment.target) * 100 
+                : 0;
+            const freedomPercent = appState.budget.allocations.freedomPlay.target > 0 
+                ? (appState.budget.allocations.freedomPlay.spent / appState.budget.allocations.freedomPlay.target) * 100 
+                : 0;
+            
+            document.getElementById('needsBar').style.width = Math.min(needsPercent, 100) + '%';
+            document.getElementById('needsBar').textContent = Math.round(Math.min(needsPercent, 100)) + '%';
+            document.getElementById('needsAmount').textContent = Math.round(appState.budget.allocations.needsOperations.spent);
+            document.getElementById('needsTarget').textContent = Math.round(appState.budget.allocations.needsOperations.target);
+            
+            document.getElementById('growthBar').style.width = Math.min(growthPercent, 100) + '%';
+            document.getElementById('growthBar').textContent = Math.round(Math.min(growthPercent, 100)) + '%';
+            document.getElementById('growthAmount').textContent = Math.round(appState.budget.allocations.growthInvestment.spent);
+            document.getElementById('growthTarget').textContent = Math.round(appState.budget.allocations.growthInvestment.target);
+            
+            document.getElementById('freedomBar').style.width = Math.min(freedomPercent, 100) + '%';
+            document.getElementById('freedomBar').textContent = Math.round(Math.min(freedomPercent, 100)) + '%';
+            document.getElementById('freedomAmount').textContent = Math.round(appState.budget.allocations.freedomPlay.spent);
+            document.getElementById('freedomTarget').textContent = Math.round(appState.budget.allocations.freedomPlay.target);
+            
+            // Decalogue preview
+            const decaloguePreview = document.getElementById('decaloguePreview');
+            decaloguePreview.innerHTML = '';
+            appState.decalogue.dailyTasks.forEach(task => {
+                const taskEl = document.createElement('div');
+                taskEl.className = 'flex items-center gap-2 p-2 rounded bg-opacity-50 ' + (task.completed ? 'bg-green-900' : 'bg-red-900');
+                taskEl.innerHTML = `
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="completeDecalogueTask('${task.id}')" class="w-4 h-4">
+                    <span class="text-sm flex-1 ${task.completed ? 'line-through text-gray-500' : ''}">${task.description}</span>
+                `;
+                decaloguePreview.appendChild(taskEl);
+            });
+            
+            // Income list
+            const incomeList = document.getElementById('incomeList');
+            incomeList.innerHTML = '';
+            appState.budget.incomeStreams.forEach(stream => {
+                const incomeEl = document.createElement('div');
+                incomeEl.className = 'flex justify-between items-center p-2 rounded bg-opacity-30 bg-gold';
+                incomeEl.innerHTML = `
+                    <div>
+                        <p class="text-sm font-body">${stream.name}</p>
+                        <p class="text-xs text-gray-400">${stream.type}</p>
+                    </div>
+                    <p class="font-body font-bold text-gold">$${stream.amount}</p>
+                `;
+                incomeList.appendChild(incomeEl);
+            });
+            
+            // Transaction list
+            const transactionList = document.getElementById('transactionList');
+            transactionList.innerHTML = '';
+            appState.budget.transactions.slice(-10).reverse().forEach(tx => {
+                const txEl = document.createElement('div');
+                txEl.className = 'flex justify-between items-center p-2 rounded text-xs ' + (tx.type === 'income' ? 'bg-opacity-30 bg-green-900' : 'bg-opacity-30 bg-red-900');
+                txEl.innerHTML = `
+                    <div>
+                        <p class="font-body">${tx.description}</p>
+                        <p class="text-gray-400">${tx.date}</p>
+                    </div>
+                    <p class="font-body font-bold">${tx.type === 'income' ? '+' : '-'}$${tx.amount}</p>
+                `;
+                transactionList.appendChild(txEl);
+            });
+            
+            // Decalogue tab
+            const decalogueList = document.getElementById('decalogueList');
+            decalogueList.innerHTML = '';
+            appState.decalogue.dailyTasks.forEach(task => {
+                const taskEl = document.createElement('div');
+                taskEl.className = 'card flex items-center gap-3';
+                taskEl.innerHTML = `
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="completeDecalogueTask('${task.id}')" class="w-5 h-5">
+                    <span class="flex-1 text-sm ${task.completed ? 'line-through text-gray-500' : ''}">${task.description}</span>
+                `;
+                decalogueList.appendChild(taskEl);
+            });
+            
+            // Decalogue stats
+            const completed = getCompletedTasksCount();
+            document.getElementById('completedToday').textContent = completed + '/10';
+            document.getElementById('streakDisplay').textContent = appState.decalogue.currentStreak + ' days';
+            document.getElementById('xpToday').textContent = getDecalogueXP();
+            
+            // Metrics
+            const netWorthLatest = appState.metrics.netWorth.length > 0 
+                ? appState.metrics.netWorth[appState.metrics.netWorth.length - 1].net 
+                : 0;
+            document.getElementById('netWorthDisplay').textContent = '$' + netWorthLatest;
+            document.getElementById('savingsRateDisplay').textContent = Math.round(calculateSavingsRate()) + '%';
+            
+            const journeyPercent = (appState.metrics.journeyProgress.currentWeek / appState.metrics.journeyProgress.totalWeeks) * 100;
+            document.getElementById('journeyBar').style.width = journeyPercent + '%';
+            document.getElementById('journeyBar').textContent = Math.round(journeyPercent) + '%';
+            document.getElementById('weekProgress').textContent = `Week ${appState.metrics.journeyProgress.currentWeek} / ${appState.metrics.journeyProgress.totalWeeks}`;
+            
+            // Settings
+            document.getElementById('initialsInput').value = appState.user.initials;
+            document.getElementById('zoneSelect').value = appState.user.currentZone;
+            document.getElementById('soundToggle').checked = appState.user.soundEffectsEnabled;
+            document.getElementById('currentMonth').value = appState.budget.currentMonth;
+        }
+        
+        // ============================================================================
+        // INITIALIZATION
+        // ============================================================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAppState();
+            calculateRI();
+            renderUI();
+        });
+    </script>
+</body>
+</html>
